@@ -1,0 +1,45 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+import java.lang.Math
+
+
+rule "Switch of heating if temp for panelovn is ok"
+	when
+		Time cron "0 0/5 * * * ?" 
+	then
+		var double t = new Double(power_panelovn.state.toString())
+		if (stue_vifteovn.state == ON && t < 10) {
+			sendCommand(stue_vifteovn, OFF)
+			sendCommand(stue_panelovn, OFF)
+			pushNotification("Varme","Stua er så varm at vi slo av")	
+		}
+end
+
+rule "Switch of heating during the week"
+	when
+		Time cron "0 0 7 ? * MON-FRI"
+	then
+		sendCommand(stue_vifteovn, OFF)
+		sendCommand(stue_panelovn, OFF)
+		pushNotification("Varme","Varmen skrudd av kl 07:00")
+end
+
+rule "Heat the livingroom"
+	when
+		Time cron "0 30 5 ? * MON-FRI"
+	then
+		sendCommand(stue_panelovn, ON)
+		sendCommand(stue_vifteovn, ON)
+		pushNotification("Varme","Varming av stua har startet")
+end
+
+rule "Heat in weekends"
+	when 
+		Time cron "0 0 7 ? * SAT-SUN"
+	then
+		sendCommand(stue_panelovn, ON)
+		sendCommand(stue_vifteovn, ON)
+		pushNotification("Varme", "Helgevarming startet")
+end	
+

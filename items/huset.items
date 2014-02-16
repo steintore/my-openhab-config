@@ -1,0 +1,20 @@
+Group All
+Group gGF       (All)
+Group Status    (All)
+
+/* active groups */
+Group:Number:SUM						Energy			"Energiforbruk: [%d W]"			<energy>				(All)
+
+/* Heating */
+Switch stue_panelovn    "Panelovn"      <heating>       (gGF, Heating){zwave="3:command=switch_binary"}
+Switch stue_vifteovn    "Vifteovn"      <heating>       (gGF, Heating){zwave="2:command=switch_binary"}
+
+/* NTP binding demo item */
+DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
+
+/* Energy measuring */
+Number power_vifteovn "Strøm vifteovn	[%.1f W]" <energy> (Energy) {zwave="2:command=sensor_multilevel"}
+Number power_panelovn "Strøm panelovn	[%.1f W]" <energy> (Energy) {zwave="3:command=sensor_multilevel"}
+
+Switch stein_home "Stein @ Home"	{ mqttitude="broker:owntracks/stein/iphone" }
+Switch stein_work "Stein @ Work"	{ mqttitude="broker:owntracks/stein/iphone:work" }
