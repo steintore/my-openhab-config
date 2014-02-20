@@ -15,6 +15,5 @@ sitemap huset label="Huset"
 		}
 	Frame label="Presence" {
 		Switch item=stein_home label="STT hjemme" icon="house"
-		Switch item=stein_work label="STT Jobb" icon="office"
 	}
 }

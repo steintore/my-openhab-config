@@ -10,36 +10,39 @@ rule "Switch of heating if temp for panelovn is ok"
 	then
 		var double t = new Double(power_panelovn.state.toString())
 		if (stue_vifteovn.state == ON && t < 10) {
-			sendCommand(stue_vifteovn, OFF)
-			sendCommand(stue_panelovn, OFF)
+			sendCommand(Heating, OFF)
 			pushNotification("Varme","Stua er så varm at vi slo av")	
 		}
 end
 
-rule "Switch of heating during the week"
+rule "Switch of heating during the week, or when I leave home"
 	when
-		Time cron "0 0 7 ? * MON-FRI"
+		Time cron "0 0 7 ? * MON-FRI" or
+		Item stein_home changed from ON to OFF
 	then
-		sendCommand(stue_vifteovn, OFF)
-		sendCommand(stue_panelovn, OFF)
-		pushNotification("Varme","Varmen skrudd av kl 07:00")
+		if (stue_panelovn.state == ON || stue_vifteovn.state == ON) {
+			sendCommand(Heating, OFF)
+			pushNotification("Varme","Varmen skrudd av kl " + Date.state.toString())
+		}
 end
 
-rule "Heat the livingroom"
+rule "Heat the livingroom, but only if there are someone at home"
 	when
 		Time cron "0 30 5 ? * MON-FRI"
 	then
-		sendCommand(stue_panelovn, ON)
-		sendCommand(stue_vifteovn, ON)
-		pushNotification("Varme","Varming av stua har startet")
+		if (stein_home.state == ON) {
+			sendCommand(Heating, ON)
+			pushNotification("Varme","Varming av stua har startet")
+		}
 end
 
 rule "Heat in weekends"
 	when 
 		Time cron "0 0 7 ? * SAT-SUN"
 	then
-		sendCommand(stue_panelovn, ON)
-		sendCommand(stue_vifteovn, ON)
-		pushNotification("Varme", "Helgevarming startet")
+		if (stein_home.state == ON) {
+			sendCommand(Heating, ON)
+			pushNotification("Varme", "Helgevarming startet")
+		}
 end	
 

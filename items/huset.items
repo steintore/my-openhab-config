@@ -3,7 +3,8 @@ Group gGF       (All)
 Group Status    (All)
 
 /* active groups */
-Group:Number:SUM						Energy			"Energiforbruk: [%d W]"			<energy>				(All)
+Group:Number:SUM					Energy			"Energiforbruk: [%d W]"			<energy>				(All)
+Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
 
 /* Heating */
 Switch stue_panelovn    "Panelovn"      <heating>       (gGF, Heating){zwave="3:command=switch_binary"}
@@ -17,4 +18,3 @@ Number power_vifteovn "Strøm vifteovn	[%.1f W]" <energy> (Energy) {zwave="2:com
 Number power_panelovn "Strøm panelovn	[%.1f W]" <energy> (Energy) {zwave="3:command=sensor_multilevel"}
 
 Switch stein_home "Stein @ Home"	{ mqttitude="broker:owntracks/stein/iphone" }
-Switch stein_work "Stein @ Work"	{ mqttitude="broker:owntracks/stein/iphone:work" }
