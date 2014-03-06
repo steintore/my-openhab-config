@@ -18,6 +18,7 @@ rule "Switch on heating when someone comes home"
 		Item anette_home changed from OFF to ON or
 		Item stein_home changed from OFF to ON
 	then
+		logInfo("Presence", "Someone has come home, how many home: " + Home.members.filter(s | s.state == ON).size)
 		if (Home.members.filter(s | s.state == ON).size > 0 && Heating.members.filter(s | s.state == ON).size == 0) {
 			sendCommand(Heating, ON)
 			pushNotification("Varme","Varming av stua har startet")
@@ -54,6 +55,7 @@ rule "Switch off heating during the week, or when I leave home"
 		Time cron "0 0 7 ? * MON-FRI" or
 		Item Home changed
 	then
+		logInfo("Presence", "Someone has change their presence, how many home: " + Home.members.filter(s | s.state == ON).size)
 		if (Heating.members.filter(s | s.state == ON).size > 0 && Home.members.filter(s | s.state == ON).size == 0) {
 			sendCommand(Heating, OFF)
 			pushNotification("Varme","Varmen skrudd av kl " + Date.state.toString())
