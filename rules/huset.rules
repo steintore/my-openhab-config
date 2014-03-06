@@ -25,7 +25,7 @@ rule "Switch on heating when someone comes home"
 		}
 end
 
-rule "if the room is to cold and we are home heat it up"
+rule "If the room is to cold and we are home, then heat it up"
 	when
 		Time cron "0 0/20 * * * ?" 
 	then
@@ -38,13 +38,12 @@ rule "if the room is to cold and we are home heat it up"
 		}
 end
 	
- 
 rule "Switch off heating if temp for panelovn is ok, but leave panelovn on"
 	when
 		Time cron "0 0/5 * * * ?" 
 	then
 		var double t = new Double(power_panelovn.state.toString())
-		if (stue_vifteovn.state == ON && t < 10 && Home.members.filter(s | s.state == ON).size == 0) {
+		if (stue_vifteovn.state == ON && t < 10) {
 			sendCommand(stue_vifteovn, OFF)
 			pushNotification("Varme","Stua er så varm at vi slo av vifteovnen")	
 		}
@@ -72,22 +71,13 @@ rule "Switch off heating in the evening"
 		}
 end
 
-rule "Heat during the week, but only if there are someone at home"
+rule "Start heating, but only if there are someone at home"
 	when
-		Time cron "0 30 5 ? * MON-FRI"
+		Time cron "0 30 5 ? * MON-FRI" or
+		Time cron "0 0 7 ? * SAT-SUN"
 	then
 		if (Home.members.filter(s | s.state == ON).size > 0) {
 			sendCommand(Heating, ON)
 			pushNotification("Varme","Varming av stua har startet")
 		}
 end
-
-rule "Heat in weekends"
-	when 
-		Time cron "0 0 7 ? * SAT-SUN"
-	then
-		if (Home.members.filter(s | s.state == ON).size > 0) {
-			sendCommand(Heating, ON)
-			pushNotification("Varme", "Helgevarming startet")
-		}
-end	
