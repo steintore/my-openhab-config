@@ -3,34 +3,78 @@ import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 import java.lang.Math
 
+/* RULES FOR HEATING */
+/*
+ * x1. Varme kl 0530 hverdager - men bare hvis noen er hjemme - skru av kl 07 eller når vi drar
+ * x2. Varme kl 0730 i helgene - men bare hvis noen er hjemme
+ * x3. Starte oppvarming når jeg kommer hjem
+ * x4. Når rommet er varmt (sjekkes hvert 5. min) så slår vi kun av vifteovnen, dersom kl er etter 22 så slår vi av alt
+ * x5. Hvert 20. min sjekker om panelovnen igjen bruker mer strøm, hvis ja og hvis noen er hjemme -> slå på varming, men kun om panelovnen er på
+ * x6. Slå av all varming når ingen er hjemme
+ * x7. Slå av varming kl 22
+ */
+rule "Switch on heating when someone comes home"
+	when
+		Item anette_home changed from OFF to ON or
+		Item stein_home changed from OFF to ON
+	then
+		if (Home.members.filter(s | s.state == ON).size > 0 && Heating.members.filter(s | s.state == ON).size == 0) {
+			sendCommand(Heating, ON)
+			pushNotification("Varme","Varming av stua har startet")
+		}
+end
 
-rule "Switch of heating if temp for panelovn is ok"
+rule "if the room is to cold and we are home heat it up"
+	when
+		Time cron "0 0/20 * * * ?" 
+	then
+		if (stue_panelovn.state == ON) {
+			var double t = new Double(power_panelovn.state.toString())
+			if (stue_vifteovn.state == OFF && t > 10 && Home.members.filter(s | s.state == ON).size > 0) {
+				sendCommand(Heating, ON)
+				pushNotification("Varme","Stua er så varm at vi slo av vifteovnen")	
+			}
+		}
+end
+	
+ 
+rule "Switch off heating if temp for panelovn is ok, but leave panelovn on"
 	when
 		Time cron "0 0/5 * * * ?" 
 	then
 		var double t = new Double(power_panelovn.state.toString())
-		if (stue_vifteovn.state == ON && t < 10) {
-			sendCommand(Heating, OFF)
-			pushNotification("Varme","Stua er så varm at vi slo av")	
+		if (stue_vifteovn.state == ON && t < 10 && Home.members.filter(s | s.state == ON).size == 0) {
+			sendCommand(stue_vifteovn, OFF)
+			pushNotification("Varme","Stua er så varm at vi slo av vifteovnen")	
 		}
 end
 
-rule "Switch of heating during the week, or when I leave home"
+rule "Switch off heating during the week, or when I leave home"
 	when
 		Time cron "0 0 7 ? * MON-FRI" or
-		Item stein_home changed from ON to OFF
+		Item Home changed
 	then
-		if (stue_panelovn.state == ON || stue_vifteovn.state == ON) {
+		if (Heating.members.filter(s | s.state == ON).size > 0 && Home.members.filter(s | s.state == ON).size == 0) {
 			sendCommand(Heating, OFF)
 			pushNotification("Varme","Varmen skrudd av kl " + Date.state.toString())
 		}
 end
 
-rule "Heat the livingroom, but only if there are someone at home"
+rule "Switch off heating in the evening"
+	when
+		Time cron "0 0 22 ? * *" 
+	then
+		if (Heating.members.filter(s | s.state == ON).size > 0) {
+			sendCommand(Heating, OFF)
+			pushNotification("Varme","Varmen skrudd av kl " + Date.state.toString())
+		}
+end
+
+rule "Heat during the week, but only if there are someone at home"
 	when
 		Time cron "0 30 5 ? * MON-FRI"
 	then
-		if (stein_home.state == ON) {
+		if (Home.members.filter(s | s.state == ON).size > 0) {
 			sendCommand(Heating, ON)
 			pushNotification("Varme","Varming av stua har startet")
 		}
@@ -40,9 +84,8 @@ rule "Heat in weekends"
 	when 
 		Time cron "0 0 7 ? * SAT-SUN"
 	then
-		if (stein_home.state == ON) {
+		if (Home.members.filter(s | s.state == ON).size > 0) {
 			sendCommand(Heating, ON)
 			pushNotification("Varme", "Helgevarming startet")
 		}
 end	
-

@@ -1,19 +1,21 @@
 sitemap huset label="Huset"
 {
-        Frame {
-                Group item=gGF label="Første etasje" icon="groundfloor"
-                Switch item=stue_vifteovn label="Vifteovn" icon="heating"
-                Switch item=stue_panelovn label="Panelovn" icon="heating"
-        }
+    Frame {
+		Group item=gGF label="Første etasje" icon="groundfloor"
+        Switch item=stue_vifteovn label="Vifteovn" icon="heating"
+        Switch item=stue_panelovn label="Panelovn" icon="heating"
+    }
         
-        Frame {
-			Group item=Energy
-		}
+    Frame {
+		Group item=Energy
+	}
         
-    	Frame label="Date" {
-			Text item=Date
-		}
+	Frame label="Date" {
+		Text item=Date
+	}
+
 	Frame label="Presence" {
-		Switch item=stein_home label="STT hjemme" icon="house"
+		Switch item=stein_home  label="Stein Tore home" icon="house"
+		Switch item=anette_home label="Anette home"     icon="house"
 	}
 }

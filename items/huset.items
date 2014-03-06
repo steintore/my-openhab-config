@@ -1,6 +1,7 @@
 Group All
 Group gGF       (All)
 Group Status    (All)
+Group Home
 
 /* active groups */
 Group:Number:SUM					Energy			"Energiforbruk: [%d W]"			<energy>				(All)
@@ -17,4 +18,8 @@ DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berl
 Number power_vifteovn "Strøm vifteovn	[%.1f W]" <energy> (Energy) {zwave="2:command=sensor_multilevel"}
 Number power_panelovn "Strøm panelovn	[%.1f W]" <energy> (Energy) {zwave="3:command=sensor_multilevel"}
 
-Switch stein_home "Stein @ Home"	{ mqttitude="broker:owntracks/stein/iphone" }
+/* Presence detection */
+Switch stein_home   "Stein @ Home"       	(Home){ mqttitude="broker:owntracks/stein/iphone/waypoints:home" }
+Switch stein_work   "Stein @ Work"       		  { mqttitude="broker:owntracks/stein/iphone/waypoints:work" }
+Switch stein_train  "Stein @ Train station"       { mqttitude="broker:owntracks/stein/iphone/waypoints:train" }
+Switch anette_home  "Anette @ Home"       	(Home){ mqttitude="broker:owntracks/anette/iphone/waypoints:home" }
