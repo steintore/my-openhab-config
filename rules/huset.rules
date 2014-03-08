@@ -33,7 +33,7 @@ rule "If the room is to cold and we are home, then heat it up"
 			var double t = new Double(power_panelovn.state.toString())
 			if (stue_vifteovn.state == OFF && t > 10 && Home.members.filter(s | s.state == ON).size > 0) {
 				sendCommand(Heating, ON)
-				pushNotification("Varme","Stua er så varm at vi slo av vifteovnen")	
+				logInfo("Heating", "Slo på vifteovnen")	
 			}
 		}
 end
@@ -45,7 +45,7 @@ rule "Switch off heating if temp for panelovn is ok, but leave panelovn on"
 		var double t = new Double(power_panelovn.state.toString())
 		if (stue_vifteovn.state == ON && t < 10) {
 			sendCommand(stue_vifteovn, OFF)
-			pushNotification("Varme","Stua er så varm at vi slo av vifteovnen")	
+			logInfo("Heating", "Slo av vifteovn, men ikke panelovn")	
 		}
 end
 
@@ -67,7 +67,7 @@ rule "Switch off heating in the evening"
 	then
 		if (Heating.members.filter(s | s.state == ON).size > 0) {
 			sendCommand(Heating, OFF)
-			pushNotification("Varme","Varmen skrudd av kl " + Date.state.toString())
+			logInfo("Heating", "Slo av varmen kl 22")
 		}
 end
 
@@ -78,6 +78,6 @@ rule "Start heating, but only if there are someone at home"
 	then
 		if (Home.members.filter(s | s.state == ON).size > 0) {
 			sendCommand(Heating, ON)
-			pushNotification("Varme","Varming av stua har startet")
+			logInfo("Heating", "Startet morgenvarming")
 		}
 end
