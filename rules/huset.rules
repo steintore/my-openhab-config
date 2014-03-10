@@ -15,9 +15,10 @@ import java.lang.Math
  */
 rule "Switch on heating when someone comes home"
 	when
-		Item Home changed
+		Item stein_home changed or
+		Item anette_home changed
 	then
-		logInfo("Presence", "Someone has come home, how many home: " + Home.members.filter(s | s.state == ON).size)
+		logInfo("Presence", "Someone has changed presence, how many home: " + Home.members.filter(s | s.state == ON).size)
 		if (Heating.members.filter(s | s.state == ON).size > 0 && Home.members.filter(s | s.state == ON).size == 0) {
 			sendCommand(Heating, OFF)
 			pushNotification("Varme","Varmen skrudd av kl " + Date.state.toString())

@@ -19,7 +19,5 @@ Number power_vifteovn "Strøm vifteovn	[%.1f W]" <energy> (Energy) {zwave="2:com
 Number power_panelovn "Strøm panelovn	[%.1f W]" <energy> (Energy) {zwave="3:command=sensor_multilevel"}
 
 /* Presence detection */
-Switch stein_home    "Stein @ Home"       	(Home){ mqttitude="broker:owntracks/stein/iphone/waypoints:home" }
-Switch stein_home_1  "Stein @ Home"       	(Home){ mqttitude="broker:owntracks/stein/iphone/" }
-Switch anette_home   "Anette @ Home"       	(Home){ mqttitude="broker:owntracks/anette/iphone/waypoints:home" }
-Switch anette_home_1 "Anette @ Home"        (Home){ mqttitude="broker:owntracks/anette/iphone/" }
+Switch stein_home    "Stein @ Home"       	(Home){ mqttitude="broker:owntracks/stein/iphone:home" }
+Switch anette_home   "Anette @ Home"       	(Home){ mqttitude="broker:owntracks/anette/iphone:home" }
