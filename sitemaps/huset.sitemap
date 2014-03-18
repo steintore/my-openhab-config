@@ -17,5 +17,6 @@ sitemap huset label="Huset"
 	Frame label="Presence" {
 		Switch item=stein_home  label="Stein Tore home" icon="house"
 		Switch item=anette_home label="Anette home"     icon="house"
+		Switch item=guest_home label="Guests" 			icon="smiley"
 	}
 }

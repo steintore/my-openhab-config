@@ -3,6 +3,14 @@ import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 import java.lang.Math
 
+
+rule "Send message when guests arrive"
+	when
+		Item guest_home changed
+	then
+	pushNotification('Guests', "Guest changed to:" + guest_home.state)
+end
+
 /* RULES FOR HEATING */
 /*
  * x1. Varme kl 0530 hverdager - men bare hvis noen er hjemme - skru av kl 07 eller når vi drar
