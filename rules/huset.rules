@@ -3,19 +3,35 @@ import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 import java.lang.Math
 
+rule "Set things to off when starting system"
+when
+	System started
+then
+	sendCommand(Home, OFF)
+	sendCommand(Heating, OFF)
+end
 
-rule "Send message when guests arrive"
-	when
-		Item guest_home changed
-	then
-	pushNotification('Guests', "Guest changed to:" + guest_home.state)
+rule "Stein Mobile Wlan Proximity Enter"
+when
+	Item Mobile_Stein_Wlan changed from OFF to ON
+then
+	logInfo("org.openhab.rules","steinwlan on. setting to on.")
+	sendCommand(stein_home, ON)
+end
+
+rule "Anette Mobile Wlan Proximity Enter"
+when
+	Item Mobile_Anette_Wlan changed from OFF to ON
+then
+	logInfo("org.openhab.rules","steinwlan on. setting to on.")
+	sendCommand(anette_home, ON)
 end
 
 /* RULES FOR HEATING */
 /*
  * x1. Varme kl 0530 hverdager - men bare hvis noen er hjemme - skru av kl 07 eller når vi drar
  * x2. Varme kl 0730 i helgene - men bare hvis noen er hjemme
- * x3. Starte oppvarming når jeg kommer hjem
+ * x3. Starte oppvarming når jeg kommer hjem - men bare før 22 og etter 05
  * x4. Når rommet er varmt (sjekkes hvert 5. min) så slår vi kun av vifteovnen, dersom kl er etter 22 så slår vi av alt
  * x5. Hvert 20. min sjekker om panelovnen igjen bruker mer strøm, hvis ja og hvis noen er hjemme -> slå på varming, men kun om panelovnen er på
  * x6. Slå av all varming når ingen er hjemme
@@ -23,17 +39,18 @@ end
  */
 rule "Switch on heating when someone comes home"
 	when
-		Item stein_home changed or
-		Item anette_home changed
+		Item Home changed
 	then
-		logInfo("Presence", "Someone has changed presence, how many home: " + Home.members.filter(s | s.state == ON).size)
-		if (Heating.members.filter(s | s.state == ON).size > 0 && Home.members.filter(s | s.state == ON).size == 0) {
+		if (Heating.state == ON && Home.state == OFF) {
 			sendCommand(Heating, OFF)
 			pushNotification("Varme","Varmen skrudd av kl " + Date.state.toString())
-		} else if (Home.members.filter(s | s.state == ON).size > 0 && Heating.members.filter(s | s.state == ON).size == 0) {
-			sendCommand(Heating, ON)
-			pushNotification("Varme","Varming av stua har startet")
-			logInfo("Varme","Varming av stua har startet")
+		} else if (Home.state == ON && Heating.state == OFF) {
+			var p = now.getHourOfDay
+			if (p < 22 && p > 05) {
+				sendCommand(Heating, ON)
+				pushNotification("Varme","Varming av stua har startet")
+				logInfo("org.openhab.rules","Varming av stua har startet")
+			}
 		}
 end
 
@@ -45,7 +62,7 @@ rule "If the room is to cold and we are home, then heat it up"
 			var double t = new Double(power_panelovn.state.toString())
 			if (stue_vifteovn.state == OFF && t > 10 && Home.members.filter(s | s.state == ON).size > 0) {
 				sendCommand(Heating, ON)
-				logInfo("Heating", "Slo på vifteovnen")	
+				logInfo("org.openhab.rules", "Slo på vifteovnen")	
 			}
 		}
 end
@@ -54,14 +71,12 @@ rule "Switch off heating if temp for panelovn is ok, but leave panelovn on"
 	when
 		Time cron "0 0/5 * * * ?" 
 	then
-		var double t = new Double(power_panelovn.state.toString())
-		if (stue_vifteovn.state == ON && t < 10) {
-			sendCommand(stue_vifteovn, OFF)
-			logInfo("Heating", "Slo av vifteovn, men ikke panelovn")	
-		}
-		if (Home.members.filter(s | s.state == ON).size == 0) {
-			sendCommand(Heating, OFF)
-			logInfo("Heating", "Ingen hjemme, så slo av varming")
+		if (power_panelovn.state == ON) {
+			var double t = new Double(power_panelovn.state.toString())
+			if (stue_vifteovn.state == ON && t < 10) {
+				sendCommand(stue_vifteovn, OFF)
+				logInfo("Heating", "Slo av vifteovn, men ikke panelovn")	
+			}
 		}
 end
 
@@ -69,7 +84,7 @@ rule "Switch off heating during the week, or when last one leaves home"
 	when
 		Time cron "0 0 7 ? * MON-FRI"
 	then
-		if (Heating.members.filter(s | s.state == ON).size > 0 && Home.members.filter(s | s.state == ON).size == 0) {
+		if (Heating.state == ON && Home.state == OFF) {
 			sendCommand(Heating, OFF)
 			pushNotification("Varme","Varmen skrudd av kl " + Date.state.toString())
 		}
@@ -79,9 +94,9 @@ rule "Switch off heating in the evening"
 	when
 		Time cron "0 0 22 ? * *" 
 	then
-		if (Heating.members.filter(s | s.state == ON).size > 0) {
+		if (Heating.state == ON) {
 			sendCommand(Heating, OFF)
-			logInfo("Heating", "Slo av varmen kl 22")
+			logInfo("org.openhab.rules", "Slo av varmen kl 22")
 		}
 end
 
@@ -90,8 +105,8 @@ rule "Start heating, but only if there are someone at home"
 		Time cron "0 30 5 ? * MON-FRI" or
 		Time cron "0 0 7 ? * SAT-SUN"
 	then
-		if (Home.members.filter(s | s.state == ON).size > 0) {
+		if (Home.state == ON) {
 			sendCommand(Heating, ON)
-			logInfo("Heating", "Startet morgenvarming")
+			logInfo("org.openhab.rules", "Startet morgenvarming")
 		}
 end

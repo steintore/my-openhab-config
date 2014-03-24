@@ -1,13 +1,9 @@
 Group All
 Group gGF       (All)
 Group Status    (All)
-Group Home
-
-/* active groups */
-Group:Number:SUM					Energy			"Energiforbruk: [%d W]"			<energy>				(All)
-Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
 
 /* Heating */
+Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
 Switch stue_panelovn    "Panelovn"      <heating>       (gGF, Heating){zwave="3:command=switch_binary"}
 Switch stue_vifteovn    "Vifteovn"      <heating>       (gGF, Heating){zwave="2:command=switch_binary"}
 
@@ -15,10 +11,17 @@ Switch stue_vifteovn    "Vifteovn"      <heating>       (gGF, Heating){zwave="2:
 DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
 
 /* Energy measuring */
+Group:Number:SUM					Energy			"Energiforbruk: [%d W]"			<energy>				(All)
 Number power_vifteovn "Strøm vifteovn	[%.1f W]" <energy> (Energy) {zwave="2:command=sensor_multilevel"}
 Number power_panelovn "Strøm panelovn	[%.1f W]" <energy> (Energy) {zwave="3:command=sensor_multilevel"}
 
 /* Presence detection */
-Switch stein_home    	"Stein @ Home"       	(Home){ mqttitude="broker:owntracks/stein/iphone:home" }
-Switch anette_home   	"Anette @ Home"       	(Home){ mqttitude="broker:owntracks/anette/iphone:home" }
-Switch guest_home 		"Guests @ Home" 		(Home)
+Group:Switch:OR(ON, OFF)			Home 			"Is someone at home [(%d)]" (All)
+Switch stein_home    			"Stein @ Home"       		<present>	(Home){ mqttitude="broker:owntracks/stein/iphone:home" }
+Switch anette_home   			"Anette @ Home"       		<present>	(Home){ mqttitude="broker:owntracks/anette/iphone:home" }
+Switch guest_home 				"Guests @ Home" 			<present>	(Home)
+
+Group:Switch:OR(ON, OFF) proximity (All)
+Switch Mobile_Stein_Wlan 		"Steins iPhone Wlan" 		<present>	(proximity) {nh="192.168.1.151"}
+Switch Mobile_Anette_Wlan 		"Anettes iPhone Wlan" 		<present> 	(proximity) {nh="192.168.1.152"}
+Switch TV_living_room			"TV living room"			<present>	(proximity) {nh="192.168.1.153"}

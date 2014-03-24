@@ -2,8 +2,8 @@ sitemap huset label="Huset"
 {
     Frame {
 		Group item=gGF label="Første etasje" icon="groundfloor"
-        Switch item=stue_vifteovn label="Vifteovn" icon="heating"
-        Switch item=stue_panelovn label="Panelovn" icon="heating"
+		Switch item=stue_vifteovn label="Vifteovn" icon="heating"
+		Switch item=stue_panelovn label="Panelovn" icon="heating"
     }
         
     Frame {
@@ -15,8 +15,7 @@ sitemap huset label="Huset"
 	}
 
 	Frame label="Presence" {
-		Switch item=stein_home  label="Stein Tore home" icon="house"
-		Switch item=anette_home label="Anette home"     icon="house"
-		Switch item=guest_home label="Guests" 			icon="smiley"
+		Group item=Home label="Hjemme  [(%d)]" icon="present"
+		Group item=proximity label="Network health [(%d)]" icon="present"
 	}
 }
