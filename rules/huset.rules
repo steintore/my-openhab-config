@@ -11,22 +11,6 @@ then
 	sendCommand(Heating, OFF)
 end
 
-rule "Stein Mobile Wlan Proximity Enter"
-when
-	Item Mobile_Stein_Wlan changed from OFF to ON
-then
-	logInfo("org.openhab.rules","steinwlan on. setting to on.")
-	sendCommand(stein_home, ON)
-end
-
-rule "Anette Mobile Wlan Proximity Enter"
-when
-	Item Mobile_Anette_Wlan changed from OFF to ON
-then
-	logInfo("org.openhab.rules","steinwlan on. setting to on.")
-	sendCommand(anette_home, ON)
-end
-
 /* RULES FOR HEATING */
 /*
  * x1. Varme kl 0530 hverdager - men bare hvis noen er hjemme - skru av kl 07 eller når vi drar
