@@ -37,18 +37,18 @@ end
  * x6. Slå av all varming når ingen er hjemme
  * x7. Slå av varming kl 22
  */
-rule "Switch on heating when someone comes home"
+rule "Switch on heating when someone comes home or leaves"
 	when
 		Item Home changed
 	then
 		if (Heating.state == ON && Home.state == OFF) {
 			sendCommand(Heating, OFF)
-			pushNotification("Varme","Varmen skrudd av kl " + Date.state.toString())
+			pushNotification("Heating","Heating stopped at " + now)
 		} else if (Home.state == ON && Heating.state == OFF) {
 			var p = now.getHourOfDay
 			if (p < 22 && p > 05) {
 				sendCommand(Heating, ON)
-				pushNotification("Varme","Varming av stua har startet")
+				pushNotification("Heating","Started heating the living room")
 				logInfo("org.openhab.rules","Varming av stua har startet")
 			}
 		}
@@ -60,9 +60,9 @@ rule "If the room is to cold and we are home, then heat it up"
 	then
 		if (stue_panelovn.state == ON) {
 			var double t = new Double(power_panelovn.state.toString())
-			if (stue_vifteovn.state == OFF && t > 10 && Home.members.filter(s | s.state == ON).size > 0) {
+			if (stue_vifteovn.state == OFF && t > 10 && Home.state == ON) {
 				sendCommand(Heating, ON)
-				logInfo("org.openhab.rules", "Slo på vifteovnen")	
+				logInfo("org.openhab.rules", "Switched on fan")	
 			}
 		}
 end
@@ -71,11 +71,11 @@ rule "Switch off heating if temp for panelovn is ok, but leave panelovn on"
 	when
 		Time cron "0 0/5 * * * ?" 
 	then
-		if (power_panelovn.state == ON) {
+		if (stue_panelovn.state == ON) {
 			var double t = new Double(power_panelovn.state.toString())
 			if (stue_vifteovn.state == ON && t < 10) {
 				sendCommand(stue_vifteovn, OFF)
-				logInfo("Heating", "Slo av vifteovn, men ikke panelovn")	
+				logInfo("Heating", "Switched off fan oven")	
 			}
 		}
 end
@@ -86,7 +86,7 @@ rule "Switch off heating during the week, or when last one leaves home"
 	then
 		if (Heating.state == ON && Home.state == OFF) {
 			sendCommand(Heating, OFF)
-			pushNotification("Varme","Varmen skrudd av kl " + Date.state.toString())
+			pushNotification("Heating","Heating switched off at " + now)
 		}
 end
 
@@ -96,7 +96,7 @@ rule "Switch off heating in the evening"
 	then
 		if (Heating.state == ON) {
 			sendCommand(Heating, OFF)
-			logInfo("org.openhab.rules", "Slo av varmen kl 22")
+			logInfo("org.openhab.rules", "Heating switched of at " + now)
 		}
 end
 
@@ -107,6 +107,6 @@ rule "Start heating, but only if there are someone at home"
 	then
 		if (Home.state == ON) {
 			sendCommand(Heating, ON)
-			logInfo("org.openhab.rules", "Startet morgenvarming")
+			logInfo("org.openhab.rules", "Morning heating started")
 		}
 end
