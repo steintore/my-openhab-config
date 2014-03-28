@@ -1,27 +1,40 @@
 Group All
-Group gGF       (All)
-Group Status    (All)
+Group gGF       	(All)
+Group gOutdoor 		(All)
+Group gBasement 	(All)
+Group gFirstFloor 	(All)
+Group Status    	(All)
+
+/* NTP binding demo item */
+DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
 Switch stue_panelovn    "Panelovn"      <heating>       (gGF, Heating){zwave="3:command=switch_binary"}
 Switch stue_vifteovn    "Vifteovn"      <heating>       (gGF, Heating){zwave="2:command=switch_binary"}
-
-/* NTP binding demo item */
-DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
+Switch stue_vifteovn_2  "Vifteovn 2"    <heating>       (gGF, Heating){zwave="4:command=switch_binary"}
 
 /* Energy measuring */
 Group:Number:SUM					Energy			"Energiforbruk: [%d W]"			<energy>				(All)
-Number power_vifteovn "Strøm vifteovn	[%.1f W]" <energy> (Energy) {zwave="2:command=sensor_multilevel"}
-Number power_panelovn "Strøm panelovn	[%.1f W]" <energy> (Energy) {zwave="3:command=sensor_multilevel"}
+Number power_vifteovn "Strøm vifteovn	[%.1f W]" <energy> (Energy) 	{zwave="2:command=sensor_multilevel"}
+Number power_panelovn "Strøm panelovn	[%.1f W]" <energy> (Energy) 	{zwave="3:command=sensor_multilevel"}
+Number power_vifteovn_2 "Strøm vifteovn 2	[%.1f W]" <energy> (Energy)	{zwave="4:command=sensor_multilevel"}
 
 /* Presence detection */
-Group:Switch:OR(ON, OFF)			Home 			"Is someone at home [(%d)]" (All)
-Switch stein_home    			"Stein @ Home"       		<present>	(Home){ mqttitude="broker:owntracks/stein/iphone:home" }
-Switch anette_home   			"Anette @ Home"       		<present>	(Home){ mqttitude="broker:owntracks/anette/iphone:home" }
-Switch guest_home 				"Guests @ Home" 			<present>	(Home)
+Group:Switch:OR(ON, OFF)	Home 			"Is someone at home [(%d)]" (All)
+Switch stein_home    		"Stein @ Home"       		<present>	(Home){ mqttitude="broker:owntracks/stein/iphone:home" }
+Switch anette_home   		"Anette @ Home"       		<present>	(Home){ mqttitude="broker:owntracks/anette/iphone:home" }
+Switch guest_home 			"Guests @ Home" 			<present>	(Home)
 
 Group:Switch:OR(ON, OFF) proximity (All)
-Switch Mobile_Stein_Wlan 		"Steins iPhone Wlan" 		<present>	(proximity) {nh="192.168.1.151"}
-Switch Mobile_Anette_Wlan 		"Anettes iPhone Wlan" 		<present> 	(proximity) {nh="192.168.1.152"}
-Switch TV_living_room			"TV living room"			<present>	(proximity) {nh="192.168.1.153"}
+Switch Mobile_Stein_Wlan 	"Steins iPhone Wlan" 		<present>	(proximity) {nh="192.168.1.151"}
+Switch Mobile_Anette_Wlan 	"Anettes iPhone Wlan" 		<present> 	(proximity) {nh="192.168.1.152"}
+Switch TV_living_room		"TV living room"			<present>	(proximity) {nh="192.168.1.153"}
+
+/* Temperature */
+Number OutdoorTemperature 	"Temp ute [%.1f °C]" 				<temperature> 	(Temperature,gOutdoor) { rfxcom="<26628:Temperature" }
+Number OutdoorHumidity 		"Luftfuktighet ute [%.1f %%]" 		<temperature> 	(gOutdoor) { rfxcom="<26628:Humidity" }
+Number OfficeTemperature	"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature,gFirstFloor) { rfxcom="<36353:Temperature" }
+Number OfficeHumidity 		"Luftfuktighet kontor [%.1f %%]"	<temperature> 	(gFirstFloor) { rfxcom="<36353:Humidity" }
+Number BasementTemperature	"Temp kjeller [%.1f °C]"			<temperature>	(Temperature,gBasement) { rfxcom="<52226:Temperature" }
+Number BasementHumidity 	"Luftfuktighet kjeller [%.1f %%]" 	<temperature>	(gBasement) { rfxcom="<52226:Humidity" }

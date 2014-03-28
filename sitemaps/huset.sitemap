@@ -1,17 +1,19 @@
 sitemap huset label="Huset"
 {
-    Frame {
+    Frame label="Huset" {
 		Group item=gGF label="Første etasje" icon="groundfloor"
-		Switch item=stue_vifteovn label="Vifteovn" icon="heating"
-		Switch item=stue_panelovn label="Panelovn" icon="heating"
+		Group item=gFirstFloor label="Andre etasje" icon="firstfloor"
+		Group item=gBasement label="Kjeller" icon="cellar"
+		Group item=gOutdoor label="Ute" icon="garden"
     }
-        
     Frame {
 		Group item=Energy
 	}
         
 	Frame label="Date" {
 		Text item=Date
+		Text item=OutdoorTemperature 
+		Text item=OutdoorHumidity
 	}
 
 	Frame label="Presence" {
