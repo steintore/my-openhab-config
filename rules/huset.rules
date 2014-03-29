@@ -58,7 +58,7 @@ rule "Switch off heating if temp for panelovn is ok, but leave panelovn on"
 	then
 		if (stue_panelovn.state == ON) {
 			var double t = new Double(power_panelovn.state.toString())
-			if (stue_vifteovn.state == ON && t < 10) {
+			if (stue_vifteovn.state == ON || stue_vifteovn_2.state == ON && t < 10) {
 				sendCommand(stue_vifteovn, OFF)
 				sendCommand(stue_vifteovn_2, OFF)
 				logInfo("Heating", "Switched off fan oven")	
