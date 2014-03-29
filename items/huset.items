@@ -10,15 +10,17 @@ DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berl
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
-Switch stue_panelovn    "Panelovn"      <heating>       (gGF, Heating){zwave="3:command=switch_binary"}
-Switch stue_vifteovn    "Vifteovn"      <heating>       (gGF, Heating){zwave="2:command=switch_binary"}
-Switch stue_vifteovn_2  "Vifteovn 2"    <heating>       (gGF, Heating){zwave="4:command=switch_binary"}
+Switch stue_panelovn    "Panelovn"      	<heating>       (gGF, Heating){zwave="3:command=switch_binary"}
+Switch stue_vifteovn    "Vifteovn"      	<heating>       (gGF, Heating){zwave="2:command=switch_binary"}
+Switch stue_vifteovn_2  "Vifteovn 2"    	<heating>       (gGF, Heating){zwave="4:command=switch_binary"}
+Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor){zwave="5:command=switch_binary"}
 
 /* Energy measuring */
 Group:Number:SUM					Energy			"Energiforbruk: [%d W]"			<energy>				(All)
-Number power_vifteovn "Strøm vifteovn	[%.1f W]" <energy> (Energy) 	{zwave="2:command=sensor_multilevel"}
-Number power_panelovn "Strøm panelovn	[%.1f W]" <energy> (Energy) 	{zwave="3:command=sensor_multilevel"}
-Number power_vifteovn_2 "Strøm vifteovn 2	[%.1f W]" <energy> (Energy)	{zwave="4:command=sensor_multilevel"}
+Number power_vifteovn 			"Strøm vifteovn	[%.1f W]" 				<energy> (Energy) 	{zwave="2:command=sensor_multilevel"}
+Number power_panelovn 			"Strøm panelovn	[%.1f W]" 				<energy> (Energy) 	{zwave="3:command=sensor_multilevel"}
+Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 			<energy> (Energy)	{zwave="4:command=sensor_multilevel"}
+Number power_panelovn_kontor 	"Strøm panelovn kontor	[%.1f W]" 		<energy> (Energy) 	{zwave="5:command=sensor_multilevel"}
 
 /* Presence detection */
 Group:Switch:OR(ON, OFF)	Home 			"Is someone at home [(%d)]" (All)
@@ -38,3 +40,7 @@ Number OfficeTemperature	"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature
 Number OfficeHumidity 		"Luftfuktighet kontor [%.1f %%]"	<temperature> 	(gFirstFloor) { rfxcom="<36353:Humidity" }
 Number BasementTemperature	"Temp kjeller [%.1f °C]"			<temperature>	(Temperature,gBasement) { rfxcom="<52226:Temperature" }
 Number BasementHumidity 	"Luftfuktighet kjeller [%.1f %%]" 	<temperature>	(gBasement) { rfxcom="<52226:Humidity" }
+
+/* Freezer */
+Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(Energy) 			{zwave="6:command=sensor_multilevel"}
+Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control){zwave="6:command=switch_binary"}

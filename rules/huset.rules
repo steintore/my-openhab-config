@@ -2,7 +2,7 @@ import org.openhab.core.library.types.*
 import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 import java.lang.Math
-
+/*
 rule "Set things to off when starting system"
 when
 	System started
@@ -10,6 +10,7 @@ then
 	sendCommand(Home, OFF)
 	sendCommand(Heating, OFF)
 end
+*/
 
 /* RULES FOR HEATING */
 /*
