@@ -44,3 +44,7 @@ Number BasementHumidity 	"Luftfuktighet kjeller [%.1f %%]" 	<temperature>	(gBase
 /* Freezer */
 Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(Energy) 			{zwave="6:command=sensor_multilevel"}
 Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control){zwave="6:command=switch_binary"}
+
+/* Garage */
+Switch garage_door_1    "Garasjedør 1"      	<garagedoor>       (gOutdoor){zwave="7:command=switch_binary"}
+Switch garage_door_2    "Garasjedør 2"      	<garagedoor>       (gOutdoor){zwave="8:command=switch_binary"}
