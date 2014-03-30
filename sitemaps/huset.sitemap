@@ -20,4 +20,8 @@ sitemap huset label="Huset"
 		Group item=Home label="Hjemme  [(%d)]" icon="present"
 		Group item=proximity label="Network health [(%d)]" icon="present"
 	}
+	
+	Frame label="Status" {
+		Group item=gBattery label="Batteri" icon="battery"
+	}
 }
