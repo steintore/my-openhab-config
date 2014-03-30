@@ -47,4 +47,4 @@ Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control){zwave="6:co
 
 /* Garage */
 Contact garage_door_1    "Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}
-Contact garage_door_2    "Garasjedør MONDEO [MAP(no.map):%s]"      <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}
+Contact garage_door_2    "Garasjedør MONDEO [MAP(no.map):%s]"      <garagedoor>       (gOutdoor){zwave="8:1:command=BASIC"}
