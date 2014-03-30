@@ -2,27 +2,8 @@ import org.openhab.core.library.types.*
 import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 import java.lang.Math
-/*
-rule "Set things to off when starting system"
-when
-	System started
-then
-	sendCommand(Home, OFF)
-	sendCommand(Heating, OFF)
-end
-*/
 
-/* RULES FOR HEATING */
-/*
- * x1. Varme kl 0530 hverdager - men bare hvis noen er hjemme - skru av kl 07 eller når vi drar
- * x2. Varme kl 0730 i helgene - men bare hvis noen er hjemme
- * x3. Starte oppvarming når jeg kommer hjem - men bare før 22 og etter 05
- * x4. Når rommet er varmt (sjekkes hvert 5. min) så slår vi kun av vifteovnen, dersom kl er etter 22 så slår vi av alt
- * x5. Hvert 20. min sjekker om panelovnen igjen bruker mer strøm, hvis ja og hvis noen er hjemme -> slå på varming, men kun om panelovnen er på
- * x6. Slå av all varming når ingen er hjemme
- * x7. Slå av varming kl 22
- */
-rule "Switch on heating when someone comes home or leaves"
+rule "Switch on heating when someone comes home or of when someone leaves"
 	when
 		Item Home changed
 	then
@@ -30,29 +11,31 @@ rule "Switch on heating when someone comes home or leaves"
 			sendCommand(Heating, OFF)
 			pushNotification("Heating","Heating stopped at " + now)
 		} else if (Home.state == ON && Heating.state == OFF) {
+			var double temp = new Double(OutdoorTemperature.state.toString())
 			var p = now.getHourOfDay
-			if (p < 22 && p > 05) {
+			if (p < 22 && p > 05 && temp < 10) {
 				sendCommand(Heating, ON)
-				pushNotification("Heating","Started heating the living room")
 				logInfo("org.openhab.rules","Varming av stua har startet")
+				pushNotification("Heating","Started heating the living room")
 			}
 		}
 end
 
-rule "If the room is to cold and we are home, then heat it up"
+rule "If the room is to cold and we are home, then heat it up, but only if it is less than 10 degrees outside"
 	when
 		Time cron "0 0/20 * * * ?" 
 	then
 		if (stue_panelovn.state == ON) {
 			var double t = new Double(power_panelovn.state.toString())
-			if (stue_vifteovn.state == OFF && t > 10 && Home.state == ON) {
+			var double temp = new Double(OutdoorTemperature.state.toString())
+			if (t > 10 && Home.state == ON && temp < 10) {
 				sendCommand(Heating, ON)
 				logInfo("org.openhab.rules", "Switched on fan")	
 			}
 		}
 end
 	
-rule "Switch off heating if temp for panelovn is ok, but leave panelovn on"
+rule "Switch off heating if temp for panelovn is ok, but leave panelovn on, unless more than 10 degress outside"
 	when
 		Time cron "0 0/5 * * * ?" 
 	then
@@ -62,6 +45,10 @@ rule "Switch off heating if temp for panelovn is ok, but leave panelovn on"
 				sendCommand(stue_vifteovn, OFF)
 				sendCommand(stue_vifteovn_2, OFF)
 				logInfo("Heating", "Switched off fan oven")	
+			}
+			var double temp = new Double(OutdoorTemperature.state.toString())
+			if (temp > 10) {
+				sendCommand(stue_panelovn, OFF)
 			}
 		}
 end

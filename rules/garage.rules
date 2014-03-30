@@ -1,0 +1,64 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+var Timer garageDoorOpen = null
+
+rule "On system startup"
+	when
+		System started
+	then
+	 sendCommand(garage_door_1, CLOSED)
+	 sendCommand(garage_door_2, CLOSED)
+end
+
+
+rule "Send a message if garage door has been open for 30 minutes"
+	when
+		Item garage_door_1 changed to OPEN or
+		Item garage_door_2 changed to OPEN	
+	then
+		logInfo("org.openhab.rules","Garage door opened")
+		garageDoorOpen = createTimer(now.plusSeconds(1800)) [|
+			logInfo("org.openhab.rules", "Garage door has been open too long")
+			pushNotification("Garage door", "Garage door has not been closed")
+			if(garageDoorOpen!=null) {
+				if(garageDoorOpen.running) {
+					garageDoorOpen.cancel()
+				}
+				garageDoorOpen = null
+			}
+		]
+end
+
+rule "Reset timer if someone closes the garage door, and both is closed"
+	when
+		Item garage_door_1 changed to CLOSED or
+		Item garage_door_2 changed to CLOSED
+	then
+		logInfo("org.openhab.rules", "Garage door closed")
+		if (garage_door_1.state == CLOSED && garage_door_2.state == CLOSED) {
+			if(garageDoorOpen!=null) {
+			garageDoorOpen.cancel
+			garageDoorOpen = null
+			}
+		}	
+end
+
+rule "Send a message after 5 minutes if garage door is open and nobody is home"
+	when
+		Time cron "0 0/5 * * * ?"
+	then
+		if (Home.state == OFF && garage_door_1.state == OPEN || garage_door_2.state == OPEN) {
+			pushNotification("Garage door", "Nobody at home and garage door is open!")
+		}	
+end
+
+rule "Send a message at 22 if the garage door is open"
+	when
+		Time cron "0 0 22 ? * *"
+	then
+		if (garage_door_1.state == OPEN || garage_door_2.state == OPEN) {
+			pushNotification("Garage door", "Leaf:: " + garage_door_1.state + ", Mondeo:" + garage_door_2.state)
+		}	
+end

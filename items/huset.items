@@ -46,5 +46,5 @@ Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(Energy) 			{zwave="6:
 Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control){zwave="6:command=switch_binary"}
 
 /* Garage */
-Switch garage_door_1    "Garasjedør 1"      	<garagedoor>       (gOutdoor){zwave="7:command=switch_binary"}
-Switch garage_door_2    "Garasjedør 2"      	<garagedoor>       (gOutdoor){zwave="8:command=switch_binary"}
+Contact garage_door_1    "Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}
+Contact garage_door_2    "Garasjedør MONDEO [MAP(no.map):%s]"      <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}

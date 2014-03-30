@@ -5,6 +5,7 @@ import org.openhab.model.script.actions.*
 var Timer timerSteinMobileWlan = null
 var Timer timerAnetteMobileWlan = null
 
+
 rule "Stein Mobile Wlan Proximity Enter"
 when
 	Item Mobile_Stein_Wlan changed from OFF to ON
