@@ -35,7 +35,7 @@ rule "If the room is to cold and we are home, then heat it up, but only if it is
 		}
 end
 	
-rule "Switch off heating if temp for panelovn is ok, but leave panelovn on, unless more than 10 degress outside"
+rule "Switch off heating if temp for panelovn is ok, but leave panelovn on, unless more than 10 degrees outside"
 	when
 		Time cron "0 0/5 * * * ?" 
 	then

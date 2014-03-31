@@ -51,11 +51,10 @@ Contact garage_door_1    "Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>
 Contact garage_door_2    "Garasjedør MONDEO [MAP(no.map):%s]"      <garagedoor>       (gOutdoor){zwave="8:1:command=BASIC"}
 
 /* Switch */
-Switch left_double_switch 	"Venstre knapp" <network> (gFirstFloor) { rfxcom="<11971074.11:Command" }
-Switch right_double_switch 	"Høyre knapp" 	<network> (gFirstFloor) { rfxcom="<11971074.12:Command" }
+Switch left_double_switch 	"Venstre knapp" <network> (gGF) { rfxcom="<11971074.11:Command" }
+Switch right_double_switch 	"Høyre knapp" 	<network> (gGF) { rfxcom="<11971074.12:Command" }
 
 /* Battery */
-Number battery_switch			"Bryter [%.1f %%]"		<rollershutter>	(gBattery)	{rfxcom="<11971074:BatteryLevel"}
-Number battery_outdoor_temp		"Utetemp [%.1f %%]" 	<rollershutter>	(gBattery) 	{rfxcom="<26628:BatteryLevel"}
-Number battery_basement_temp	"Kjellertemp [%.1f %%]"	<rollershutter>	(gBattery) 	{rfxcom="<52226:BatteryLevel"}
-Number battery_office_temp		"Kontortemp [%.1f %%]"	<rollershutter>	(gBattery) 	{rfxcom="<36353:BatteryLevel"}
+Number battery_outdoor_temp		"Utetemp [%f]" 		<rollershutter>	(gBattery) 	{rfxcom="<26628:BatteryLevel"}
+Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery) 	{rfxcom="<52226:BatteryLevel"}
+Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery) 	{rfxcom="<36353:BatteryLevel"}

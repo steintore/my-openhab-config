@@ -22,6 +22,6 @@ sitemap huset label="Huset"
 	}
 	
 	Frame label="Status" {
-		Group item=gBattery label="Batteri" icon="battery"
+		Group item=gBattery label="Batteri" icon="energy"
 	}
 }
