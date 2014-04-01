@@ -30,7 +30,8 @@ rule "If the room is to cold and we are home, then heat it up, but only if it is
 			var double temp = new Double(OutdoorTemperature.state.toString())
 			if (t > 10 && Home.state == ON && temp < 10) {
 				sendCommand(Heating, ON)
-				logInfo("org.openhab.rules", "Switched on fan")	
+				logInfo("org.openhab.rules", "Switched on fan")
+				pushNotification("Heating", "Switched on fan")	
 			}
 		}
 end
@@ -41,14 +42,16 @@ rule "Switch off heating if temp for panelovn is ok, but leave panelovn on, unle
 	then
 		if (stue_panelovn.state == ON) {
 			var double t = new Double(power_panelovn.state.toString())
-			if (stue_vifteovn.state == ON || stue_vifteovn_2.state == ON && t < 10) {
+			if ((stue_vifteovn.state == ON || stue_vifteovn_2.state == ON) && t < 10) {
 				sendCommand(stue_vifteovn, OFF)
 				sendCommand(stue_vifteovn_2, OFF)
-				logInfo("Heating", "Switched off fan oven")	
+				logInfo("Heating", "Switched off fan oven")
+				pushNotification("Heating", "Switched of fan oven")	
 			}
 			var double temp = new Double(OutdoorTemperature.state.toString())
 			if (temp > 10) {
 				sendCommand(stue_panelovn, OFF)
+				pushNotification("Heating", "Switched of panel oven, outside temp is: " + temp)
 			}
 		}
 end
@@ -70,6 +73,7 @@ rule "Switch off heating in the evening"
 		if (Heating.state == ON) {
 			sendCommand(Heating, OFF)
 			logInfo("org.openhab.rules", "Heating switched of at " + now)
+			pushNotification("Heating", "Heating switched of at " + now)
 		}
 end
 
@@ -81,5 +85,6 @@ rule "Start heating, but only if there are someone at home"
 		if (Home.state == ON) {
 			sendCommand(Heating, ON)
 			logInfo("org.openhab.rules", "Morning heating started")
+			pushNotification("Heating", "Morning heating started")
 		}
 end

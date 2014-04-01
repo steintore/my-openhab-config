@@ -10,6 +10,7 @@ rule "On system startup"
 	then
 	 sendCommand(garage_door_1, CLOSED)
 	 sendCommand(garage_door_2, CLOSED)
+	 pushNotification("System", "System is up and running")
 end
 
 
@@ -59,6 +60,6 @@ rule "Send a message at 22 if the garage door is open"
 		Time cron "0 0 22 ? * *"
 	then
 		if (garage_door_1.state == OPEN || garage_door_2.state == OPEN) {
-			pushNotification("Garage door", "Leaf:: " + garage_door_1.state + ", Mondeo:" + garage_door_2.state)
+			pushNotification("Garage door", "Leaf: " + garage_door_1.state.toString() + ", Mondeo:" + garage_door_2.state.toString())
 		}	
 end
