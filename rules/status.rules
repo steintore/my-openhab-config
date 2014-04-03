@@ -1,0 +1,21 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+rule "Check garage doors when clicking button"
+	when
+		Item right_double_switch received command ON	
+	then
+		pushNotification("Status", "Garagedoors - LEAF: " + garage_door_1.state.toString + ", Mondeo: " + garage_door_2.state.toString)
+end
+
+rule "Leaving house"
+	when
+		Item right_double_switch received command OFF	
+	then
+		sendCommand(Heating, OFF)
+		sendCommand(Home, OFF)
+		sendCommand(garage_door_1, CLOSED)
+		sendCommand(garage_door_2, CLOSED)
+		pushNotification("Going?", "Leaving house??")		
+end
