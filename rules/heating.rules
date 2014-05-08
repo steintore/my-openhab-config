@@ -72,6 +72,7 @@ rule "Switch off heating in the evening"
 	then
 		if (Heating.state == ON) {
 			sendCommand(Heating, OFF)
+			sendCommand(kontor_panelovn, OFF)
 			logInfo("org.openhab.rules", "Heating switched of at " + now)
 			pushNotification("Heating", "Heating switched of at " + now)
 		}
@@ -101,4 +102,15 @@ rule "Stop heating if button is switched to off"
 		Item left_double_switch received command OFF	
 	then
 		sendCommand(Heating, OFF)
+end
+
+rule "Left double switch"
+	when
+		Item left_double_switch received update
+	then
+		if (left_double_switch.state == ON) {
+			sendCommand(Heating, ON)			
+		} else {
+			sendCommand(Heating, OFF)
+		}
 end
