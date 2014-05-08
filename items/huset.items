@@ -33,6 +33,7 @@ Group:Switch:OR(ON, OFF) proximity (All)
 Switch Mobile_Stein_Wlan 	"Steins iPhone Wlan" 		<present>	(proximity) {nh="192.168.1.151"}
 Switch Mobile_Anette_Wlan 	"Anettes iPhone Wlan" 		<present> 	(proximity) {nh="192.168.1.152"}
 Switch TV_living_room		"TV living room"			<present>	(proximity) {nh="192.168.1.153"}
+Switch router_wlan		"Router"			<present>		(proximity) {nh="192.168.1.200"}
 
 /* Temperature */
 Number OutdoorTemperature 	"Temp ute [%.1f °C]" 				<temperature> 	(Temperature,gOutdoor) { rfxcom="<26628:Temperature" }
@@ -41,6 +42,8 @@ Number OfficeTemperature	"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature
 Number OfficeHumidity 		"Luftfuktighet kontor [%.1f %%]"	<temperature> 	(gFirstFloor) { rfxcom="<36353:Humidity" }
 Number BasementTemperature	"Temp kjeller [%.1f °C]"			<temperature>	(Temperature,gBasement) { rfxcom="<52226:Temperature" }
 Number BasementHumidity 	"Luftfuktighet kjeller [%.1f %%]" 	<temperature>	(gBasement) { rfxcom="<52226:Humidity" }
+Number LivingRoomTemperature    "Temp stue [%.1f °C]"			<temperature>   (Temperature,gGF) { rfxcom="<48385:Temperature"}
+Number LivingRoomHumidity	"Luftfuktighet stue [%.1f %%]"		<temperature>	(gGF) { rfxcom="<48385:Humidity" }
 
 /* Freezer */
 Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(Energy) 			{zwave="6:command=sensor_multilevel"}
@@ -58,3 +61,4 @@ Switch right_double_switch 	"Høyre knapp" 	<network> (gGF) { rfxcom="<11971074.
 Number battery_outdoor_temp		"Utetemp [%f]" 		<rollershutter>	(gBattery) 	{rfxcom="<26628:BatteryLevel"}
 Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery) 	{rfxcom="<52226:BatteryLevel"}
 Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery) 	{rfxcom="<36353:BatteryLevel"}
+Number battery_living_room_temp		"Stuetemp [%f]"		<rollershutter> (gBattery)	{rfxcom="<48385:BatteryLevel"}
