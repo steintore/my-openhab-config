@@ -14,8 +14,24 @@ rule "Leaving house"
 		Item right_double_switch received command OFF	
 	then
 		sendCommand(Heating, OFF)
+		sendCommand(kontor_panelovn, OFF)
 		sendCommand(Home, OFF)
 		sendCommand(garage_door_1, CLOSED)
 		sendCommand(garage_door_2, CLOSED)
-		pushNotification("Going?", "Leaving house??")		
+		pushNotification("Going?", "Leaving house??")
+end
+
+rule "Alarm is being armed"
+	when
+		Item router_wlan changed from ON to OFF
+	then
+		sendCommand(Home, OFF)
+		pushNotification('Alarmed changed', 'Seems like you left at' + now)
+end
+
+rule "Alarm is being disarmed"
+	when
+		Item router_wlan changed from OFF to ON
+	then
+		pushNotification('Alarm changed', 'Welcome home, home status is: ' + Home.state.toString())
 end

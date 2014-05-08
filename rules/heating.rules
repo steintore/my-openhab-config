@@ -9,6 +9,7 @@ rule "Switch on heating when someone comes home or of when someone leaves"
 	then
 		if (Heating.state == ON && Home.state == OFF) {
 			sendCommand(Heating, OFF)
+			sendCommand(kontor_panelovn, OFF)
 			pushNotification("Heating","Heating stopped at " + now)
 		} else if (Home.state == ON && Heating.state == OFF) {
 			var double temp = new Double(OutdoorTemperature.state.toString())
@@ -62,6 +63,7 @@ rule "Switch off heating during the week, or when last one leaves home"
 	then
 		if (Heating.state == ON && Home.state == OFF) {
 			sendCommand(Heating, OFF)
+			sendCommand(kontor_panelovn, OFF)
 			pushNotification("Heating","Heating switched off at " + now)
 		}
 end
