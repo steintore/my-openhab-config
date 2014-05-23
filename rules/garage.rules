@@ -10,6 +10,7 @@ rule "Send a message if garage door has been open for 30 minutes"
 		Item garage_door_2 changed to OPEN	
 	then
 		logInfo("org.openhab.rules","Garage door opened")
+		sendCommand(message_received, OFF)
 		garageDoorOpen = createTimer(now.plusSeconds(1800)) [|
 			logInfo("org.openhab.rules", "Garage door has been open too long")
 			pushNotification("Garage door", "Garage door has not been closed")
@@ -28,6 +29,7 @@ rule "Reset timer if someone closes the garage door, and both is closed"
 		Item garage_door_2 changed to CLOSED
 	then
 		logInfo("org.openhab.rules", "Garage door closed")
+		sendCommand(message_received, OFF)
 		if (garage_door_1.state == CLOSED && garage_door_2.state == CLOSED) {
 			if(garageDoorOpen!=null) {
 			garageDoorOpen.cancel
@@ -41,7 +43,9 @@ rule "Send a message after 5 minutes if garage door is open and nobody is home"
 		Time cron "0 0/5 * * * ?"
 	then
 		if (Home.state == OFF && garage_door_1.state == OPEN || garage_door_2.state == OPEN) {
-			pushNotification("Garage door", "Nobody at home and garage door is open!")
+			if (message_received.state == ON) {
+				pushNotification("Garage door", "Nobody at home and garage door is open!")
+			}
 		}
 		if (garage_door_1.state == Undefined || garage_door_1.state == Uninitialized) {
         	sendCommand(garage_door_1, CLOSED)
