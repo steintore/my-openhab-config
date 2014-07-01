@@ -1,6 +1,0 @@
-sitemap huset label="Kona"
-{
-        Frame {
-        	Switch item=Heating label="Trykk her om det er for kaldt" icon="heating"
-        }
-}
