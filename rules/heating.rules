@@ -10,14 +10,16 @@ rule "Switch on heating when someone comes home or of when someone leaves"
 		if (Heating.state == ON && Home.state == OFF) {
 			sendCommand(Heating, OFF)
 			sendCommand(kontor_panelovn, OFF)
-			pushNotification("Heating","Heating stopped at " + now)
+			postUpdate(push_message_text, "Heating stopped at " + now)
+			callScript('pushMessages')
 		} else if (Home.state == ON && Heating.state == OFF) {
 			var double temp = new Double(OutdoorTemperature.state.toString())
 			var p = now.getHourOfDay
 			if (p < 22 && p > 05 && temp < 10) {
 				sendCommand(Heating, ON)
 				logInfo("org.openhab.rules","Varming av stua har startet")
-				pushNotification("Heating","Started heating the living room")
+				postUpdate(push_message_text, "Started heating the living room")
+				callScript('pushMessages')
 			}
 		}
 end
@@ -50,7 +52,8 @@ rule "Switch off heating if temp for panelovn is ok, but leave panelovn on, unle
 			var double temp = new Double(OutdoorTemperature.state.toString())
 			if (temp > 10) {
 				sendCommand(stue_panelovn, OFF)
-				pushNotification("Heating", "Switched of panel oven, outside temp is: " + temp)
+				postUpdate(push_message_text, "Switched of panel oven, outside temp is: " + temp)
+				callScript('pushMessages')
 			}
 		}
 end
@@ -62,7 +65,8 @@ rule "Switch off heating during the week, or when last one leaves home"
 		if (Heating.state == ON && Home.state == OFF) {
 			sendCommand(Heating, OFF)
 			sendCommand(kontor_panelovn, OFF)
-			pushNotification("Heating","Heating switched off at " + now)
+			postUpdate(push_message_text, "Heating switched off at " + now)
+			callScript('pushMessages')
 		}
 end
 
@@ -74,7 +78,8 @@ rule "Switch off heating in the evening"
 			sendCommand(Heating, OFF)
 			sendCommand(kontor_panelovn, OFF)
 			logInfo("org.openhab.rules", "Heating switched off at " + now)
-			pushNotification("Heating", "Heating switched off at " + now)
+			postUpdate(push_message_text, "Heating switched off at " + now)
+			callScript('pushMessages')
 		}
 end
 
@@ -83,7 +88,7 @@ rule "Start heating, but only if there are someone at home"
 		Time cron "0 30 5 ? * MON-FRI" or
 		Time cron "0 0 7 ? * SAT-SUN"
 	then
-		if (Home.state == ON) {
+		if (Home.state == ON && new Double(OutdoorTemperature.state.toString()) < 10) {
 			sendCommand(Heating, ON)
 			logInfo("org.openhab.rules", "Morning heating started")
 		}

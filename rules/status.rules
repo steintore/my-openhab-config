@@ -6,7 +6,8 @@ rule "Check garage doors when clicking button"
 	when
 		Item right_double_switch received command ON	
 	then
-		pushNotification("Status", "Garagedoors - LEAF: " + garage_door_1.state.toString + ", Mondeo: " + garage_door_2.state.toString)
+		postUpdate(push_message_text, "Garagedoors - LEAF: " + garage_door_1.state.toString + ", Mondeo: " + garage_door_2.state.toString)
+		callScript('pushMessages')
 end
 
 rule "Leaving house"
@@ -18,7 +19,8 @@ rule "Leaving house"
 		sendCommand(Home, OFF)
 		sendCommand(garage_door_1, CLOSED)
 		sendCommand(garage_door_2, CLOSED)
-		pushNotification("Going?", "Leaving house??")
+		postUpdate(push_message_text, "Bye bye, home status is now: " + Home.state.toString)
+		callScript('pushMessages')
 end
 
 rule "Alarm is being armed"
@@ -26,12 +28,14 @@ rule "Alarm is being armed"
 		Item router_wlan changed from ON to OFF
 	then
 		sendCommand(Home, OFF)
-		pushNotification('Alarmed changed', 'Seems like you left at' + now)
+		postUpdate(push_message_text, "Seems like you left at" + now)
+		callScript('pushMessages')
 end
 
 rule "Alarm is being disarmed"
 	when
 		Item router_wlan changed from OFF to ON
 	then
-		pushNotification('Alarm changed', 'Welcome home, home status is: ' + Home.state.toString())
+		postUpdate(push_message_text, "Welcome home, home status is: " + Home.state.toString())
+		callScript('pushMessages')
 end

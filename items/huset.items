@@ -63,3 +63,6 @@ Number battery_outdoor_temp		"Utetemp [%f]" 		<rollershutter>	(gBattery) 	{rfxco
 Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery) 	{rfxcom="<52226:BatteryLevel"}
 Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery) 	{rfxcom="<36353:BatteryLevel"}
 Number battery_living_room_temp		"Stuetemp [%f]"		<rollershutter> (gBattery)	{rfxcom="<48385:BatteryLevel"}
+
+/* Text values */
+String push_message_text "Default message"
