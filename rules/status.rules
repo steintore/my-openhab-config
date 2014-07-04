@@ -36,6 +36,7 @@ rule "Alarm is being disarmed"
 	when
 		Item router_wlan changed from OFF to ON
 	then
+		sendCommand(Home, ON)
 		postUpdate(push_message_text, "Welcome home, home status is: " + Home.state.toString())
 		callScript('pushMessages')
 end

@@ -17,7 +17,7 @@ Switch stue_vifteovn_2  "Vifteovn 2"    	<heating>       (gGF, Heating){zwave="4
 Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor){zwave="5:command=switch_binary"}
 
 /* Energy measuring */
-Group:Number:SUM					Energy			"Energiforbruk: [%d W]"			<energy>				(All)
+Group:Number:SUM					Energy			"Energiforbruk: [%f W]"			<energy>				(All)
 Number power_vifteovn 			"Strøm vifteovn	[%.1f W]" 				<energy> (Energy) 	{zwave="2:command=sensor_multilevel"}
 Number power_panelovn 			"Strøm panelovn	[%.1f W]" 				<energy> (Energy) 	{zwave="3:command=sensor_multilevel"}
 Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 			<energy> (Energy)	{zwave="4:command=sensor_multilevel"}
@@ -44,6 +44,9 @@ Number BasementTemperature	"Temp kjeller [%.1f °C]"			<temperature>	(Temperatur
 Number BasementHumidity 	"Luftfuktighet kjeller [%.1f %%]" 	<temperature>	(gBasement) { rfxcom="<52226:Humidity" }
 Number LivingRoomTemperature    "Temp stue [%.1f °C]"			<temperature>   (Temperature,gGF) { rfxcom="<48385:Temperature"}
 Number LivingRoomHumidity	"Luftfuktighet stue [%.1f %%]"		<temperature>	(gGF) { rfxcom="<48385:Humidity" }
+
+/* Weather */
+/*String w   "Today [%s]"   <w>  { http="<[http://api.wunderground.com/api/<your api key>/forecast/q/Luxembourg/Luxembourg.xml:3600000:XSLT(wunderground_icon_forecast.xsl)]"}*/ 
 
 /* Freezer */
 Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(Energy) 			{zwave="6:command=sensor_multilevel"}
