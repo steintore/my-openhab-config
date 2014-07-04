@@ -28,6 +28,7 @@ rule "Alarm is being armed"
 	when
 		Item router_wlan changed from ON to OFF
 	then
+		sendCommand(guest_home, OFF)
 		sendCommand(Home, OFF)
 		postUpdate(push_message_text, "Seems like you left at" + now)
 		callScript('pushMessages')
