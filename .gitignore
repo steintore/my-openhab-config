@@ -1,3 +1,4 @@
 openhab.cfg
 users.cfg
 .DS_Store
+scripts/pushMessages.script
