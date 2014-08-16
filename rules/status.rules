@@ -18,9 +18,7 @@ rule "Leaving house"
 		sendCommand(kontor_panelovn, OFF)
 		sendCommand(guest_home, OFF)
 		sendCommand(Home, OFF)
-		sendCommand(garage_door_1, CLOSED)
-		sendCommand(garage_door_2, CLOSED)
-		postUpdate(push_message_text, "Bye bye, home status is now: " + Home.state.toString)
+		postUpdate(push_message_text, "Bye bye")
 		callScript('pushMessages')
 end
 
@@ -30,7 +28,7 @@ rule "Alarm is being armed"
 	then
 		sendCommand(guest_home, OFF)
 		sendCommand(Home, OFF)
-		postUpdate(push_message_text, "Seems like you left at" + now)
+		postUpdate(push_message_text, "Seems like you left at " + now)
 		callScript('pushMessages')
 end
 
@@ -39,6 +37,6 @@ rule "Alarm is being disarmed"
 		Item router_wlan changed from OFF to ON
 	then
 		sendCommand(guest_home, ON)
-		postUpdate(push_message_text, "Welcome home, home status is: " + Home.state.toString())
+		postUpdate(push_message_text, "Welcome home")
 		callScript('pushMessages')
 end
