@@ -62,12 +62,18 @@ rule "Send a message after 5 minutes if garage door is open and nobody is home"
         }	
 end
 
-rule "Send a message at 22 if the garage door is open"
+rule "Send a status message at 22 if anything is not ok"
 	when
 		Time cron "0 0 22 ? * *"
 	then
 		if (garage_door_1.state == OPEN || garage_door_2.state == OPEN) {
 			postUpdate(push_message_text, "Leaf: " + garage_door_1.state.toString() + ", Mondeo:" + garage_door_2.state.toString())
 			callScript('pushMessages')
-		}	
+		}
+		if (boss_lan.state == OFF && !boss_lan.changedSince(now.minusHours(12))) {
+			pushover('Boss is not responding, and has been off for 12 hours')
+		}
+		if (nas_lan.state == OFF && !nas_lan.changedSince(now.minusHours(12))) {
+			pushover('NAS is not responding, and has been off for 12 hours')
+		} 	 	
 end

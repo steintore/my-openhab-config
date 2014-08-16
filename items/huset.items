@@ -35,6 +35,7 @@ Switch Mobile_Anette_Wlan 	"Anettes iPhone Wlan" 		<present> 	(proximity) {nh="1
 Switch TV_living_room		"TV living room"			<present>	(proximity) {nh="192.168.1.153"}
 Switch router_wlan		"Router"			<present>		(proximity) {nh="192.168.1.200:0:40000"}
 Switch boss_lan			"Boss server"       <present>       (proximity) {nh="192.168.1.99"}
+Switch nas_lan			"NAS"				<present>		(proximity) {nh="192.168.1.222"}
 
 /* Temperature */
 Number OutdoorTemperature 	"Temp ute [%.1f °C]" 				<temperature> 	(Temperature,gOutdoor) { rfxcom="<26628:Temperature" }
