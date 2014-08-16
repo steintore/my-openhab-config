@@ -14,6 +14,7 @@ sitemap huset label="Huset"
 		Text item=Date
 		Text item=OutdoorTemperature 
 		Text item=OutdoorHumidity
+		Chart item=OutdoorTemperature period=W service="mysql"
 	}
 
 	Frame label="Presence" {
