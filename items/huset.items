@@ -33,7 +33,8 @@ Group:Switch:OR(ON, OFF) proximity (All)
 Switch Mobile_Stein_Wlan 	"Steins iPhone Wlan" 		<present>	(proximity) {nh="192.168.1.151"}
 Switch Mobile_Anette_Wlan 	"Anettes iPhone Wlan" 		<present> 	(proximity) {nh="192.168.1.152"}
 Switch TV_living_room		"TV living room"			<present>	(proximity) {nh="192.168.1.153"}
-Switch router_wlan		"Router"			<present>		(proximity) {nh="192.168.1.200:0:20000"}
+Switch router_wlan		"Router"			<present>		(proximity) {nh="192.168.1.200:0:40000"}
+Switch boss_lan			"Boss server"       <present>       (proximity) {nh="192.168.1.99"}
 
 /* Temperature */
 Number OutdoorTemperature 	"Temp ute [%.1f °C]" 				<temperature> 	(Temperature,gOutdoor) { rfxcom="<26628:Temperature" }
