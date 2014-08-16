@@ -48,7 +48,7 @@ rule "Send a message after 5 minutes if garage door is open and nobody is home"
 	when
 		Time cron "0 0/5 * * * ?"
 	then
-		if (Home.state == OFF && garage_door_1.state == OPEN || garage_door_2.state == OPEN) {
+		if (Home.state == OFF && (garage_door_1.state == OPEN || garage_door_2.state == OPEN)) {
 			if (message_received.state == OFF) {
 				postUpdate(push_message_text, "Nobody at home and garage door is open!")
 				try { callScript('pushMessages') } catch (org.openhab.core.scriptengine.ScriptExecutionException e) {}
