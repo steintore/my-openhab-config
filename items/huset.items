@@ -5,6 +5,7 @@ Group gBasement 	(All)
 Group gFirstFloor 	(All)
 Group Status    	(All)
 Group gBattery 		(All)
+Group light		(All)
 
 /* NTP binding demo item */
 DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
@@ -71,3 +72,10 @@ Number battery_living_room_temp		"Stuetemp [%f]"		<rollershutter> (gBattery)	{rf
 
 /* Text values */
 String push_message_text "Default message"
+
+/* Lighting */
+Switch light_living_room "Stue"	<light> (gGF,light) {rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch light_living_room_2 "Stue 2" <light> (gGF,light) {rfxcom=">12339014.2:LIGHTING2.AC:Command"}
+
+/* Motion detector */
+Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
