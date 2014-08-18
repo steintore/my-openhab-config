@@ -12,8 +12,11 @@ rule "Send a message if garage door has been open for 30 minutes"
 		logInfo("org.openhab.rules","Garage door opened")
 		sendCommand(message_received, OFF)
 		garageDoorOpen = createTimer(now.plusSeconds(1800)) [|
-			logInfo("org.openhab.rules", "Garage door has been open too long")
-			postUpdate(push_message_text, "Garage door has not been closed")
+			var t = ""
+			if (garage_door_1.state == OPEN) t = "Leafs "
+			else t = "Mondeos" 
+			logInfo("org.openhab.rules", t+ " Garage door has been open too long")
+			postUpdate(push_message_text, t + " Garage door has not been closed")
 			try {
 				callScript('pushMessages')
 			} catch (org.openhab.core.scriptengine.ScriptExecutionException e) {}
