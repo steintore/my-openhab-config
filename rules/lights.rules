@@ -1,0 +1,15 @@
+
+rule "Motion detected"
+	when 
+		Item motion_detector changed to ON
+	then
+	 	if (Home.state == ON)
+			sendCommand(light, ON)
+end
+
+rule "No motion detected"
+	when 
+		Item motion_detector changed to OFF
+	then
+		sendCommand(light, OFF)
+end
