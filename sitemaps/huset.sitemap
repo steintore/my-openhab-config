@@ -12,9 +12,14 @@ sitemap huset label="Huset"
         
 	Frame label="Date" {
 		Text item=Date
-		Text item=OutdoorTemperature 
-		Text item=OutdoorHumidity
-		Text item=w
+		Text item=OutdoorTemperature {
+			Frame {
+				Switch item=Temperature_Chart_Period label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="temperature"
+				Chart item=Temperature_Chart period=h refresh=300 visibility=[Temperature_Chart_Period==0, Temperature_Chart_Period=="Uninitialized"]
+				Chart item=Temperature_Chart period=D refresh=1800 visibility=[Temperature_Chart_Period==1]
+				Chart item=Temperature_Chart period=W refresh=3600 visibility=[Temperature_Chart_Period==2]
+			}
+		} 
 	}
 
 	Frame label="Presence" {

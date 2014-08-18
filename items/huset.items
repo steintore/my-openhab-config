@@ -39,7 +39,9 @@ Switch boss_lan			"Boss server"       <present>       (proximity) {nh="192.168.1
 Switch nas_lan			"NAS"				<present>		(proximity) {nh="192.168.1.222"}
 
 /* Temperature */
-Number OutdoorTemperature 	"Temp ute [%.1f °C]" 				<temperature> 	(Temperature,gOutdoor) { rfxcom="<26628:Temperature" }
+Group Temperature_Chart <temperature>
+Number Temperature_Chart_Period
+Number OutdoorTemperature 	"Temp ute [%.1f °C]" 				<temperature> 	(Temperature,gOutdoor,Temperature_Chart) { rfxcom="<26628:Temperature" }
 Number OutdoorHumidity 		"Luftfuktighet ute [%.1f %%]" 		<temperature> 	(gOutdoor) { rfxcom="<26628:Humidity" }
 Number OfficeTemperature	"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature,gFirstFloor) { rfxcom="<36353:Temperature" }
 Number OfficeHumidity 		"Luftfuktighet kontor [%.1f %%]"	<temperature> 	(gFirstFloor) { rfxcom="<36353:Humidity" }
