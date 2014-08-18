@@ -18,6 +18,7 @@ rule "Leaving house"
 		sendCommand(kontor_panelovn, OFF)
 		sendCommand(guest_home, OFF)
 		sendCommand(Home, OFF)
+		sendCommand(light, OFF)
 		postUpdate(push_message_text, "Bye bye")
 		callScript('pushMessages')
 end
@@ -28,6 +29,7 @@ rule "Alarm is being armed"
 	then
 		sendCommand(guest_home, OFF)
 		sendCommand(Home, OFF)
+		sendCommand(light, OFF)
 		postUpdate(push_message_text, "Seems like you left at " + now)
 		callScript('pushMessages')
 end
