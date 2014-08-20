@@ -81,3 +81,8 @@ Switch light_living_room_2 "Stue 2" <light> (gGF,light) {rfxcom=">12339014.2:LIG
 
 /* Motion detector */
 Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
+
+/* Config-values */
+String pushover_token_anette "Pushover Anette" {configadmin = "pushover:anetteToken"}
+String pushover_token_both "Pushover both" {configadmin = "pushover:bothToken"}
+String pushover_token_default "Pushover default" {configadmin = "pushover:defaultToken"}

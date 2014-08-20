@@ -16,7 +16,7 @@ rule "Send a message if garage door has been open for 30 minutes"
 			if (garage_door_1.state == OPEN) t = "Leafs "
 			else t = "Mondeos" 
 			logInfo("org.openhab.rules", t+ " Garage door has been open too long")
-			postUpdate(push_message_text, t + " Garage door has not been closed")
+			postUpdate(push_message_text, t + " garasjeport er ikke lukket")
 			try {
 				callScript('pushMessages')
 			} catch (org.openhab.core.scriptengine.ScriptExecutionException e) {}
@@ -53,7 +53,7 @@ rule "Send a message after 5 minutes if garage door is open and nobody is home"
 	then
 		if (Home.state == OFF && (garage_door_1.state == OPEN || garage_door_2.state == OPEN)) {
 			if (message_received.state == OFF) {
-				postUpdate(push_message_text, "Nobody at home and garage door is open!")
+				postUpdate(push_message_text, "Tydeligvis ingen hjemme, men garasjeporten er åpen!")
 				try { callScript('pushMessages') } catch (org.openhab.core.scriptengine.ScriptExecutionException e) {}
 			}
 		}

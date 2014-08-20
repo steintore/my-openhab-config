@@ -6,7 +6,7 @@ rule "Check garage doors when clicking button"
 	when
 		Item right_double_switch received command ON	
 	then
-		postUpdate(push_message_text, "Garagedoors - LEAF: " + garage_door_1.state.toString + ", Mondeo: " + garage_door_2.state.toString)
+		postUpdate(push_message_text, "Garasjeport - LEAF: " + garage_door_1.state.toString + ", Mondeo: " + garage_door_2.state.toString)
 		callScript('pushMessages')
 end
 
@@ -19,7 +19,7 @@ rule "Leaving house"
 		sendCommand(guest_home, OFF)
 		sendCommand(Home, OFF)
 		sendCommand(light, OFF)
-		postUpdate(push_message_text, "Bye bye")
+		postUpdate(push_message_text, "God tur ut i " + OutdoorTemperature.state + " °C")
 		callScript('pushMessages')
 end
 
@@ -27,18 +27,18 @@ rule "Alarm is being armed"
 	when
 		Item router_wlan changed from ON to OFF
 	then
+		postUpdate(push_message_text, "Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state + " °C ute")
+		callScript('pushMessages')
 		sendCommand(guest_home, OFF)
 		sendCommand(Home, OFF)
 		sendCommand(light, OFF)
-		postUpdate(push_message_text, "Seems like you left at " + now)
-		callScript('pushMessages')
 end
 
 rule "Alarm is being disarmed"
 	when
 		Item router_wlan changed from OFF to ON
 	then
-		sendCommand(guest_home, ON)
-		postUpdate(push_message_text, "Welcome home")
+		postUpdate(push_message_text, "Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state + "°C ute, og " + LivingRoomTemperature.state + " °C i stua")
 		callScript('pushMessages')
+		sendCommand(guest_home, ON)
 end
