@@ -17,9 +17,6 @@ rule "Send a message if garage door has been open for 30 minutes"
 			else t = "Mondeos" 
 			logInfo("org.openhab.rules", t+ " Garage door has been open too long")
 			postUpdate(push_message_text, t + " garasjeport er ikke lukket")
-			try {
-				callScript('pushMessages')
-			} catch (org.openhab.core.scriptengine.ScriptExecutionException e) {}
 			
 			if(garageDoorOpen!=null) {
 				if(garageDoorOpen.running) {
@@ -47,14 +44,13 @@ rule "Reset timer if someone closes the garage door, and both is closed"
 		}	
 end
 
-rule "Send a message after 5 minutes if garage door is open and nobody is home"
+rule "Send a message after 10 minutes if garage door is open and nobody is home"
 	when
-		Time cron "0 0/5 * * * ?"
+		Time cron "0 0/10 * * * ?"
 	then
 		if (Home.state == OFF && (garage_door_1.state == OPEN || garage_door_2.state == OPEN)) {
-			if (message_received.state == OFF) {
+			if (message_received.state == OFF && !garage_door_1.changedSince(now.minusMinutes(15)) && !garage_door_2.changedSince(now.minusMinutes(15))) {
 				postUpdate(push_message_text, "Tydeligvis ingen hjemme, men garasjeporten er åpen!")
-				try { callScript('pushMessages') } catch (org.openhab.core.scriptengine.ScriptExecutionException e) {}
 			}
 		}
 		if (garage_door_1.state == Undefined || garage_door_1.state == Uninitialized) {
@@ -65,13 +61,12 @@ rule "Send a message after 5 minutes if garage door is open and nobody is home"
         }	
 end
 
-rule "Send a status message at 22 if anything is not ok"
+rule "Send a status message at 22 if anything is NOT ok"
 	when
 		Time cron "0 0 22 ? * *"
 	then
 		if (garage_door_1.state == OPEN || garage_door_2.state == OPEN) {
 			postUpdate(push_message_text, "Leaf: " + garage_door_1.state.toString() + ", Mondeo:" + garage_door_2.state.toString())
-			callScript('pushMessages')
 		}
 		if (boss_lan.state == OFF && !boss_lan.changedSince(now.minusHours(12))) {
 			pushover('Boss is not responding, and has been off for 12 hours')

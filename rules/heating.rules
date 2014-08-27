@@ -19,7 +19,6 @@ rule "Switch on heating when someone comes home or of when someone leaves"
 				sendCommand(Heating, ON)
 				logInfo("org.openhab.rules","Varming av stua har startet")
 				postUpdate(push_message_text, "Started heating the living room")
-				callScript('pushMessages')
 			}
 		}
 end
@@ -53,7 +52,6 @@ rule "Switch off heating if temp for panelovn is ok, but leave panelovn on, unle
 			if (temp > 10) {
 				sendCommand(stue_panelovn, OFF)
 				postUpdate(push_message_text, "Switched of panel oven, outside temp is: " + temp)
-				callScript('pushMessages')
 			}
 		}
 end
@@ -66,7 +64,6 @@ rule "Switch off heating during the week, or when last one leaves home"
 			sendCommand(Heating, OFF)
 			sendCommand(kontor_panelovn, OFF)
 			postUpdate(push_message_text, "Heating switched off at " + now)
-			callScript('pushMessages')
 		}
 end
 
@@ -79,7 +76,6 @@ rule "Switch off heating in the evening"
 			sendCommand(kontor_panelovn, OFF)
 			logInfo("org.openhab.rules", "Heating switched off at " + now)
 			postUpdate(push_message_text, "Heating switched off at " + now)
-			callScript('pushMessages')
 		}
 end
 
