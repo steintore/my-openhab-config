@@ -7,7 +7,6 @@ rule "Check garage doors when clicking button"
 		Item right_double_switch received command ON	
 	then
 		postUpdate(push_message_text, "Garasjeport - LEAF: " + garage_door_1.state.toString + ", Mondeo: " + garage_door_2.state.toString)
-		callScript('pushMessages')
 end
 
 rule "Leaving house"
@@ -19,16 +18,18 @@ rule "Leaving house"
 		sendCommand(guest_home, OFF)
 		sendCommand(Home, OFF)
 		sendCommand(light, OFF)
-		postUpdate(push_message_text, "God tur ut i " + OutdoorTemperature.state + " °C")
-		callScript('pushMessages')
+		if (OutdoorTemperature.state instanceof DecimalType) {
+			pushover("God tur ut i " + OutdoorTemperature.state.format("%.1f") + " °C")
+		}
 end
 
 rule "Alarm is being armed"
 	when
 		Item router_wlan changed from ON to OFF
 	then
-		postUpdate(push_message_text, "Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state + " °C ute")
-		callScript('pushMessages')
+		if (OutdoorTemperature.state instanceof DecimalType) {
+			pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
+		}
 		sendCommand(guest_home, OFF)
 		sendCommand(Home, OFF)
 		sendCommand(light, OFF)
@@ -38,7 +39,18 @@ rule "Alarm is being disarmed"
 	when
 		Item router_wlan changed from OFF to ON
 	then
-		postUpdate(push_message_text, "Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state + "°C ute, og " + LivingRoomTemperature.state + " °C i stua")
-		callScript('pushMessages')
+		if( (OutdoorTemperature.state instanceof DecimalType) && (OutdoorTemperature.state instanceof DecimalType) ){
+			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
+		}
 		sendCommand(guest_home, ON)
+end
+
+rule "When text is changes, send a push message"
+	when
+		Item push_message_text changed
+	then
+		logInfo('org.openhab', 'message text is: ' + push_message_text.state)
+		try {
+				callScript('pushMessages')
+		} catch (org.openhab.core.scriptengine.ScriptExecutionException e) {}
 end
