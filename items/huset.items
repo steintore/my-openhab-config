@@ -51,8 +51,8 @@ Number LivingRoomTemperature    "Temp stue [%.1f °C]"			<temperature>   (Temper
 Number LivingRoomHumidity	"Luftfuktighet stue [%.1f %%]"		<temperature>	(gGF) { rfxcom="<48385:Humidity" }
 
 /* Weather */
-String w   "Today [%s]"   <w>  { http="<[http://api.wunderground.com/api/7c8571547a8b91c9/forecast/q/NO/Oslo.xml:3600000:XSLT(wunderground_icon_forecast.xsl)]"}
-String yr_weahter   "[%s]"   <w>  { http="<[http://www.yr.no/sted/Norge/%C3%98stfold/Fredrikstad/Ambj%C3%B8rnr%C3%B8d/varsel.xml:3600000:XSLT(yr.no_weatherforecast.xsl)]"}  
+/*String w   "Today [%s]"   <w>  { http="<[http://api.wunderground.com/api/7c8571547a8b91c9/forecast/q/NO/Oslo.xml:3600000:XSLT(wunderground_icon_forecast.xsl)]"}*/
+/*String yr_weahter   "[%s]"   <w>  { http="<[http://www.yr.no/sted/Norge/%C3%98stfold/Fredrikstad/Ambj%C3%B8rnr%C3%B8d/varsel.xml:3600000:XSLT(yr.no_weatherforecast.xsl)]"}  */
 
 /* Freezer */
 Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(Energy) 			{zwave="6:command=sensor_multilevel"}
