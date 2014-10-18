@@ -22,7 +22,7 @@ rule "Switch on heating when someone comes home or of when someone leaves"
 			}
 		}
 end
-
+/*
 rule "If the room is to cold and we are home, then heat it up, but only if it is less than 10 degrees outside"
 	when
 		Time cron "0 0/20 * * * ?" 
@@ -36,7 +36,9 @@ rule "If the room is to cold and we are home, then heat it up, but only if it is
 			}
 		}
 end
+*/
 	
+	/*
 rule "Switch off heating if temp for panelovn is ok, but leave panelovn on, unless more than 10 degrees outside"
 	when
 		Time cron "0 0/5 * * * ?" 
@@ -55,6 +57,7 @@ rule "Switch off heating if temp for panelovn is ok, but leave panelovn on, unle
 			}
 		}
 end
+*/
 
 rule "Switch off heating during the week, or when last one leaves home"
 	when
@@ -79,6 +82,7 @@ rule "Switch off heating in the evening"
 		}
 end
 
+/*
 rule "Start heating, but only if there are someone at home"
 	when
 		Time cron "0 30 5 ? * MON-FRI" or
@@ -114,3 +118,4 @@ rule "Left double switch"
 			sendCommand(Heating, OFF)
 		}
 end
+*/
