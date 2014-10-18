@@ -56,11 +56,32 @@ rule "When text is changes, send a push message"
 end
 
 // Creates an item that stores the last update time of this item
-rule "Records last weather update time"
+rule "Records last outdoor update time"
 when
   Item OutdoorTemperature received update
 then
-  postUpdate(Weather_LastUpdate, new DateTimeType())
+  postUpdate(OutdoorTemperature_LastUpdate, new DateTimeType())
+end
+
+rule "Records last office temperature update time"
+when
+  Item OfficeTemperature received update
+then
+  postUpdate(OfficeTemperature_LastUpdate, new DateTimeType())
+end
+
+rule "Records last basement temperature update time"
+when
+  Item BasementTemperature received update
+then
+  postUpdate(BasementTemperature_LastUpdate, new DateTimeType())
+end
+
+rule "Records last living room temperature update time"
+when
+  Item LivingRoomTemperature received update
+then
+  postUpdate(LivingRoomTemperature_LastUpdate, new DateTimeType())
 end
 
 /** 

@@ -1,23 +1,59 @@
 sitemap huset label="Huset"
 {
     Frame label="Huset" {
-		Group item=gGF label="Første etasje" icon="groundfloor"
-		Group item=gFirstFloor label="Andre etasje" icon="firstfloor"
-		Group item=gBasement label="Kjeller" icon="cellar"
-		Group item=gOutdoor label="Ute" icon="garden"
+    	Text item=LivingRoomTemperature label="Første etasje [%.1f °C]" icon="groundfloor" valuecolor=[LivingRoomTemperature_LastUpdate=="Uninitialized"="lightgray",LivingRoomTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
+    		Frame {
+    			Text item=LivingRoomTemperature
+    			Text item=LivingRoomHumidity
+				Text item=LivingRoomTemperature_LastUpdate visibility=[LivingRoomTemperature_LastUpdate>30] valuecolor=[LivingRoomTemperature_LastUpdate>120="orange", LivingRoomTemperature_LastUpdate>300="red"]
+			}
+			Frame {
+				Switch item=Living_Room_Lights mappings=[OFF="Av", ON="På"]
+				
+			}
+    	}
+    	Text item=OfficeTemperature label="Andre etasje [%.1f °C]" icon="firstfloor" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
+    		Frame {
+    			Text item=OfficeTemperature
+    			Text item=OfficeHumidity
+				Text item=OfficeTemperature_LastUpdate visibility=[OfficeTemperature_LastUpdate>30] valuecolor=[OfficeTemperature_LastUpdate>120="orange", OfficeTemperature_LastUpdate>300="red"]
+    		}
+    		Frame label="Varme" {
+    			Switch item=kontor_panelovn
+    			Text item=power_panelovn_kontor
+    		}
+    	}
+    	Text item=BasementTemperature label="Kjeller [%.1f °C]" icon="cellar" valuecolor=[BasementTemperature_LastUpdate=="Uninitialized"="lightgray",BasementTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
+    		Frame {
+    			Text item=BasementTemperature
+    			Text item=BasementHumidity
+				Text item=BasementTemperature_LastUpdate visibility=[BasementTemperature_LastUpdate>30] valuecolor=[BasementTemperature_LastUpdate>120="orange", BasementTemperature_LastUpdate>300="red"]
+			}
+			Frame {
+				Text item=power_freezer
+			}
+    	}
+    	Text item=OutdoorTemperature label="Ute [%.1f °C]" icon="garden" valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
+    		Frame {
+    			Text item=OutdoorTemperature
+    			Text item=OutdoorHumidity
+				Text item=OutdoorTemperature_LastUpdate visibility=[OutdoorTemperature_LastUpdate>30] valuecolor=[OutdoorTemperature_LastUpdate>120="orange", OutdoorTemperature_LastUpdate>300="red"]
+			}
+			Frame label="Garasjen" {
+				Text item=garage_door_1
+				Text item=garage_door_2
+				Switch item=message_received mappings=[ON="Ja"] icon="network" 
+			}
+    	}
     }
-    Frame {
-		Group item=Energy
-	}
-        
-	Frame label="Weather" {
+    Frame label="Weather" {
 		Text item=Date
-		Text item=OutdoorTemperature valuecolor=[Weather_LastUpdate=="Uninitialized"="lightgray",Weather_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"] {
+		Text item=OutdoorTemperature valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"] {
 			Frame {
 				Text item=Weather_Temp_Max valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"]
 				Text item=Weather_Temp_Min valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"]
 				Text item=OutdoorHumidity
-				Text item=Weather_LastUpdate visibility=[Weather_LastUpdate>30] valuecolor=[Weather_LastUpdate>120="orange", Weather_LastUpdate>300="red"]
+				Text item=OutdoorTemperature_LastUpdate visibility=[OutdoorTemperature_LastUpdate>30] valuecolor=[OutdoorTemperature_LastUpdate>120="orange", OutdoorTemperature_LastUpdate>300="red"]
 			}
 			Frame {
 				Switch item=Temperature_Chart_Period label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="temperature"
@@ -35,5 +71,6 @@ sitemap huset label="Huset"
 	
 	Frame label="Status" {
 		Group item=gBattery label="Batteri" icon="energy"
+		Group item=Energy
 	}
 }

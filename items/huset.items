@@ -19,9 +19,9 @@ Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor){zwave="5
 
 /* Energy measuring */
 Group:Number:SUM					Energy			"Energiforbruk: [%.1f W]"			<energy>				(All)
-Number power_vifteovn 			"Strøm vifteovn	[%.1f W]" 				<energy> (Energy) 	{zwave="2:command=sensor_multilevel"}
-Number power_panelovn 			"Strøm panelovn	[%.1f W]" 				<energy> (Energy) 	{zwave="3:command=sensor_multilevel"}
-Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 			<energy> (Energy)	{zwave="4:command=sensor_multilevel"}
+//Number power_vifteovn 			"Strøm vifteovn	[%.1f W]" 				<energy> (Energy) 	{zwave="2:command=sensor_multilevel"}
+//Number power_panelovn 			"Strøm panelovn	[%.1f W]" 				<energy> (Energy) 	{zwave="3:command=sensor_multilevel"}
+//Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 			<energy> (Energy)	{zwave="4:command=sensor_multilevel"}
 Number power_panelovn_kontor 	"Strøm panelovn kontor	[%.1f W]" 		<energy> (Energy) 	{zwave="5:command=sensor_multilevel"}
 
 /* Presence detection */
@@ -44,16 +44,19 @@ Number Temperature_Chart_Period "Periode"
 Number Weather_Temp_Max 		"Todays Maximum [%.1f °C]"	<temperature> (Temperature_Chart)
 Number Weather_Temp_Min 		"Todays Minimum [%.1f °C]"	<temperature> (Temperature_Chart)
 Number Weather_Humidex			"Humidex [SCALE(humidex.scale):%s]" 			(Weather)
-Number OutdoorTemperature 	"Temp ute [%.1f °C]" 				<temperature> 	(Temperature,gOutdoor,Temperature_Chart) { rfxcom="<26628:Temperature" }
-Number OutdoorHumidity 		"Luftfuktighet ute [%.1f %%]" 		<temperature> 	(gOutdoor, Weather) { rfxcom="<26628:Humidity" }
-DateTime Weather_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
+Number OutdoorTemperature 		"Ute [%.1f °C]" 				<temperature> 	(Temperature,gOutdoor,Temperature_Chart) { rfxcom="<26628:Temperature" }
+Number OutdoorHumidity 			"Luftfuktighet ute [%.1f %%]" 		<temperature> 	(gOutdoor, Weather) { rfxcom="<26628:Humidity" }
+DateTime OutdoorTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
 
-Number OfficeTemperature	"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature,gFirstFloor) { rfxcom="<5377:Temperature" }
-Number OfficeHumidity 		"Luftfuktighet kontor [%.1f %%]"	<temperature> 	(gFirstFloor) { rfxcom="<5377:Humidity" }
-Number BasementTemperature	"Temp kjeller [%.1f °C]"			<temperature>	(Temperature,gBasement) { rfxcom="<52226:Temperature" }
-Number BasementHumidity 	"Luftfuktighet kjeller [%.1f %%]" 	<temperature>	(gBasement) { rfxcom="<52226:Humidity" }
+Number OfficeTemperature		"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature,gFirstFloor) { rfxcom="<5377:Temperature" }
+Number OfficeHumidity 			"Luftfuktighet kontor [%.1f %%]"	<temperature> 	(gFirstFloor) { rfxcom="<5377:Humidity" }
+DateTime OfficeTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
+Number BasementTemperature		"Kjeller [%.1f °C]"			<temperature>	(Temperature,gBasement) { rfxcom="<52226:Temperature" }
+Number BasementHumidity 		"Luftfuktighet kjeller [%.1f %%]" 	<temperature>	(gBasement) { rfxcom="<52226:Humidity" }
+DateTime BasementTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
 Number LivingRoomTemperature    "Temp stue [%.1f °C]"			<temperature>   (Temperature,gGF) { rfxcom="<48385:Temperature"}
-Number LivingRoomHumidity	"Luftfuktighet stue [%.1f %%]"		<temperature>	(gGF) { rfxcom="<48385:Humidity" }
+Number LivingRoomHumidity		"Luftfuktighet stue [%.1f %%]" 		<temperature>	(gGF) { rfxcom="<48385:Humidity" }
+DateTime LivingRoomTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
 
 /* Weather */
 /*String w   "Today [%s]"   <w>  { http="<[http://api.wunderground.com/api/7c8571547a8b91c9/forecast/q/NO/Oslo.xml:3600000:XSLT(wunderground_icon_forecast.xsl)]"}*/
@@ -64,9 +67,9 @@ Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(gBasement, Energy) 		
 Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control)			{zwave="6:command=switch_binary"}
 
 /* Garage */
-Contact garage_door_1    "Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}
-Contact garage_door_2    "Garasjedør MONDEO [MAP(no.map):%s]"      <garagedoor>       (gOutdoor){zwave="8:1:command=BASIC"}
-Switch message_received "Garasjedørmelding er mottatt"				<garagedoor>	  (gOutdoor)
+Contact garage_door_1    	"Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}
+Contact garage_door_2    	"Garasjedør MONDEO [MAP(no.map):%s]"      <garagedoor>       (gOutdoor){zwave="8:1:command=BASIC"}
+Switch message_received 	"Garasjedørmelding er mottatt"				<garagedoor>	  (gOutdoor)
 
 /* Switch */
 Switch left_double_switch 	"Venstre knapp" <network> (gGF) { rfxcom="<11971074.11:Command" }
@@ -76,14 +79,15 @@ Switch right_double_switch 	"Høyre knapp" 	<network> (gGF) { rfxcom="<11971074.
 Number battery_outdoor_temp		"Utetemp [%f]" 		<rollershutter>	(gBattery, gOutDorr) 	{rfxcom="<26628:BatteryLevel"}
 Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery, gBasement) 	{rfxcom="<52226:BatteryLevel"}
 Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery, gFirstFloor) {rfxcom="<36353:BatteryLevel"}
-Number battery_living_room_temp		"Stuetemp [%f]"		<rollershutter> (gBattery, gGF)		{rfxcom="<48385:BatteryLevel"}
+Number battery_living_room_temp	"Stuetemp [%f]"		<rollershutter> (gBattery, gGF)		{rfxcom="<48385:BatteryLevel"}
 
 /* Text values */
 String push_message_text "Default message"
 
 /* Lighting */
-Switch light_living_room "Stue"	<light> (gGF,gLight) {rfxcom=">12339014.1:LIGHTING2.AC:Command"}
-Switch light_living_room_2 "Stue 2" <light> (gGF,gLight) {rfxcom=">12339014.2:LIGHTING2.AC:Command"}
+Group:Switch:OR(ON, OFF) 		Living_Room_Lights 		"Lys [(%d)]"
+Switch light_living_room "Stue"	<light> (gGF,gLight, Living_Room_Lights) {rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights) {rfxcom=">12339014.2:LIGHTING2.AC:Command"}
 
 /* Motion detector */
 Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
