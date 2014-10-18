@@ -68,7 +68,7 @@ end
  */
 rule "Compute humidex"
 when Item OutdoorTemperature changed or
-	 Item OutdoorTemperature changed 
+	 Item OutdoorHumidity changed 
 then
 	var Number T = OutdoorTemperature.state as DecimalType
 	var Number H = OutdoorHumidity.state as DecimalType	
