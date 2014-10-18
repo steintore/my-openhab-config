@@ -11,7 +11,7 @@ when
 	Item Mobile_Stein_Wlan changed from OFF to ON
 then
 	if(timerSteinMobileWlan!=null) {
-		timerSteinMobileWlan.cancel
+		timerSteinMobileWlan.cancel()
 		timerSteinMobileWlan = null
 	}
 	sendCommand(stein_home, ON)
@@ -22,7 +22,7 @@ when
 	Item Mobile_Anette_Wlan changed from OFF to ON
 then
 	if(timerAnetteMobileWlan!=null) {
-		timerAnetteMobileWlan.cancel
+		timerAnetteMobileWlan.cancel()
 		timerAnetteMobileWlan = null
 	}
 	sendCommand(anette_home, ON)

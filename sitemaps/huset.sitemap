@@ -31,6 +31,8 @@ sitemap huset label="Huset"
 			}
 			Frame {
 				Text item=power_freezer
+				Switch item=dryer
+				Text item=power_dryer
 			}
     	}
     	Text item=OutdoorTemperature label="Ute [%.1f °C]" icon="garden" valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
@@ -72,5 +74,9 @@ sitemap huset label="Huset"
 	Frame label="Status" {
 		Group item=gBattery label="Batteri" icon="energy"
 		Group item=Energy
+	}
+	
+	Frame label="Heating" {
+		Group item=Heating
 	}
 }

@@ -2,6 +2,8 @@ import org.openhab.core.library.types.*
 import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 
+var Timer timerRouterLAN = null
+
 rule "Check garage doors when clicking button"
 	when
 		Item right_double_switch received command ON	
@@ -23,23 +25,45 @@ rule "Leaving house"
 		}
 end
 
-rule "Alarm is being armed"
-	when
-		Item router_wlan changed from ON to OFF
-	then
-		if (OutdoorTemperature.state instanceof DecimalType) {
-			pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
-		}
-		sendCommand(guest_home, OFF)
-		sendCommand(Home, OFF)
-		sendCommand(gLight, OFF)
+rule "Leaving home, we think"
+when
+	Item router_wlan changed from ON to OFF
+then
+	logInfo("org.openhab.rules","Router disconnected, started timer.")
+	if( timerRouterLAN == null ) {
+		timerRouterLAN = createTimer(now.plusSeconds(120)) [|
+				logInfo("org.openhab.rules", "Timer has timed out. Executing proximity off")
+				if (OutdoorTemperature.state instanceof DecimalType) {
+					pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
+				}
+				sendCommand(guest_home, OFF)
+				sendCommand(Home, OFF)
+				sendCommand(gLight, OFF)
+				if (dryer.state == ON && new Double(power_dryer.state.toString()) < 10) {
+					pushover("Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
+				}
+				sendCommand(HomeAppliances, OFF)
+				if(timerRouterLAN!=null) {
+					if(timerRouterLAN.running) {
+						timerRouterLAN.cancel()
+					}
+					timerRouterLAN= null
+			}
+			]
+	} else {
+		timerRouterLAN.reschedule(now.plusSeconds(120))
+	}
 end
 
 rule "Alarm is being disarmed"
 	when
 		Item router_wlan changed from OFF to ON
 	then
-		if( (OutdoorTemperature.state instanceof DecimalType) && (OutdoorTemperature.state instanceof DecimalType) ){
+		if(timerRouterLAN != null) {
+			timerRouterLAN.cancel()
+			timerRouterLAN = null
+		}
+		if( (OutdoorTemperature.state instanceof DecimalType) && (LivingRoomTemperature.state instanceof DecimalType) ){
 			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
 		}
 		sendCommand(guest_home, ON)

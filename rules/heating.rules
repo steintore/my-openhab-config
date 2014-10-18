@@ -3,6 +3,7 @@ import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 import java.lang.Math
 
+/*
 rule "Switch on heating when someone comes home or of when someone leaves"
 	when
 		Item Home changed
@@ -22,6 +23,7 @@ rule "Switch on heating when someone comes home or of when someone leaves"
 			}
 		}
 end
+*/
 /*
 rule "If the room is to cold and we are home, then heat it up, but only if it is less than 10 degrees outside"
 	when

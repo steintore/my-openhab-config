@@ -12,10 +12,9 @@ DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berl
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
-Switch stue_panelovn    "Panelovn"      	<heating>       (gGF, Heating){zwave="3:command=switch_binary"}
-Switch stue_vifteovn    "Vifteovn"      	<heating>       (gGF, Heating){zwave="2:command=switch_binary"}
-Switch stue_vifteovn_2  "Vifteovn 2"    	<heating>       (gGF, Heating){zwave="4:command=switch_binary"}
-Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor){zwave="5:command=switch_binary"}
+Switch stue_panelovn    "Panelovn"      	<heating>       (gGF, Heating)			{zwave="3:command=switch_binary"}
+Switch stue_vifteovn    "Vifteovn"      	<heating>       (gGF, Heating)			{zwave="2:command=switch_binary"}
+Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor, Heating)	{zwave="5:command=switch_binary"}
 
 /* Energy measuring */
 Group:Number:SUM					Energy			"Energiforbruk: [%.1f W]"			<energy>				(All)
@@ -34,7 +33,7 @@ Group:Switch:OR(ON, OFF) proximity (All)
 Switch Mobile_Stein_Wlan 	"Steins iPhone Wlan" 		<present>	(proximity) {nh="192.168.1.151"}
 Switch Mobile_Anette_Wlan 	"Anettes iPhone Wlan" 		<present> 	(proximity) {nh="192.168.1.152"}
 Switch TV_living_room		"TV living room"			<present>	(proximity) {nh="192.168.1.153"}
-Switch router_wlan		"Router"			<present>		(proximity) {nh="192.168.1.200:0:90000"}
+Switch router_wlan		"Router"			<present>		(proximity) {nh="192.168.1.211"}
 Switch boss_lan			"Boss server"       <present>       (proximity) {nh="192.168.1.99"}
 Switch nas_lan			"NAS"				<present>		(proximity) {nh="192.168.1.222"}
 
@@ -63,8 +62,11 @@ DateTime LivingRoomTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
 /*String yr_weahter   "[%s]"   <w>  { http="<[http://www.yr.no/sted/Norge/%C3%98stfold/Fredrikstad/Ambj%C3%B8rnr%C3%B8d/varsel.xml:3600000:XSLT(yr.no_weatherforecast.xsl)]"}*/  
 
 /* Freezer */
-Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(gBasement, Energy) 			{zwave="6:command=sensor_multilevel"}
-Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control)			{zwave="6:command=switch_binary"}
+Group HomeAppliances (Appliance)
+Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(gBasement, Energy) 				{zwave="6:command=sensor_multilevel"}
+Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control, HomeAppliances){zwave="6:command=switch_binary"}
+Number power_dryer		"Strøm tørketrommel	[%.1f W]" 	<energy> 	(gBasement, Energy) 				{zwave="4:command=sensor_multilevel"}
+Switch dryer			"Tørketrommel"								(gBasement, HomeAppliances)			{zwave="4:command=switch_binary"}
 
 /* Garage */
 Contact garage_door_1    	"Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}
