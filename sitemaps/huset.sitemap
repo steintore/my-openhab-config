@@ -10,16 +10,22 @@ sitemap huset label="Huset"
 		Group item=Energy
 	}
         
-	Frame label="Date" {
+	Frame label="Weather" {
 		Text item=Date
-		Text item=OutdoorTemperature {
+		Text item=OutdoorTemperature valuecolor=[Weather_LastUpdate=="Uninitialized"="lightgray",Weather_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"] {
+			Frame {
+				Text item=Weather_Temp_Max valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"]
+				Text item=Weather_Temp_Min valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"]
+				Text item=OutdoorHumidity
+				Text item=Weather_LastUpdate visibility=[Weather_LastUpdate>30] valuecolor=[Weather_LastUpdate>120="orange", Weather_LastUpdate>300="red"]
+			}
 			Frame {
 				Switch item=Temperature_Chart_Period label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="temperature"
 				Chart item=Temperature_Chart period=h refresh=300 visibility=[Temperature_Chart_Period==0, Temperature_Chart_Period=="Uninitialized"]
 				Chart item=Temperature_Chart period=D refresh=1800 visibility=[Temperature_Chart_Period==1]
 				Chart item=Temperature_Chart period=W refresh=3600 visibility=[Temperature_Chart_Period==2]
 			}
-		} 
+		}
 	}
 
 	Frame label="Presence" {

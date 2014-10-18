@@ -5,7 +5,7 @@ Group gBasement 	(All)
 Group gFirstFloor 	(All)
 Group Status    	(All)
 Group gBattery 		(All)
-Group light		(All)
+Group gLight		(All)
 
 /* NTP binding demo item */
 DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
@@ -34,15 +34,20 @@ Group:Switch:OR(ON, OFF) proximity (All)
 Switch Mobile_Stein_Wlan 	"Steins iPhone Wlan" 		<present>	(proximity) {nh="192.168.1.151"}
 Switch Mobile_Anette_Wlan 	"Anettes iPhone Wlan" 		<present> 	(proximity) {nh="192.168.1.152"}
 Switch TV_living_room		"TV living room"			<present>	(proximity) {nh="192.168.1.153"}
-Switch router_wlan		"Router"			<present>		(proximity) {nh="192.168.1.200:0:40000"}
+Switch router_wlan		"Router"			<present>		(proximity) {nh="192.168.1.200:0:90000"}
 Switch boss_lan			"Boss server"       <present>       (proximity) {nh="192.168.1.99"}
 Switch nas_lan			"NAS"				<present>		(proximity) {nh="192.168.1.222"}
 
 /* Temperature */
-Group Temperature_Chart <temperature>
-Number Temperature_Chart_Period
+Group Temperature_Chart <temperature> (Weather)
+Number Temperature_Chart_Period "Periode"
+Number Weather_Temp_Max 		"Todays Maximum [%.1f °C]"	<temperature> (Temperature_Chart)
+Number Weather_Temp_Min 		"Todays Minimum [%.1f °C]"	<temperature> (Temperature_Chart)
+Number Weather_Humidex			"Humidex [SCALE(humidex.scale):%s]" 			(Weather)
 Number OutdoorTemperature 	"Temp ute [%.1f °C]" 				<temperature> 	(Temperature,gOutdoor,Temperature_Chart) { rfxcom="<26628:Temperature" }
-Number OutdoorHumidity 		"Luftfuktighet ute [%.1f %%]" 		<temperature> 	(gOutdoor) { rfxcom="<26628:Humidity" }
+Number OutdoorHumidity 		"Luftfuktighet ute [%.1f %%]" 		<temperature> 	(gOutdoor, Weather) { rfxcom="<26628:Humidity" }
+DateTime Weather_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
+
 Number OfficeTemperature	"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature,gFirstFloor) { rfxcom="<36353:Temperature" }
 Number OfficeHumidity 		"Luftfuktighet kontor [%.1f %%]"	<temperature> 	(gFirstFloor) { rfxcom="<36353:Humidity" }
 Number BasementTemperature	"Temp kjeller [%.1f °C]"			<temperature>	(Temperature,gBasement) { rfxcom="<52226:Temperature" }
@@ -55,8 +60,8 @@ Number LivingRoomHumidity	"Luftfuktighet stue [%.1f %%]"		<temperature>	(gGF) { 
 /*String yr_weahter   "[%s]"   <w>  { http="<[http://www.yr.no/sted/Norge/%C3%98stfold/Fredrikstad/Ambj%C3%B8rnr%C3%B8d/varsel.xml:3600000:XSLT(yr.no_weatherforecast.xsl)]"}*/  
 
 /* Freezer */
-Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(Energy) 			{zwave="6:command=sensor_multilevel"}
-Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control){zwave="6:command=switch_binary"}
+Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(gBasement, Energy) 			{zwave="6:command=sensor_multilevel"}
+Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control)			{zwave="6:command=switch_binary"}
 
 /* Garage */
 Contact garage_door_1    "Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}
@@ -68,22 +73,22 @@ Switch left_double_switch 	"Venstre knapp" <network> (gGF) { rfxcom="<11971074.1
 Switch right_double_switch 	"Høyre knapp" 	<network> (gGF) { rfxcom="<11971074.12:Command" }
 
 /* Battery */
-Number battery_outdoor_temp		"Utetemp [%f]" 		<rollershutter>	(gBattery) 	{rfxcom="<26628:BatteryLevel"}
-Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery) 	{rfxcom="<52226:BatteryLevel"}
-Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery) 	{rfxcom="<36353:BatteryLevel"}
-Number battery_living_room_temp		"Stuetemp [%f]"		<rollershutter> (gBattery)	{rfxcom="<48385:BatteryLevel"}
+Number battery_outdoor_temp		"Utetemp [%f]" 		<rollershutter>	(gBattery, gOutDorr) 	{rfxcom="<26628:BatteryLevel"}
+Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery, gBasement) 	{rfxcom="<52226:BatteryLevel"}
+Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery, gFirstFloor) {rfxcom="<36353:BatteryLevel"}
+Number battery_living_room_temp		"Stuetemp [%f]"		<rollershutter> (gBattery, gGF)		{rfxcom="<48385:BatteryLevel"}
 
 /* Text values */
 String push_message_text "Default message"
 
 /* Lighting */
-Switch light_living_room "Stue"	<light> (gGF,light) {rfxcom=">12339014.1:LIGHTING2.AC:Command"}
-Switch light_living_room_2 "Stue 2" <light> (gGF,light) {rfxcom=">12339014.2:LIGHTING2.AC:Command"}
+Switch light_living_room "Stue"	<light> (gGF,gLight) {rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch light_living_room_2 "Stue 2" <light> (gGF,gLight) {rfxcom=">12339014.2:LIGHTING2.AC:Command"}
 
 /* Motion detector */
 Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
 
 /* Config-values */
-String pushover_token_anette "Pushover Anette" {configadmin = "pushover:anetteToken"}
-String pushover_token_both "Pushover both" {configadmin = "pushover:bothToken"}
-String pushover_token_default "Pushover default" {configadmin = "pushover:defaultToken"}
+String pushover_token_anette "Pushover Anette" 		{configadmin = "pushover:anetteToken"}
+String pushover_token_both "Pushover both" 			{configadmin = "pushover:bothToken"}
+String pushover_token_default "Pushover default" 	{configadmin = "pushover:defaultToken"}
