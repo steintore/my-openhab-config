@@ -39,7 +39,7 @@ Switch boss_lan			"Boss server"       <present>       (proximity) {nh="192.168.1
 Switch nas_lan			"NAS"				<present>		(proximity) {nh="192.168.1.222"}
 
 /* Temperature */
-Group Temperature_Chart <temperature> (Weather)
+Group Temperature_Chart (Weather)
 Number Temperature_Chart_Period "Periode"
 Number Weather_Temp_Max 		"Todays Maximum [%.1f °C]"	<temperature> (Temperature_Chart)
 Number Weather_Temp_Min 		"Todays Minimum [%.1f °C]"	<temperature> (Temperature_Chart)

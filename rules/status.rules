@@ -58,7 +58,7 @@ end
 // Creates an item that stores the last update time of this item
 rule "Records last weather update time"
 when
-  Item Weather_Temperature received update
+  Item OutdoorTemperature received update
 then
   postUpdate(Weather_LastUpdate, new DateTimeType())
 end
@@ -67,8 +67,8 @@ end
  * This rule will be used to test Scale transformation service
  */
 rule "Compute humidex"
-when Item Weather_Temperature changed or
-	 Item Weather_Humidity changed 
+when Item OutdoorTemperature changed or
+	 Item OutdoorTemperature changed 
 then
 	var Number T = OutdoorTemperature.state as DecimalType
 	var Number H = OutdoorHumidity.state as DecimalType	
@@ -80,21 +80,11 @@ end
 
 rule "Update max and min temperatures"
 when
-	Item Weather_Temperature changed or
+	Item OutdoorTemperature changed or
 	Time cron "0 0 0 * * ?" or
 	System started
 then	
 	postUpdate(Weather_Temp_Max, OutdoorTemperature.maximumSince(now.toDateMidnight).state)
 	postUpdate(Weather_Temp_Min, OutdoorTemperature.minimumSince(now.toDateMidnight).state)
 	//logInfo("Weather","Temperature evolved of " + OutdoorTemperature.deltaSince(now.minusMinutes(2)).toString + " degrees.")
-end
-
-/** shows how to use sensor values from the past */
-rule "Persistence Demo"
-when
-	Time cron "0 * * * * ?"
-then	
-	if(OutdoorTemperature.changedSince(now.minusMinutes(1))) {
-		println("2 minutes ago, the temperature was " + OutdoorTemperature.historicState(now.minusMinutes(2)) + " degrees.")		
-	}
 end
