@@ -63,7 +63,7 @@ rule "Alarm is being disarmed"
 			timerRouterLAN.cancel()
 			timerRouterLAN = null
 		}
-		if( (OutdoorTemperature.state instanceof DecimalType) && (LivingRoomTemperature.state instanceof DecimalType) ){
+		if(guest_home.state == OFF && (OutdoorTemperature.state instanceof DecimalType) && (LivingRoomTemperature.state instanceof DecimalType) ){
 			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
 		}
 		sendCommand(guest_home, ON)
