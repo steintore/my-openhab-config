@@ -2,9 +2,10 @@ Strategies {
 
     everyHour : "0 0 * * * ?"
     everyDay  : "0 0 0 * * ?"
+    everyMinute : "0 * * * * ?"
 
      // if no strategy is specified for an item entry below, the default list will be used
-    default = everyChange
+    default = everyMinute
 }
 
 /* 
@@ -14,5 +15,5 @@ Strategies {
  */
 Items {
     // persist all items once a day and on every change and restore them from the db at startup
-    * : strategy = everyChange, everyDay, restoreOnStartup
+    * : strategy = everyMinute, everyChange, everyDay, restoreOnStartup
 }
