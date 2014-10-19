@@ -98,3 +98,10 @@ Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"
 String pushover_token_anette "Pushover Anette" 		{configadmin = "pushover:anetteToken"}
 String pushover_token_both "Pushover both" 			{configadmin = "pushover:bothToken"}
 String pushover_token_default "Pushover default" 	{configadmin = "pushover:defaultToken"}
+
+/* Living room TV */
+Group TV
+Dimmer        tv_channel        (TV){samsungtv="ON:Livingroom:KEY_CHUP, OFF:Livingroom:KEY_CHDOWN"}
+Switch        tv_mute           (TV){samsungtv="ON:Livingroom:KEY_MUTE, OFF:Livingroom:KEY_MUTE"}
+Dimmer		  tv_volume         (TV){samsungtv="ON:Livingroom:KEY_VOLUP, OFF:Livingroom:KEY_VOLDOWN"}
+Switch 		  tv_power 		    (TV){samsungtv="ON:Livinroom:KEY_POWERON, OFF:Linvingroom:KEY_POWEROFF"}

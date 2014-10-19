@@ -9,7 +9,9 @@ sitemap huset label="Huset"
 			}
 			Frame {
 				Switch item=Living_Room_Lights mappings=[OFF="Av", ON="På"]
-				
+			}
+			Frame {
+				Group item=TV
 			}
     	}
     	Text item=OfficeTemperature label="Andre etasje [%.1f °C]" icon="firstfloor" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
@@ -29,7 +31,7 @@ sitemap huset label="Huset"
     			Text item=BasementHumidity
 				Text item=BasementTemperature_LastUpdate visibility=[BasementTemperature_LastUpdate>30] valuecolor=[BasementTemperature_LastUpdate>120="orange", BasementTemperature_LastUpdate>300="red"]
 			}
-			Frame {
+			Frame label="Diverse" {
 				Text item=power_freezer
 				Switch item=dryer
 				Text item=power_dryer
