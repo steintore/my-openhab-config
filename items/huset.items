@@ -101,7 +101,7 @@ String pushover_token_default "Pushover default" 	{configadmin = "pushover:defau
 
 /* Living room TV */
 Group TV
-Dimmer        tv_channel        (TV){samsungtv="ON:Livingroom:KEY_CHUP, OFF:Livingroom:KEY_CHDOWN"}
+Rollershutter tv_channel        (TV){samsungtv="ON:Livingroom:KEY_CHUP, OFF:Livingroom:KEY_CHDOWN"}
 Switch        tv_mute           (TV){samsungtv="ON:Livingroom:KEY_MUTE, OFF:Livingroom:KEY_MUTE"}
-Dimmer		  tv_volume         (TV){samsungtv="ON:Livingroom:KEY_VOLUP, OFF:Livingroom:KEY_VOLDOWN"}
+Rollershutter tv_volume         (TV){samsungtv="ON:Livingroom:KEY_VOLUP, OFF:Livingroom:KEY_VOLDOWN"}
 Switch 		  tv_power 		    (TV){samsungtv="ON:Livinroom:KEY_POWERON, OFF:Linvingroom:KEY_POWEROFF"}
