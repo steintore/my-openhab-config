@@ -13,6 +13,15 @@ sitemap huset label="Huset"
 			Frame {
 				Group item=TV
 			}
+			Frame label="Varmepumpe"{
+				Text item=ac_current_temp icon="temperature" label="Faktisk temp [%.1f °C]"
+				Setpoint item=ac_set_temp minValue=16 maxValue=28 step=1 icon="temperature"
+				Switch item=ac_power icon="heating"
+				Switch item=ac_mode label="Modus" icon="sofa" mappings=[0="Off", 1="Quiet", 2="Sleep", 3="Smart", 4="SoftCool", 5="TurboMode", 6="WindMode1", 7="WindMode2", 8="WindMode3"]
+				Switch item=ac_op_mode icon="sofa" mappings=[0="Auto", 1="Cool", 2="Dry", 3="Wind", 4="Heat"]
+				Switch item=ac_direction icon="wind" mappings=[0="Auto", 1="SwingUD", 2="Rotation", 3="Fixed"]
+				Switch item=ac_windlevel icon="wind" mappings=[0="Auto", 1="Low", 2="Mid", 3="High", 4="Turbo"]
+			}
     	}
     	Text item=OfficeTemperature label="Andre etasje [%.1f °C]" icon="firstfloor" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame {

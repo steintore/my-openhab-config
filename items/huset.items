@@ -105,3 +105,13 @@ Rollershutter tv_channel        (TV){samsungtv="ON:Livingroom:KEY_CHUP, OFF:Livi
 Switch        tv_mute           (TV){samsungtv="ON:Livingroom:KEY_MUTE, OFF:Livingroom:KEY_MUTE"}
 Rollershutter tv_volume         (TV){samsungtv="ON:Livingroom:KEY_VOLUP, OFF:Livingroom:KEY_VOLDOWN"}
 Switch 		  tv_power 		    (TV){samsungtv="ON:Livinroom:KEY_POWERON, OFF:Linvingroom:KEY_POWEROFF"}
+
+/* Samsung AC */
+Group AC
+Number ac_current_temp "Målt temperatur [%.1f]" (AC) {samsungac="[Livingroom|AC_FUN_TEMPNOW]"}
+Switch ac_power (AC) {samsungac="[Livingroom|AC_FUN_POWER]"}
+Number ac_mode "Modus" (AC) {samsungac="[Livingroom|AC_FUN_COMODE]"}
+Number ac_op_mode "Modus" (AC) {samsungac="[Livingroom|AC_FUN_OPMODE]"}
+Number ac_set_temp "Ønsket temp [%.1f]" (AC) {samsungac="[Livingroom|AC_FUN_TEMPSET]"}
+Number ac_direction "Direction" (AC) {samsungac="[Livingroom|AC_FUN_DIRECTION]"}
+Number ac_windlevel "Windlevel" (AC) {samsungac="[Livingroom|AC_FUN_WINDLEVEL]"}
