@@ -116,3 +116,4 @@ Number ac_op_mode "Operation mode" 				<sofa> 			(AC) {samsungac="[Livingroom|AC
 Number ac_set_temp "Temperatur [%.1f°C]" 		<temperature> 	(AC) {samsungac="[Livingroom|AC_FUN_TEMPSET]"}
 Number ac_direction "Direction" 				<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_DIRECTION]"}
 Number ac_windlevel "Windlevel" 				<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_WINDLEVEL]"}
+DateTime ac_lastUpdate "Last update [%1$ta %1$tR]"	<clock>
