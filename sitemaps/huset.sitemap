@@ -35,6 +35,11 @@ sitemap huset label="Huset"
     		}
     	}
     	Text item=BasementTemperature label="Kjeller [%.1f °C]" icon="cellar" valuecolor=[BasementTemperature_LastUpdate=="Uninitialized"="lightgray",BasementTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
+    		Frame label="Kjellerstue"{
+    			Switch item=light_basement_power
+    			Slider item=light_basement visibility=[light_basement_power==ON]
+    			Text item=light_basement_signal visibility=[light_basement_power==ON]
+    		}
     		Frame {
     			Text item=BasementTemperature
     			Text item=BasementHumidity
