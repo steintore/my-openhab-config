@@ -94,7 +94,7 @@ Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights) {rf
 
 Dimmer light_basement 		"Lystyrke [%%]" <light> (gBasement) 		{rfxcom=">12339014.0:LIGHTING2.AC:DimmingLevel"}
 Switch light_basement_power 	"Av/På"		<light> (gBasement, gLight) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
-Number light_basement_signal 	"Signalstyrke"	<light> (gBasement) 		{rfxcom="<12339014.0:LIGHTING2.AC:SignalLevel"}
+Number light_basement_signal 	"Signalstyrke"	<light> (gBasement) 		{rfxcom="<12339014.0:SignalLevel"}
 
 /* Motion detector */
 Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
