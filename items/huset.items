@@ -90,10 +90,11 @@ String push_message_text "Default message"
 Group:Switch:OR(ON, OFF) 		Living_Room_Lights 		"Lys [(%d)]"
 Switch light_living_room "Stue"	<light> (gGF,gLight, Living_Room_Lights) {rfxcom=">12339014.1:LIGHTING2.AC:Command"}
 Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights) {rfxcom=">12339014.2:LIGHTING2.AC:Command"}
+Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights) {rfxcom=">12339014.3:LIGHTING2.AC:Command"}
 
-Dimmer light_basement "Lys" 	<light> (gBasement) 		{rfxcom=">12339014.0:LIGHTING2.AC:DimmingLevel"}
-Switch light_basement_power 	<light> (gBasement, gLight) { rfxcom=">12339014.0:LIGHTING2.AC:Command" }
-Number light_basement_signal 	<light> (gBasement) 		{ rfxcom="<12339014.0:LIGHTING2.AC:SignalLevel" }
+Dimmer light_basement 		"Lystyrke [%%]" <light> (gBasement) 		{rfxcom=">12339014.0:LIGHTING2.AC:DimmingLevel"}
+Switch light_basement_power 	"Av/På"		<light> (gBasement, gLight) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
+Number light_basement_signal 	"Signalstyrke"	<light> (gBasement) 		{rfxcom="<12339014.0:LIGHTING2.AC:SignalLevel"}
 
 /* Motion detector */
 Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
