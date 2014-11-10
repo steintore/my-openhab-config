@@ -146,3 +146,13 @@ when
 then
 	postUpdate(ac_lastUpdate, new DateTimeType())
 end
+
+rule "Set Samsung TV to same state as LAN-checking, and set Air Conditioner to QUIET-mode if TV is being switched on"
+when
+	Item TV_living_room changed
+then
+	tv_power.setState(TV_living_room.state)
+	if (tv_power.state == ON) {
+		ac_mode.postUpdate(2)
+	}
+end
