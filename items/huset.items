@@ -21,7 +21,10 @@ Group:Number:SUM					Energy			"Energiforbruk: [%.1f W]"			<energy>				(All)
 //Number power_vifteovn 			"Strøm vifteovn	[%.1f W]" 				<energy> (Energy) 	{zwave="2:command=sensor_multilevel"}
 //Number power_panelovn 			"Strøm panelovn	[%.1f W]" 				<energy> (Energy) 	{zwave="3:command=sensor_multilevel"}
 //Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 			<energy> (Energy)	{zwave="4:command=sensor_multilevel"}
-Number power_panelovn_kontor 	"Strøm panelovn kontor	[%.1f W]" 		<energy> (Energy) 	{zwave="5:command=sensor_multilevel"}
+Number power_panelovn_kontor 	"Strøm panelovn kontor	[%.1f W]" 		<energy> (Energy, Energy_Chart) 	{zwave="5:command=sensor_multilevel"}
+
+Group Energy_Chart (Energy)
+Number Energy_Chart_Period "Periode"
 
 /* Presence detection */
 Group:Switch:OR(ON, OFF)	Home 			"Is someone at home [(%d)]" (All)
@@ -64,9 +67,9 @@ DateTime LivingRoomTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
 
 /* Freezer */
 Group HomeAppliances (Appliance)
-Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(gBasement, Energy) 				{zwave="6:command=sensor_multilevel"}
+Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(gBasement, Energy, Energy_Chart) 				{zwave="6:command=sensor_multilevel"}
 Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control, HomeAppliances){zwave="6:command=switch_binary"}
-Number power_dryer		"Strøm tørketrommel	[%.1f W]" 	<energy> 	(gBasement, Energy) 				{zwave="4:command=sensor_multilevel"}
+Number power_dryer		"Strøm tørketrommel	[%.1f W]" 	<energy> 	(gBasement, Energy, Energy_Chart) 				{zwave="4:command=sensor_multilevel"}
 Switch dryer			"Tørketrommel"								(gBasement, HomeAppliances)			{zwave="4:command=switch_binary"}
 
 /* Garage */
@@ -125,4 +128,4 @@ Number ac_windlevel "Windlevel" 				<wind> 			(AC) {samsungac="[Livingroom|AC_FU
 DateTime ac_lastUpdate "Last update [%1$ta %1$tR]"	<clock>
 
 /* Roomba */
-//String roomba_test <sofa> {tcp="<[127.0.0.1:3333:'REGEX((.*))']"} // for a String Item that captures some state of a remote device that connects to openHAB
+//String roomba_test <sofa> {tcp="<[192.168.1.154:9001:'REGEX((.*))']"} // for a String Item that captures some state of a remote device that connects to openHAB
