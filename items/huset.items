@@ -36,6 +36,7 @@ Switch TV_living_room		"TV living room"			<present>	(proximity) {nh="192.168.1.1
 Switch router_wlan		"Router"			<present>		(proximity) {nh="192.168.1.200"}
 Switch boss_lan			"Boss server"       <present>       (proximity) {nh="192.168.1.99"}
 Switch nas_lan			"NAS"				<present>		(proximity) {nh="192.168.1.222"}
+Switch roomba_lan		"Roomba"			<present>		(proximity) {nh="192.168.1.154"}
 
 /* Temperature */
 Group Temperature_Chart (Weather)
@@ -122,3 +123,6 @@ Number ac_set_temp "Temperatur [%.1f°C]" 		<temperature> 	(AC) {samsungac="[Liv
 Number ac_direction "Direction" 				<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_DIRECTION]"}
 Number ac_windlevel "Windlevel" 				<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_WINDLEVEL]"}
 DateTime ac_lastUpdate "Last update [%1$ta %1$tR]"	<clock>
+
+/* Roomba */
+//String roomba_test <sofa> {tcp="<[127.0.0.1:3333:'REGEX((.*))']"} // for a String Item that captures some state of a remote device that connects to openHAB
