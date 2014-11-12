@@ -1,28 +1,23 @@
 import org.openhab.core.library.types.*
 import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
+import java.util.Map
 
 var Timer timerRouterLAN = null
+var Map states = null
 
-rule "Check garage doors when clicking button"
+rule "Switch on living room lights"
 	when
 		Item right_double_switch received command ON	
 	then
-		postUpdate(push_message_text, "Garasjeport - LEAF: " + garage_door_1.state.toString + ", Mondeo: " + garage_door_2.state.toString)
+		sendCommand(gLight, ON)
 end
 
-rule "Leaving house"
+rule "Switch off living room lights"
 	when
 		Item right_double_switch received command OFF	
 	then
-		sendCommand(Heating, OFF)
-		sendCommand(kontor_panelovn, OFF)
-		sendCommand(guest_home, OFF)
-		sendCommand(Home, OFF)
 		sendCommand(gLight, OFF)
-		if (OutdoorTemperature.state instanceof DecimalType) {
-			pushover("God tur ut i " + OutdoorTemperature.state.format("%.1f") + " °C")
-		}
 end
 
 rule "Leaving home, we think"
@@ -36,10 +31,11 @@ then
 				if (OutdoorTemperature.state instanceof DecimalType) {
 					pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
 				}
+				states = storeStates(dryer, kontor_panelovn, gLight, ac_mode)
 				sendCommand(guest_home, OFF)
 				sendCommand(Home, OFF)
 				sendCommand(gLight, OFF)
-				if (dryer.state == ON && new Double(power_dryer.state.toString()) < 10) {
+				if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 					pushover("Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
 				}
 				sendCommand(HomeAppliances, OFF)
@@ -66,6 +62,7 @@ rule "Alarm is being disarmed"
 		if(guest_home.state == OFF && (OutdoorTemperature.state instanceof DecimalType) && (LivingRoomTemperature.state instanceof DecimalType) ){
 			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
 		}
+		restoreStates(states)
 		sendCommand(guest_home, ON)
 end
 
