@@ -153,6 +153,6 @@ when
 then
 	tv_power.setState(TV_living_room.state)
 	if (tv_power.state == ON) {
-		ac_mode.postUpdate(1)
+		ac_mode.sendCommand(1)
 	}
 end
