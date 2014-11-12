@@ -173,7 +173,7 @@ rule "Freezer is suddenly using less power"
 when
 	Item power_freezer changed
 then
-	var double w = new Double(power_dryer.state.toString())
+	var double w = new Double(power_freezer.state.toString())
 	var double maxLastHour = new Double(power_freezer.maximumSince(now.minusHours(1)).state.toString())
 	if (w < 5 || (w < 70 && maxLastHour < 70 )) {
 		pushover("Fryseren drar plutselig mindre strøm enn vanlig, nå kun: " + w + " watt og maks siste time er: " + maxLastHour)
