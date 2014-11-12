@@ -121,6 +121,7 @@ Group AC
 Number ac_current_temp "Målt temperatur [%.1f °C]" <temperature> 	(AC) {samsungac="[Livingroom|AC_FUN_TEMPNOW]"}
 Switch ac_power "Varmepumpe"					<power> 		(AC) {samsungac="[Livingroom|AC_FUN_POWER]"}
 Number ac_mode "Convenient mode" 				<sofa> 			(AC) {samsungac="[Livingroom|AC_FUN_COMODE]"}
+Number ac_mode_previous
 Number ac_op_mode "Operation mode" 				<sofa> 			(AC) {samsungac="[Livingroom|AC_FUN_OPMODE]"}
 Number ac_set_temp "Temperatur [%.1f°C]" 		<temperature> 	(AC) {samsungac="[Livingroom|AC_FUN_TEMPSET]"}
 Number ac_direction "Direction" 				<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_DIRECTION]"}
