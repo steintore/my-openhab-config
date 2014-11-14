@@ -16,15 +16,17 @@ Switch stue_panelovn    "Panelovn"      	<heating>       (gGF, Heating)			{zwave
 Switch stue_vifteovn    "Vifteovn"      	<heating>       (gGF, Heating)			{zwave="2:command=switch_binary"}
 Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor, Heating)	{zwave="5:command=switch_binary"}
 
-/* Energy measuring */
-Group:Number:SUM					Energy			"Energiforbruk: [%.1f W]"			<energy>				(All)
-//Number power_vifteovn 			"Strøm vifteovn	[%.1f W]" 				<energy> (Energy) 	{zwave="2:command=sensor_multilevel"}
-//Number power_panelovn 			"Strøm panelovn	[%.1f W]" 				<energy> (Energy) 	{zwave="3:command=sensor_multilevel"}
-//Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 			<energy> (Energy)	{zwave="4:command=sensor_multilevel"}
-Number power_panelovn_kontor 	"Strøm panelovn kontor	[%.1f W]" 		<energy> (Energy, Energy_Chart) 	{zwave="5:command=sensor_multilevel"}
+/* Energy/Power measuring */
+Group:Number:SUM					Power			"Forbruk nå: [%.1f W]"			<energy>				(All)
+Group:Number:SUM					Energy			"Totalforbruk: [%.1f W]"		<energy>				(All)
+//Number power_vifteovn 			"Strøm vifteovn	[%.1f W]" 				<energy> (Power) 	{zwave="2:command=sensor_multilevel"}
+//Number power_panelovn 			"Strøm panelovn	[%.1f W]" 				<energy> (Power) 	{zwave="3:command=sensor_multilevel"}
+//Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 			<energy> (Power)	{zwave="4:command=sensor_multilevel"}
+Number power_panelovn_kontor  "Strøm panelovn kontor	[%.1f W]" 	<energy> (Power, Power_Chart) 	{zwave="5:command=sensor_multilevel"}
+Number panelovn_kontor_energy "Panelovn totalforbruk: [%.2f KWh]"	<energy> (Energy) { zwave="5:command=meter" }
 
-Group Energy_Chart (Energy)
-Number Energy_Chart_Period "Periode"
+Group Power_Chart (Power)
+Number Power_Chart_Period "Periode"
 
 /* Presence detection */
 Group:Switch:OR(ON, OFF)	Home 			"Is someone at home [(%d)]" (All)
@@ -67,10 +69,12 @@ DateTime LivingRoomTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
 
 /* Freezer */
 Group HomeAppliances (Appliance)
-Number power_freezer	"Strøm fryser	[%.1f W]" 	<energy> 		(gBasement, Energy, Energy_Chart) 				{zwave="6:command=sensor_multilevel"}
-Switch freezer		  	"Fryser"					<kitchen>       (gBasement, Control, HomeAppliances){zwave="6:command=switch_binary"}
-Number power_dryer		"Strøm tørketrommel	[%.1f W]" 	<energy> 	(gBasement, Energy, Energy_Chart) 				{zwave="4:command=sensor_multilevel"}
-Switch dryer			"Tørketrommel"								(gBasement, HomeAppliances)			{zwave="4:command=switch_binary"}
+Number power_freezer	"Strøm fryser	[%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{zwave="6:command=sensor_multilevel"}
+Switch freezer		  	"Fryser"								<kitchen>   (gBasement, Control, HomeAppliances)	{zwave="6:command=switch_binary"}
+Number energy_freezer 	"Fryser totalforbruk: [%.2f KWh]" 		<energy> 	(Energy, gBasement)						{zwave="6:command=meter" }
+Number power_dryer		"Strøm tørketrommel	[%.1f W]" 			<energy> 	(gBasement, Power, Power_Chart) 		{zwave="4:command=sensor_multilevel"}
+Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances)				{zwave="4:command=switch_binary"}
+Number energy_dryer 	"Tørketrommel totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{zwave="4:command=meter" }
 
 /* Garage */
 Contact garage_door_1    	"Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}
@@ -93,11 +97,15 @@ String push_message_text "Default message"
 /* Lighting */
 Group:Switch:OR(ON, OFF) 		Living_Room_Lights 		"Lys [(%d)]"
 Switch light_living_room "Stue"	<light> (gGF,gLight, Living_Room_Lights) {rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch remote_light_living_room {rfxcom="<12339014.1:Command"}
 Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights) {rfxcom=">12339014.2:LIGHTING2.AC:Command"}
+Switch remote_light_living_room_2 {rfxcom="<12339014.2:Command"}
 Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights) {rfxcom=">12339014.3:LIGHTING2.AC:Command"}
+Switch remote_light_living_room_3 {rfxcom="<12339014.3:Command"}
 
 Dimmer light_basement 		"Lystyrke [%%]" <light> (gBasement) 		{rfxcom=">12339014.0:LIGHTING2.AC:DimmingLevel"}
 Switch light_basement_power 	"Av/På"		<light> (gBasement, gLight) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
+Switch remote_light_basement_power 	{rfxcom="<12339014.0:Command"}
 Number light_basement_signal 	"Signalstyrke"	<light> (gBasement) 		{rfxcom="<12339014.0:SignalLevel"}
 
 /* Motion detector */

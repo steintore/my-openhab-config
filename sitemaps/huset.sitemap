@@ -89,17 +89,18 @@ sitemap huset label="Huset"
 	
 	Frame label="Status" {
 		Group item=gBattery label="Batteri" icon="energy"
-		Text item=Energy label="Strømforbruk: " icon="energy" {
+		Group item=Energy 
+		Text item=Power label="Strømforbruk" icon="energy" {
 			Frame {
 				Text item=power_dryer
 				Text item=power_freezer
 				Text item=power_panelovn_kontor
 			}
 			Frame {
-				Switch item=Energy_Chart_Period label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="energy"
-				Chart item=Energy_Chart period=h refresh=300 visibility=[Energy_Chart_Period==0, Energy_Chart_Period=="Uninitialized"]
-				Chart item=Energy_Chart period=D refresh=1800 visibility=[Energy_Chart_Period==1]
-				Chart item=Energy_Chart period=W refresh=3600 visibility=[Energy_Chart_Period==2]
+				Switch item=Power_Chart_Period label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="energy"
+				Chart item=Power_Chart period=h refresh=300 visibility=[Power_Chart_Period==0, Power_Chart_Period=="Uninitialized"]
+				Chart item=Power_Chart period=D refresh=1800 visibility=[Power_Chart_Period==1]
+				Chart item=Power_Chart period=W refresh=3600 visibility=[Power_Chart_Period==2]
 			}
 		}
 	}
