@@ -133,13 +133,7 @@ end
 
 rule "Record last update received from Samsung Air Conditioner"
 when
- 	Item ac_current_temp received update or
-	Item ac_power received update or
-	Item ac_mode received update or
-	Item ac_op_mode received update or
-	Item ac_set_temp received update or
-	Item ac_direction received update or
-	Item ac_windlevel received update
+ 	Item ac_current_temp received update
 then
 	postUpdate(ac_lastUpdate, new DateTimeType())
 end
