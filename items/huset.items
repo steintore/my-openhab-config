@@ -108,6 +108,9 @@ Switch light_basement_power 	"Av/På"		<light> (gBasement, gLight) 	{rfxcom=">12
 Switch remote_light_basement_power 	{rfxcom="<12339014.0:Command"}
 Number light_basement_signal 	"Signalstyrke"	<light> (gBasement) 		{rfxcom="<12339014.0:SignalLevel"}
 
+Switch light_basement_window 	"Av/På"		<light> (gBasement, gLight) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch remote_light_basement_window 	{rfxcom="<12339014.1:Command"}
+
 /* Motion detector */
 Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
 

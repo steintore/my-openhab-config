@@ -15,3 +15,38 @@ rule "No motion detected"
 end
 
 */
+
+rule "send command from remote to living room light 1"
+when
+        Item remote_light_living_room changed
+then
+        sendCommand(light_living_room, remote_light_living_room.state.toString)
+end
+
+rule "send command from remote to living room light 2"
+when
+        Item remote_light_living_room_2 changed
+then
+        sendCommand(light_living_room_2, remote_light_living_room_2.state.toString)
+end
+
+rule "send command from remote to living room light 3"
+when
+        Item remote_light_living_room_3 changed
+then
+        sendCommand(light_living_room_3, remote_light_living_room_3.state.toString)
+end
+
+rule "send command from remote to basement light"
+when
+        Item remote_light_basement_power changed
+then
+        sendCommand(light_basement_power, remote_light_basement_power.state.toString)
+end
+
+rule "send command from remote to basement window light"
+when
+        Item remote_light_basement_window changed
+then
+        sendCommand(light_basement_window, remote_light_basement_window.state.toString)
+end
