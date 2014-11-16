@@ -17,8 +17,8 @@ Switch stue_vifteovn    "Vifteovn"      	<heating>       (gGF, Heating)			{zwave
 Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor, Heating)	{zwave="5:command=switch_binary"}
 
 /* Energy/Power measuring */
-Group:Number:SUM					Power			"Forbruk nå: [%.1f W]"			<energy>				(All)
-Group:Number:SUM					Energy			"Totalforbruk: [%.1f W]"		<energy>				(All)
+Group:Number:SUM					Power			"Nå: [%.1f W]"			<energy>				(All)
+Group:Number:SUM					Energy			"Totalt: [%.1f W]"		<energy>				(All)
 //Number power_vifteovn 			"Strøm vifteovn	[%.1f W]" 				<energy> (Power) 	{zwave="2:command=sensor_multilevel"}
 //Number power_panelovn 			"Strøm panelovn	[%.1f W]" 				<energy> (Power) 	{zwave="3:command=sensor_multilevel"}
 //Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 			<energy> (Power)	{zwave="4:command=sensor_multilevel"}

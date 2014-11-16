@@ -90,7 +90,7 @@ sitemap huset label="Huset"
 	Frame label="Status" {
 		Group item=gBattery label="Batteri" icon="energy"
 		Group item=Energy 
-		Text item=Power label="Strømforbruk" icon="energy" {
+		Text item=Power icon="energy" {
 			Frame {
 				Text item=power_dryer
 				Text item=power_freezer
