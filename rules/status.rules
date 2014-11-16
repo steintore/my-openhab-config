@@ -26,7 +26,7 @@ when
 then
 	logInfo("org.openhab.rules","Router disconnected, started timer.")
 	if( timerRouterLAN == null ) {
-		timerRouterLAN = createTimer(now.plusSeconds(120)) [|
+		timerRouterLAN = createTimer(now.plusSeconds(240)) [|
 				logInfo("org.openhab.rules", "Timer has timed out. Executing proximity off")
 				if (OutdoorTemperature.state instanceof DecimalType) {
 					pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
