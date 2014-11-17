@@ -21,6 +21,7 @@ sitemap huset label="Huset"
 				Selection item=ac_op_mode mappings=[0="Auto", 1="Cool", 2="Dry", 3="Wind", 4="Heat"] visibility=[ac_power==ON]
 				Selection item=ac_direction icon="wind" mappings=[0="Auto", 1="SwingUD", 2="Rotation", 3="Fixed", 4="SwingLR"] visibility=[ac_power==ON]
 				Selection item=ac_windlevel icon="wind" mappings=[0="Auto", 1="Low", 2="Mid", 3="High", 4="Turbo"] visibility=[ac_power==ON]
+				Setpoint item=ac_night_temp minValue=16 maxValue=28 step=1 icon="temperature"
 			}
     	}
     	Text item=OfficeTemperature label="Andre etasje [%.1f °C]" icon="firstfloor" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {

@@ -11,6 +11,7 @@ rule "Switch on living room lights"
 		Item right_double_switch received command ON	
 	then
 		sendCommand(Living_Room_Lights, ON)
+		sendCommand(gLight, ON)
 end
 
 rule "Switch off living room lights"
@@ -18,6 +19,7 @@ rule "Switch off living room lights"
 		Item right_double_switch received command OFF	
 	then
 		sendCommand(Living_Room_Lights, OFF)
+		sendCommand(gLight, OFF)
 end
 
 rule "Leaving home, we think"
@@ -72,7 +74,7 @@ rule "When text is changes, send a push message"
 	then
 		logInfo('org.openhab', 'message text is: ' + push_message_text.state)
 		try {
-				callScript('pushMessages')
+			callScript('pushMessages')
 		} catch (org.openhab.core.scriptengine.ScriptExecutionException e) {}
 end
 

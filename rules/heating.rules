@@ -2,6 +2,9 @@ import org.openhab.core.library.types.*
 import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 import java.lang.Math
+import java.util.*
+
+var Map acstates = null
 
 /*
 rule "Switch on heating when someone comes home or of when someone leaves"
@@ -72,7 +75,7 @@ rule "Switch off heating during the week, or when last one leaves home"
 		}
 end
 
-rule "Switch off heating in the evening"
+rule "Switch heating to night mode in the evening"
 	when
 		Time cron "0 0 22 ? * *" 
 	then
@@ -82,20 +85,27 @@ rule "Switch off heating in the evening"
 			logInfo("org.openhab.rules", "Heating switched off at " + now)
 			postUpdate(push_message_text, "Heating switched off at " + now)
 		}
+		
+		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
+			storeStates(ac_current_temp, ac_mode)
+			sendCommand(ac_current_temp, ac_night_temp.state.toString)
+			sendCommand(ac_mode, 0)
+		}
 end
 
-/*
-rule "Start heating, but only if there are someone at home"
+
+rule "Return to day mode"
 	when
 		Time cron "0 30 5 ? * MON-FRI" or
 		Time cron "0 0 7 ? * SAT-SUN"
 	then
 		if (Home.state == ON && new Double(OutdoorTemperature.state.toString()) < 10) {
-			sendCommand(Heating, ON)
-			logInfo("org.openhab.rules", "Morning heating started")
+			sendCommand(ac_power, ON)
+			restoreStates(acstates)	
 		}
 end
 
+/*
 rule "Start heating if button is switched to ON"
 	when
 		Item left_double_switch received command ON	
