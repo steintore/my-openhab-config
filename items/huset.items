@@ -12,18 +12,18 @@ DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berl
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
-Switch stue_panelovn    "Panelovn"      	<heating>       (gGF, Heating)			{zwave="3:command=switch_binary"}
-Switch stue_vifteovn    "Vifteovn"      	<heating>       (gGF, Heating)			{zwave="2:command=switch_binary"}
+//Switch stue_panelovn    "Panelovn"      	<heating>       (gGF, Heating)			{zwave="3:command=switch_binary"}
+//Switch stue_vifteovn    "Vifteovn"      	<heating>       (gGF, Heating)			{zwave="2:command=switch_binary"}
 Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor, Heating)	{zwave="5:command=switch_binary"}
 
 /* Energy/Power measuring */
 Group:Number:SUM					Power			"Nå: [%.1f W]"			<energy>				(All)
-Group:Number:SUM					Energy			"Totalt: [%.1f W]"		<energy>				(All)
+Group:Number:SUM					Energy			"Totalt: [%.1f KWh]"	<energy>				(All)
 //Number power_vifteovn 			"Strøm vifteovn	[%.1f W]" 				<energy> (Power) 	{zwave="2:command=sensor_multilevel"}
 //Number power_panelovn 			"Strøm panelovn	[%.1f W]" 				<energy> (Power) 	{zwave="3:command=sensor_multilevel"}
-//Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 			<energy> (Power)	{zwave="4:command=sensor_multilevel"}
-Number power_panelovn_kontor  "Strøm panelovn kontor	[%.1f W]" 	<energy> (Power, Power_Chart) 	{zwave="5:command=sensor_multilevel"}
-Number panelovn_kontor_energy "Panelovn totalforbruk: [%.2f KWh]"	<energy> (Energy) { zwave="5:command=meter" }
+//Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 				<energy> (Power)	{zwave="4:command=sensor_multilevel"}
+Number power_panelovn_kontor  "Strøm panelovn kontor	[%.1f W]" 			<energy> (Power, Power_Chart) 	{zwave="5:command=sensor_multilevel"}
+Number panelovn_kontor_energy "Panelovn totalforbruk: [%.2f KWh]"			<energy> (Energy) { zwave="5:command=meter" }
 
 Group Power_Chart (Power)
 Number Power_Chart_Period "Periode"
