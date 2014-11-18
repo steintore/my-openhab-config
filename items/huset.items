@@ -12,8 +12,8 @@ DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berl
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
-//Switch stue_panelovn    "Panelovn"      	<heating>       (gGF, Heating)			{zwave="3:command=switch_binary"}
-//Switch stue_vifteovn    "Vifteovn"      	<heating>       (gGF, Heating)			{zwave="2:command=switch_binary"}
+Switch switch1    "Bryter 2"      	<heating>       (gGF)			{zwave="3:command=switch_binary"}
+Switch switch2    "Bryter 1"      	<heating>       (gGF)			{zwave="2:command=switch_binary"}
 Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor, Heating)	{zwave="5:command=switch_binary"}
 
 /* Energy/Power measuring */
