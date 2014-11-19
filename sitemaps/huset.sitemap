@@ -109,4 +109,6 @@ sitemap huset label="Huset"
 	Frame label="Heating" {
 		Group item=Heating
 	}
+	
+	Group item=gGf
 }

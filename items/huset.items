@@ -12,8 +12,7 @@ DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berl
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
-Switch switch1    "Bryter 2"      	<heating>       (gGF)			{zwave="3:command=switch_binary"}
-Switch switch2    "Bryter 1"      	<heating>       (gGF)			{zwave="2:command=switch_binary"}
+//Switch switch2    		"Bryter 1"      	<heating>       (gGF)			{zwave="2:command=switch_binary"}
 Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor, Heating)	{zwave="5:command=switch_binary"}
 
 /* Energy/Power measuring */
@@ -76,6 +75,9 @@ Number energy_freezer 	"Fryser totalforbruk: [%.2f KWh]" 		<energy> 	(Energy, gB
 Number power_dryer		"Strøm tørketrommel	[%.1f W]" 			<energy> 	(gBasement, Power, Power_Chart) 		{zwave="4:command=sensor_multilevel"}
 Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances)				{zwave="4:command=switch_binary"}
 Number energy_dryer 	"Tørketrommel totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{zwave="4:command=meter" }
+Switch fridge_basement  "Kjøleskap kjeller" 					<kitchebn>  (gBasement, Control, HomeAppliances)	{zwave="2:command=switch_binary"}
+Number power_fridge		"Strøm kjøleskap [%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{zwave="2:command=sensor_multilevel"}
+Number energy_fridge 	"Kjøleskap totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{zwave="2:command=meter" }
 
 /* Garage */
 Contact garage_door_1    	"Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}
