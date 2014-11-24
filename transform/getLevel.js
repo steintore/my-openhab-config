@@ -1,0 +1,1 @@
+JSON.parse(input).data.devices[14].metrics.level.toUpperCase();
