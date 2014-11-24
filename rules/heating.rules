@@ -77,7 +77,7 @@ end
 
 rule "Switch heating to night mode in the evening"
 	when
-		Time cron "0 0 22 ? * *" 
+		Time cron "0 0 23 ? * *" 
 	then
 		if (Heating.state == ON) {
 			sendCommand(Heating, OFF)
@@ -87,8 +87,8 @@ rule "Switch heating to night mode in the evening"
 		}
 		
 		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
-			storeStates(ac_current_temp, ac_mode)
-			sendCommand(ac_current_temp, ac_night_temp.state.toString)
+			storeStates(ac_set_temp, ac_mode)
+			sendCommand(ac_set_temp, ac_night_temp.state.toString)
 			sendCommand(ac_mode, 0)
 		}
 end
