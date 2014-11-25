@@ -28,7 +28,7 @@ when
 then
 	logInfo("org.openhab.rules","Router disconnected, started timer.")
 	if( timerRouterLAN == null ) {
-		timerRouterLAN = createTimer(now.plusSeconds(240)) [|
+		timerRouterLAN = createTimer(now.plusSeconds(60)) [|
 				if (time_capsule_lan.state == OFF || boss_lan.state == OFF) {
 					logInfo("org.openhab.rules", "Seems like we lost network connection, let's wait a bit more")
 					timerRouterLAN.reschedule(now.plusSeconds(240))

@@ -80,12 +80,12 @@ Number power_fridge		"Strøm kjøleskap [%.1f W]" 				<energy> 	(gBasement, Powe
 Number energy_fridge 	"Kjøleskap totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{zwave="2:command=meter" }
 
 /* HTTP Binding */
-Switch dryer		"Strøm tørketrommel" 			<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:10000:JS(getLevel.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_4:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_4:0:37/command/off]"}        
+Switch dryer		"Strøm tørketrommel" 			<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:10000:JS(getDryerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_4:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_4:0:37/command/off]"}        
 //Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances)				{zwave="4:command=switch_binary"}
 //Number energy_dryer 	"Tørketrommel totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{zwave="4:command=meter" }
 
 /* Garage */
-Contact garage_door_1    	"Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){zwave="7:1:command=BASIC"}
+Contact garage_door_1    	"Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){http="<[zwave:10000:JS(getGarageDoorLeafStatus.js)]"}
 Contact garage_door_2    	"Garasjedør MONDEO [MAP(no.map):%s]"      <garagedoor>       (gOutdoor){zwave="8:1:command=BASIC"}
 Switch message_received 	"Garasjedørmelding er mottatt"				<garagedoor>	  (gOutdoor)
 
