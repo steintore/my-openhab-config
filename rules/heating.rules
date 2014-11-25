@@ -11,7 +11,7 @@ rule "Startup"
 		System started
 	then
 		sendCommand(ac_night_temp, 19)
-		postUpdate(push_message_text, "System started")
+		pushover("System started")
 end
 
 /*
