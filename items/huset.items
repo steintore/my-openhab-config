@@ -12,17 +12,14 @@ DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berl
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
-//Switch switch2    		"Bryter 1"      	<heating>       (gGF)			{zwave="2:command=switch_binary"}
-Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor, Heating)	{zwave="5:command=switch_binary"}
+Switch kontor_panelovn  "Panelovn kontor"	<heating>       (gFirstFloor, Heating)	{http="<[zwave:10000:JS(getOfficeOvenState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_5:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_5:0:37/command/off]"}
 
 /* Energy/Power measuring */
 Group:Number:SUM					Power			"Nå: [%.1f W]"			<energy>				(All)
 Group:Number:SUM					Energy			"Totalt: [%.1f KWh]"	<energy>				(All)
-//Number power_vifteovn 			"Strøm vifteovn	[%.1f W]" 				<energy> (Power) 	{zwave="2:command=sensor_multilevel"}
-//Number power_panelovn 			"Strøm panelovn	[%.1f W]" 				<energy> (Power) 	{zwave="3:command=sensor_multilevel"}
-//Number power_vifteovn_2 		"Strøm vifteovn 2 [%.1f W]" 				<energy> (Power)	{zwave="4:command=sensor_multilevel"}
-Number power_panelovn_kontor  "Strøm panelovn kontor	[%.1f W]" 			<energy> (Power, Power_Chart) 	{zwave="5:command=sensor_multilevel"}
-Number panelovn_kontor_energy "Panelovn totalforbruk: [%.2f KWh]"			<energy> (Energy) { zwave="5:command=meter" }
+
+Number power_panelovn_kontor  "Strøm panelovn kontor	[%.1f W]" 			<energy> (Power, Power_Chart) 	{http="<[zwave:60000:JS(getOfficeOvenPower.js)]"}
+Number panelovn_kontor_energy "Panelovn totalforbruk: [%.2f KWh]"			<energy> (Energy) {http="<[zwave:60000:JS(getOfficeOvenTotal.js)]"}
 
 Group Power_Chart (Power)
 Number Power_Chart_Period "Periode"
@@ -69,24 +66,19 @@ DateTime LivingRoomTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
 
 /* Freezer */
 Group HomeAppliances (Appliance)
-Number power_freezer	"Strøm fryser	[%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{zwave="6:command=sensor_multilevel"}
-Switch freezer		  	"Fryser"								<kitchen>   (gBasement, Control, HomeAppliances)	{zwave="6:command=switch_binary"}
-Number energy_freezer 	"Fryser totalforbruk: [%.2f KWh]" 		<energy> 	(Energy, gBasement)						{zwave="6:command=meter" }
-Number power_dryer		"Strøm tørketrommel	[%.1f W]" 			<energy> 	(gBasement, Power, Power_Chart) 		{zwave="4:command=sensor_multilevel"}
-//Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances)				{zwave="4:command=switch_binary"}
-Number energy_dryer 	"Tørketrommel totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{zwave="4:command=meter" }
-Switch fridge_basement  "Kjøleskap kjeller" 					<kitchebn>  (gBasement, Control, HomeAppliances)	{zwave="2:command=switch_binary"}
-Number power_fridge		"Strøm kjøleskap [%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{zwave="2:command=sensor_multilevel"}
-Number energy_fridge 	"Kjøleskap totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{zwave="2:command=meter" }
-
-/* HTTP Binding */
-Switch dryer		"Strøm tørketrommel" 			<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:10000:JS(getDryerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_4:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_4:0:37/command/off]"}        
-//Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances)				{zwave="4:command=switch_binary"}
-//Number energy_dryer 	"Tørketrommel totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{zwave="4:command=meter" }
+Number power_freezer	"Strøm fryser	[%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getFreezerPower.js)]"}
+Switch freezer		  	"Fryser"								<kitchen>   (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFreezerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_6:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_6:0:37/command/off]"}
+Number energy_freezer 	"Fryser totalforbruk: [%.2f KWh]" 		<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getFreezerTotal.js)]"}
+Number power_dryer		"Strøm tørketrommel	[%.1f W]" 			<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getDryerPower.js)]"}
+Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances)				{http="<[zwave:10000:JS(getDryerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_4:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_4:0:37/command/off]"}
+Number energy_dryer 	"Tørketrommel totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getDryerTotal.js)]"}
+Switch fridge_basement  "Kjøleskap kjeller" 					<kitchebn>  (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFridgeState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_2:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_2:0:37/command/off]"}
+Number power_fridge		"Strøm kjøleskap [%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getFridgePower.js)]"}
+Number energy_fridge 	"Kjøleskap totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getFridgeTotal.js)]"}
 
 /* Garage */
-Contact garage_door_1    	"Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){http="<[zwave:10000:JS(getGarageDoorLeafStatus.js)]"}
-Contact garage_door_2    	"Garasjedør MONDEO [MAP(no.map):%s]"      <garagedoor>       (gOutdoor){zwave="8:1:command=BASIC"}
+Switch garage_door_1    	"Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){http="<[zwave:10000:JS(getGarageDoorLeafStatus.js)]"}
+Switch garage_door_2    	"Garasjedør MONDEO [MAP(no.map):%s]"      <garagedoor>       (gOutdoor){http="<[zwave:10000:JS(getGarageDoorMondeoStatus.js)]"}
 Switch message_received 	"Garasjedørmelding er mottatt"				<garagedoor>	  (gOutdoor)
 
 /* Switch */
