@@ -6,6 +6,14 @@ import java.util.*
 
 var Map acstates = null
 
+rule "Startup"
+	when
+		System started
+	then
+		sendCommand(ac_night_temp, 19)
+		postUpdate(push_message_text, "System started")
+end
+
 /*
 rule "Switch on heating when someone comes home or of when someone leaves"
 	when
@@ -90,6 +98,7 @@ rule "Switch heating to night mode in the evening"
 			storeStates(ac_set_temp, ac_mode)
 			sendCommand(ac_set_temp, ac_night_temp.state.toString)
 			sendCommand(ac_mode, 0)
+			postUpdate(push_message_text, "AC set to nightmode: '" + ac_night_temp.state.toString + "' degrees")
 		}
 end
 
@@ -104,30 +113,3 @@ rule "Return to day mode"
 			restoreStates(acstates)	
 		}
 end
-
-/*
-rule "Start heating if button is switched to ON"
-	when
-		Item left_double_switch received command ON	
-	then
-		sendCommand(Heating, ON)
-end
-
-rule "Stop heating if button is switched to off"
-	when
-		Item left_double_switch received command OFF	
-	then
-		sendCommand(Heating, OFF)
-end
-
-rule "Left double switch"
-	when
-		Item left_double_switch received update
-	then
-		if (left_double_switch.state == ON) {
-			sendCommand(Heating, ON)			
-		} else {
-			sendCommand(Heating, OFF)
-		}
-end
-*/
