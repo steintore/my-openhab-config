@@ -1,0 +1,1 @@
+JSON.parse(input)..devices[?(@id=='ZWayVDev_7:0:48:1')].metrics.level.toUpperCase();
