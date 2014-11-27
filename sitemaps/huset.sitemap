@@ -96,6 +96,7 @@ sitemap huset label="Huset"
 				Text item=power_dryer
 				Text item=power_freezer
 				Text item=power_panelovn_kontor
+				Text item=power_fridge
 			}
 			Frame {
 				Switch item=Power_Chart_Period label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="energy"
