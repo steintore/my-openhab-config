@@ -28,7 +28,7 @@ when
 then
 	logInfo("org.openhab.rules","Router disconnected, started timer.")
 	if( timerRouterLAN == null ) {
-		timerRouterLAN = createTimer(now.plusSeconds(60)) [|
+		timerRouterLAN = createTimer(now.plusSeconds(30)) [|
 				if (router_wlan.state == ON) {
 					logInfo("org.openhab.rules", "Router is back up and running, so no one left!")
 					if(timerRouterLAN!=null) {
@@ -63,7 +63,7 @@ then
 					}
 				}]
 	} else {
-		timerRouterLAN.reschedule(now.plusSeconds(120))
+		timerRouterLAN.reschedule(now.plusSeconds(30))
 	}
 end
 
