@@ -29,7 +29,15 @@ then
 	logInfo("org.openhab.rules","Router disconnected, started timer.")
 	if( timerRouterLAN == null ) {
 		timerRouterLAN = createTimer(now.plusSeconds(60)) [|
-				if (time_capsule_lan.state == OFF || boss_lan.state == OFF) {
+				if (router_wlan.state == ON) {
+					logInfo("org.openhab.rules", "Router is back up and running, so no one left!")
+					if(timerRouterLAN!=null) {
+						if(timerRouterLAN.running) {
+							timerRouterLAN.cancel()
+						}
+						timerRouterLAN= null
+					}
+				} else if (time_capsule_lan.state == OFF || boss_lan.state == OFF) {
 					logInfo("org.openhab.rules", "Seems like we lost network connection, let's wait a bit more")
 					timerRouterLAN.reschedule(now.plusSeconds(240))
 				} else {
@@ -37,10 +45,12 @@ then
 					if (OutdoorTemperature.state instanceof DecimalType) {
 						pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
 					}
-					states = storeStates(dryer, kontor_panelovn, Living_Room_Lights, ac_mode)
+					states = storeStates(dryer, kontor_panelovn, Living_Room_Lights, ac_mode, ac_set_temp)
 					sendCommand(guest_home, OFF)
 					sendCommand(Home, OFF)
 					sendCommand(Living_Room_Lights, OFF)
+					sendCommand(ac_set_temp, ac_night_temp.state.toString)
+					sendCommand(ac_mode, 0)
 					if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 						pushover("Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
 					}
@@ -70,6 +80,9 @@ rule "Alarm is being disarmed"
 		}
 		restoreStates(states)
 		sendCommand(guest_home, ON)
+		if (dryer.state == ON) {
+			pushover("Tørketrommelen ble startet igjen nå når du kom hjem.")
+		}
 end
 
 rule "When text is changes, send a push message"
@@ -164,7 +177,8 @@ when
 then
 	var double w = new Double(power_dryer.state.toString())
 	var double maxLastHour = new Double(power_dryer.maximumSince(now.minusHours(1)).state.toString())
-	if (w < 10 && maxLastHour > 100) {
+	if (w < 5 && maxLastHour > 100 && dryer.state == ON) {
+		sendCommand(dryer, OFF)
 		pushover("Tørketrommelen er ferdig!")	
 	}
 end

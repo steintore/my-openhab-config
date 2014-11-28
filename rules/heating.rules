@@ -110,6 +110,6 @@ rule "Return to day mode"
 	then
 		if (Home.state == ON && new Double(OutdoorTemperature.state.toString()) < 10) {
 			sendCommand(ac_power, ON)
-			restoreStates(acstates)	
 		}
+		restoreStates(acstates)
 end
