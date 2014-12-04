@@ -95,7 +95,7 @@ rule "Switch heating to night mode in the evening"
 		}
 		
 		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
-			storeStates(ac_set_temp, ac_mode)
+			acstates = storeStates(ac_set_temp, ac_mode)
 			sendCommand(ac_set_temp, ac_night_temp.state.toString)
 			sendCommand(ac_mode, 0)
 			postUpdate(push_message_text, "AC set to nightmode: '" + ac_night_temp.state.toString + "' degrees")
