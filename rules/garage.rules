@@ -6,14 +6,14 @@ var Timer garageDoorOpen = null
 
 rule "Send a message if garage door has been open for 30 minutes"
 	when
-		Item garage_door_1 changed to OPEN or
-		Item garage_door_2 changed to OPEN	
+		Item garage_door_1 changed to ON or
+		Item garage_door_2 changed to ON	
 	then
 		logInfo("org.openhab.rules","Garage door opened")
 		sendCommand(message_received, OFF)
 		garageDoorOpen = createTimer(now.plusSeconds(1800)) [|
 			var t = ""
-			if (garage_door_1.state == OPEN) t = "Leafs "
+			if (garage_door_1.state == ON) t = "Leafs "
 			else t = "Mondeos" 
 			logInfo("org.openhab.rules", t+ " Garage door has been open too long")
 			postUpdate(push_message_text, t + " garasjeport er ikke lukket")
@@ -29,12 +29,12 @@ end
 
 rule "Reset timer if someone closes the garage door, and both is closed"
 	when
-		Item garage_door_1 changed to CLOSED or
-		Item garage_door_2 changed to CLOSED
+		Item garage_door_1 changed to OFF or
+		Item garage_door_2 changed to OFF
 	then
 		logInfo("org.openhab.rules", "Garage door closed")
 		sendCommand(message_received, OFF)
-		if (garage_door_1.state == CLOSED && garage_door_2.state == CLOSED) {
+		if (garage_door_1.state == OFF && garage_door_2.state == OFF) {
 			if(garageDoorOpen!=null) {
 			garageDoorOpen.cancel
 			garageDoorOpen = null
@@ -48,16 +48,16 @@ rule "Send a message after 10 minutes if garage door is open and nobody is home"
 	when
 		Time cron "0 0/10 * * * ?"
 	then
-		if (Home.state == OFF && (garage_door_1.state == OPEN || garage_door_2.state == OPEN)) {
+		if (Home.state == OFF && (garage_door_1.state == ON || garage_door_2.state == ON)) {
 			if (message_received.state == OFF && !garage_door_1.changedSince(now.minusMinutes(15)) && !garage_door_2.changedSince(now.minusMinutes(15))) {
 				postUpdate(push_message_text, "Tydeligvis ingen hjemme, men garasjeporten er åpen!")
 			}
 		}
 		if (garage_door_1.state == Undefined || garage_door_1.state == Uninitialized) {
-        	sendCommand(garage_door_1, CLOSED)
+        	sendCommand(garage_door_1, OFF)
         }
         if (garage_door_2.state == Undefined || garage_door_2.state == Uninitialized) {
-        	sendCommand(garage_door_2, CLOSED)
+        	sendCommand(garage_door_2, OFF)
         }	
 end
 
@@ -65,7 +65,7 @@ rule "Send a status message at 22 if anything is NOT ok"
 	when
 		Time cron "0 0 22 ? * *"
 	then
-		if (garage_door_1.state == OPEN || garage_door_2.state == OPEN) {
+		if (garage_door_1.state == ON || garage_door_2.state == ON) {
 			postUpdate(push_message_text, "Leaf: " + garage_door_1.state.toString() + ", Mondeo:" + garage_door_2.state.toString())
 		}
 		if (boss_lan.state == OFF && !boss_lan.changedSince(now.minusHours(12))) {

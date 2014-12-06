@@ -110,6 +110,8 @@ Number light_basement_signal 	"Signalstyrke"	<light> (gBasement) 		{rfxcom="<123
 Switch light_basement_window 	"Av/På"		<light> (gBasement, gLight) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
 Switch remote_light_basement_window 	{rfxcom="<12339014.1:Command"}
 
+Switch xmas_light "Julelys" <light> (gFirstFloor, gLight) {http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_10:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_10:0:37/command/off]"}
+
 /* Motion detector */
 Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
 
