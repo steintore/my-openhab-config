@@ -5,10 +5,10 @@ if (stein_home.state == ON) {
 }
 if (anette_home.state == ON) {
 	logError('Sending to Anette','Sending to Anette: ' + push_message_text)
-	pushover(pushover_token_default.state.toString, pushover_token_anette.state.toString, push_message_text.state.toString)
+	pushover(pushover_token_anette.state.toString, pushover_token_anette.state.toString, push_message_text.state.toString)
 }
 
 if (Home.state != ON) {
 	logError('Sending to both', 'Sending to both: ' + push_message_text)
-	pushover(pushover_token_default.state.toString, pushover_token_both.state.toString, push_message_text.state.toString)
+	pushover(pushover_token_both.state.toString, pushover_token_both.state.toString, push_message_text.state.toString)
 }
