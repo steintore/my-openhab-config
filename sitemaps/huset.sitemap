@@ -32,10 +32,9 @@ sitemap huset label="Huset"
     		}
     		Frame label="Varme" {
     			Switch item=kontor_panelovn
+    			Switch item=gang_panelovn
     			Text item=power_panelovn_kontor
-    		}
-    		Frame {
-    			Switch item=xmas_light
+    			/*Text item=power_panelovn_gang*/
     		}
     	}
     	Text item=BasementTemperature label="Kjeller [%.1f °C]" icon="cellar" valuecolor=[BasementTemperature_LastUpdate=="Uninitialized"="lightgray",BasementTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {

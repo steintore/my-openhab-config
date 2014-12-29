@@ -112,4 +112,5 @@ rule "Return to day mode"
 			sendCommand(ac_power, ON)
 		}
 		restoreStates(acstates)
+		pushover("Return to day mode")
 end
