@@ -175,12 +175,14 @@ rule "Dryer has been started, notify me when it is done"
 when
 	Item power_dryer changed
 then
-	var double w = new Double(power_dryer.state.toString())
-	var double maxLastHour = new Double(power_dryer.maximumSince(now.minusHours(1)).state.toString())
-	var double maxLastTwoMinutes = new Double(power_dryer.maximumSince(now.minusMinutes(2)).state.toString())
-	if (w < 2 && maxLastHour > 100 && maxLastTwoMinutes <= w && dryer.state == ON) {
-		/*sendCommand(dryer, OFF)*/
-		pushover("Tørketrommelen er ferdig!")	
+	if (dryer.state == ON) {
+		var double w = new Double(power_dryer.state.toString())
+		var double maxLastHour = new Double(power_dryer.maximumSince(now.minusHours(1)).state.toString())
+		var double maxLastTwoMinutes = new Double(power_dryer.maximumSince(now.minusMinutes(2)).state.toString())
+		if (w < 2 && maxLastHour > 100 && (maxLastTwoMinutes <= w || w == 0)) {
+			/*	sendCommand(dryer, OFF)*/
+			pushover("Tørketrommelen er ferdig!")	
+		}
 	}
 end
 
