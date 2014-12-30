@@ -87,12 +87,14 @@ end
 
 rule "When text is changes, send a push message"
 	when
-		Item push_message_text changed
+		Item push_message_text received update
 	then
 		logInfo('org.openhab', 'message text is: ' + push_message_text.state)
 		try {
 			callScript('pushMessages')
-		} catch (org.openhab.core.scriptengine.ScriptExecutionException e) {}
+		} catch (org.openhab.core.scriptengine.ScriptExecutionException e) {
+			pushover('Could not send push message: ' + push_message_text.state.toString)
+		}
 end
 
 // Creates an item that stores the last update time of this item
