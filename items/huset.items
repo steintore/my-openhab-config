@@ -142,5 +142,13 @@ Number ac_direction "Direction" 				<wind> 			(AC) {samsungac="[Livingroom|AC_FU
 Number ac_windlevel "Windlevel" 				<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_WINDLEVEL]"}
 DateTime ac_lastUpdate "Last update [%1$ta %1$tR]"	<clock>
 
+Group Motion
+Number sensor_1_temp "Temperature [%.1f °F]" (Motion) {http="<[zwave:10000:JS(getMotionTemperature.js)]"}
+Number sensor_1_luminance "Luminance    [%.0f Lux]" (Motion) {http="<[zwave:10000:JS(getMotionLuminiscence.js)]"}
+Switch sensor_1_motion "sensor [MAP(motion.map):%s]" (Motion) {http="<[zwave:10000:JS(getMotion.js)]"}
+Number sensor_1_battery "Battery [%s %%]" (Motion) {http="<[zwave:10000:JS(getMotionBattery.js)]"}
+Number sensor_1_lu "[%.0f]" {http="<[zwave:10000:JS(getMotionLastUpdate.js)]"}
+DateTime sensor_1_update "Last update [%1$ta %1$tR]" (Motion)
+
 /* Roomba */
 //String roomba_test <sofa> {tcp="<[192.168.1.154:9001:'REGEX((.*))']"} // for a String Item that captures some state of a remote device that connects to openHAB

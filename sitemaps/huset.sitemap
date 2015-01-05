@@ -36,6 +36,10 @@ sitemap huset label="Huset"
     			Text item=power_panelovn_kontor
     			/*Text item=power_panelovn_gang*/
     		}
+    		Frame label="Bevegelse" {
+    			Group item=Motion
+    			Text item=sensor_1_update
+			}
     	}
     	Text item=BasementTemperature label="Kjeller [%.1f °C]" icon="cellar" valuecolor=[BasementTemperature_LastUpdate=="Uninitialized"="lightgray",BasementTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame label="Kjellerstue"{
@@ -56,21 +60,11 @@ sitemap huset label="Huset"
 			}
     	}
     	Text item=OutdoorTemperature label="Ute [%.1f °C]" icon="garden" valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
-    		Frame {
-    			Text item=OutdoorTemperature
-    			Text item=OutdoorHumidity
-				Text item=OutdoorTemperature_LastUpdate visibility=[OutdoorTemperature_LastUpdate>1800] valuecolor=[OutdoorTemperature_LastUpdate>120="orange", OutdoorTemperature_LastUpdate>300="red"]
-			}
-			Frame label="Garasjen" {
+    		Frame label="Garasjen" {
 				Text item=garage_door_1
 				Text item=garage_door_2
 				Switch item=message_received mappings=[ON="Ja"] icon="network" 
 			}
-    	}
-    }
-    Frame label="Weather" {
-		Text item=Date
-		Text item=OutdoorTemperature valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"] {
 			Frame {
 				Text item=Weather_Temp_Max valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"]
 				Text item=Weather_Temp_Min valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"]
@@ -83,7 +77,10 @@ sitemap huset label="Huset"
 				Chart item=Temperature_Chart period=D refresh=1800 visibility=[Temperature_Chart_Period==1]
 				Chart item=Temperature_Chart period=W refresh=3600 visibility=[Temperature_Chart_Period==2]
 			}
-		}
+    	}
+    }
+    Frame label="Weather" {
+		Text item=Date
 	}
 
 	Frame label="Presence" {
