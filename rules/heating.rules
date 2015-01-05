@@ -79,7 +79,7 @@ rule "Switch off heating during the week, or when last one leaves home"
 		if (Heating.state == ON && Home.state == OFF) {
 			sendCommand(Heating, OFF)
 			sendCommand(kontor_panelovn, OFF)
-			postUpdate(push_message_text, "Heating switched off at " + now)
+			pushover("Heating switched off at " + now)
 		}
 end
 

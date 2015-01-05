@@ -12,8 +12,8 @@ DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berl
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
-Switch kontor_panelovn  "Panelovn kontor"	<heating>   (gFirstFloor, Heating)	{http="<[zwave:10000:JS(getOfficeOvenState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_5:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_5:0:37/command/off]"}
-Switch gang_panelovn "Panelovn gang" 		<heating> 	(gFirstFloor, Heating)	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_10:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_10:0:37/command/off]"}
+Switch kontor_panelovn  "Panelovn kontor"	<heating>   (gFirstFloor, Heating)	{http="<[zwave:10000:JS(getOfficeOvenState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/off]"}
+Switch gang_panelovn "Panelovn gang" 		<heating> 	(gFirstFloor, Heating)	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/off]"}
 
 /* Energy/Power measuring */
 Group:Number:SUM					Power			"Nå: [%.1f W]"			<energy>				(All)
@@ -69,12 +69,12 @@ DateTime LivingRoomTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
 /* Freezer */
 Group HomeAppliances (Appliance)
 Number power_freezer	"Strøm fryser	[%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getFreezerPower.js)]"}
-Switch freezer		  	"Fryser"								<kitchen>   (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFreezerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_6:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_6:0:37/command/off]"}
+Switch freezer		  	"Fryser"								<kitchen>   (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFreezerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_6-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_6-0-37/command/off]"}
 Number energy_freezer 	"Fryser totalforbruk: [%.2f KWh]" 		<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getFreezerTotal.js)]"}
 Number power_dryer		"Strøm tørketrommel	[%.1f W]" 			<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getDryerPower.js)]"}
-Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances)				{http="<[zwave:10000:JS(getDryerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_4:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_4:0:37/command/off]"}
+Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances)				{http="<[zwave:10000:JS(getDryerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_4-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_4-0-37/command/off]"}
 Number energy_dryer 	"Tørketrommel totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getDryerTotal.js)]"}
-Switch fridge_basement  "Kjøleskap kjeller" 					<kitchebn>  (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFridgeState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_2:0:37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_2:0:37/command/off]"}
+Switch fridge_basement  "Kjøleskap kjeller" 					<kitchebn>  (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFridgeState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_2-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_2-0-37/command/off]"}
 Number power_fridge		"Strøm kjøleskap [%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getFridgePower.js)]"}
 Number energy_fridge 	"Kjøleskap totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getFridgeTotal.js)]"}
 
