@@ -1,6 +1,6 @@
 var returnValue = 0
 JSON.parse(input).data.devices.forEach(function(element, index, array) {
-    if (element.id == 'ZWayVDev_zway_11-0-49-3') {
+    if (element.id == 'ZWayVDev_zway_12-0-49-3') {
         returnValue = element.metrics.level;
     }});
 returnValue;

@@ -1,21 +1,3 @@
-/* The motion detector is not put on a wall yet,... so i don't want this to happen... yet... 
-rule "Motion detected"
-	when 
-		Item motion_detector changed to ON
-	then
-	 	if (Home.state == ON)
-			sendCommand(gLight, ON)
-end
-
-rule "No motion detected"
-	when 
-		Item motion_detector changed to OFF
-	then
-		sendCommand(gLight, OFF)
-end
-
-*/
-
 rule "send command from remote to living room light 1"
 when
         Item remote_light_living_room changed
@@ -49,4 +31,18 @@ when
         Item remote_light_basement_window changed
 then
         sendCommand(light_basement_window, remote_light_basement_window.state.toString)
+end
+
+rule "scene for lights in living room"
+when
+	Item scene_light_livingroom changed
+then
+	if (scene_light_livingroom.state == 0) {
+		sendCommand(Living_Room_Lights, OFF)
+	} else if (scene_light_livingroom == 1) {
+		sendCommand(Living_Room_Lights, ON)
+	} else {
+		sendCommand(light_living_room, ON)
+		sendCommand(light_living_room_3, ON)
+	}	
 end

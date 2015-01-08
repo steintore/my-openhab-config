@@ -8,7 +8,7 @@ sitemap huset label="Huset"
 				Text item=LivingRoomTemperature_LastUpdate visibility=[LivingRoomTemperature_LastUpdate>30] valuecolor=[LivingRoomTemperature_LastUpdate>120="orange", LivingRoomTemperature_LastUpdate>300="red"]
 			}
 			Frame {
-				Switch item=Living_Room_Lights mappings=[OFF="Av", ON="På"]
+				Switch item=scene_light_livingroom mappings=[0="Av", 1="På", 2="Film"]
 			}
 			Frame label="TV" {
 				Group item=TV icon="tv6"
@@ -44,8 +44,6 @@ sitemap huset label="Huset"
     	Text item=BasementTemperature label="Kjeller [%.1f °C]" icon="cellar" valuecolor=[BasementTemperature_LastUpdate=="Uninitialized"="lightgray",BasementTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame label="Kjellerstue"{
     			Switch item=light_basement_power
-    			Setpoint item=light_basement minValue=0 maxValue=100 step=10 visibility=[light_basement_power==ON]
-    			Text item=light_basement_signal visibility=[light_basement_power==ON]
     		}
     		Frame {
     			Text item=BasementTemperature
@@ -65,13 +63,14 @@ sitemap huset label="Huset"
 				Text item=garage_door_2
 				Switch item=message_received mappings=[ON="Ja"] icon="network" 
 			}
-			Frame {
+			Frame label="Ute" icon="garden" {
+				Text item=OutdoorTemperature
 				Text item=Weather_Temp_Max valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"]
 				Text item=Weather_Temp_Min valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"]
 				Text item=OutdoorHumidity
 				Text item=OutdoorTemperature_LastUpdate visibility=[OutdoorTemperature_LastUpdate>30] valuecolor=[OutdoorTemperature_LastUpdate>120="orange", OutdoorTemperature_LastUpdate>300="red"]
 			}
-			Frame {
+			Frame label="Tempdetaljer" {
 				Switch item=Temperature_Chart_Period label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="temperature"
 				Chart item=Temperature_Chart period=h refresh=300 visibility=[Temperature_Chart_Period==0, Temperature_Chart_Period=="Uninitialized"]
 				Chart item=Temperature_Chart period=D refresh=1800 visibility=[Temperature_Chart_Period==1]

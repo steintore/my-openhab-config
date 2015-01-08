@@ -4,101 +4,51 @@ import org.openhab.model.script.actions.*
 import java.lang.Math
 import java.util.*
 
-var Map acstates = null
+var Map nightModeStates = null
 
 rule "Startup"
 	when
 		System started
 	then
-		sendCommand(ac_night_temp, 19)
-		pushover("System started")
-end
-
-/*
-rule "Switch on heating when someone comes home or of when someone leaves"
-	when
-		Item Home changed
-	then
-		if (Heating.state == ON && Home.state == OFF) {
-			sendCommand(Heating, OFF)
-			sendCommand(kontor_panelovn, OFF)
-			postUpdate(push_message_text, "Heating stopped at " + now)
-			callScript('pushMessages')
-		} else if (Home.state == ON && Heating.state == OFF) {
-			var double temp = new Double(OutdoorTemperature.state.toString())
-			var p = now.getHourOfDay
-			if (p < 22 && p > 05 && temp < 10) {
-				sendCommand(Heating, ON)
-				logInfo("org.openhab.rules","Varming av stua har startet")
-				postUpdate(push_message_text, "Started heating the living room")
-			}
+		if (ac_night_temp.state == Uninitialized) {
+			sendCommand(ac_night_temp, 19)
 		}
 end
-*/
-/*
-rule "If the room is to cold and we are home, then heat it up, but only if it is less than 10 degrees outside"
+
+rule "If the room is too cold and we are home, then heat it up, but only if it is less than 10 degrees outside"
 	when
 		Time cron "0 0/20 * * * ?" 
 	then
-		if (stue_panelovn.state == ON) {
-			var double t = new Double(power_panelovn.state.toString())
-			var double temp = new Double(OutdoorTemperature.state.toString())
-			if (t > 10 && Home.state == ON && temp < 10) {
-				sendCommand(Heating, ON)
-				logInfo("org.openhab.rules", "Switched on fan")	
+		var double tempOffice = new Double(OfficeTemperature.state.toString())
+		var double tempOutdoor = new Double(OutdoorTemperature.state.toString())
+		var double tempBasement = new Double(BasementTemperature.state.toString())
+		
+		if (tempOutdoor < 10) {
+			if (gang_panelovn.state == OFF && Home.state == ON) {
+				if (tempOffice < 20) {
+					sendCommand(gang_panelovn, ON)	
+				}
 			}
-		}
-end
-*/
-	
-	/*
-rule "Switch off heating if temp for panelovn is ok, but leave panelovn on, unless more than 10 degrees outside"
-	when
-		Time cron "0 0/5 * * * ?" 
-	then
-		if (stue_panelovn.state == ON) {
-			var double t = new Double(power_panelovn.state.toString())
-			if ((stue_vifteovn.state == ON || stue_vifteovn_2.state == ON) && t < 10) {
-				sendCommand(stue_vifteovn, OFF)
-				sendCommand(stue_vifteovn_2, OFF)
-				logInfo("Heating", "Switched off fan oven")	
-			}
-			var double temp = new Double(OutdoorTemperature.state.toString())
-			if (temp > 10) {
-				sendCommand(stue_panelovn, OFF)
-				postUpdate(push_message_text, "Switched of panel oven, outside temp is: " + temp)
-			}
-		}
-end
-*/
-
-rule "Switch off heating during the week, or when last one leaves home"
-	when
-		Time cron "0 0 7 ? * MON-FRI"
-	then
-		if (Heating.state == ON && Home.state == OFF) {
-			sendCommand(Heating, OFF)
-			sendCommand(kontor_panelovn, OFF)
-			pushover("Heating switched off at " + now)
-		}
+			
+			if (tempBasement < 18 && BasementTemperature.maximumSince(now.minusMinutes(21)).state >= 18) {
+				pushover('Kjellertemp er nå: ' + tempBasement + " - den har gått fra " + BasementTemperature.maximumSince(now.minusMinutes(21)).state + " de siste 20 minuttene")
+			}	
+		}		
 end
 
-rule "Switch heating to night mode in the evening"
+
+rule "Switch to night mode in the evening"
 	when
 		Time cron "0 0 23 ? * *" 
 	then
+		nightModeStates = storeStates(nightMode, ac_set_temp, ac_mode)
 		if (Heating.state == ON) {
-			sendCommand(Heating, OFF)
-			sendCommand(kontor_panelovn, OFF)
-			logInfo("org.openhab.rules", "Heating switched off at " + now)
-			postUpdate(push_message_text, "Heating switched off at " + now)
+			sendCommand(nightMode, OFF)
+			postUpdate(push_message_text, "Panelovnene ble skrudd av kl: " + now)
 		}
-		
 		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
-			acstates = storeStates(ac_set_temp, ac_mode)
 			sendCommand(ac_set_temp, ac_night_temp.state.toString)
 			sendCommand(ac_mode, 0)
-			pushover("AC set to nightmode: '" + ac_night_temp.state.toString + "' degrees")
 		}
 end
 
@@ -111,6 +61,5 @@ rule "Return to day mode"
 		if (Home.state == ON && new Double(OutdoorTemperature.state.toString()) < 10) {
 			sendCommand(ac_power, ON)
 		}
-		restoreStates(acstates)
-		pushover("Return to day mode")
+		restoreStates(nightModeStates)
 end

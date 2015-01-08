@@ -46,16 +46,16 @@ then
 					if (OutdoorTemperature.state instanceof DecimalType) {
 						pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
 					}
-					states = storeStates(dryer, kontor_panelovn, Living_Room_Lights, ac_mode, ac_set_temp)
-					sendCommand(guest_home, OFF)
-					sendCommand(Home, OFF)
-					sendCommand(Living_Room_Lights, OFF)
-					sendCommand(ac_set_temp, ac_night_temp.state.toString)
-					sendCommand(ac_mode, 0)
+					states = storeStates(awayMode)
 					if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 						postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
 					}
-					sendCommand(HomeAppliances, OFF)
+					
+					sendCommand(guest_home, OFF)
+					sendCommand(Home, OFF)
+					sendCommand(awayMode, OFF)
+					sendCommand(ac_set_temp, ac_night_temp.state.toString)
+					sendCommand(ac_mode, 0)
 					if(timerRouterLAN!=null) {
 						if(timerRouterLAN.running) {
 							timerRouterLAN.cancel()
