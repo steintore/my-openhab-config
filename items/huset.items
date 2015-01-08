@@ -81,9 +81,9 @@ Number power_fridge		"Strøm kjøleskap [%.1f W]" 				<energy> 	(gBasement, Powe
 Number energy_fridge 	"Kjøleskap totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getFridgeTotal.js)]"}
 
 /* Garage */
-Switch garage_door_1    	"Garasjedør LEAF [MAP(no.map):%s]"        <garagedoor>       (gOutdoor){http="<[zwave:10000:JS(getGarageDoorLeafStatus.js)]"}
-Switch garage_door_2    	"Garasjedør MONDEO [MAP(no.map):%s]"      <garagedoor>       (gOutdoor){http="<[zwave:10000:JS(getGarageDoorMondeoStatus.js)]"}
-Switch message_received 	"Garasjedørmelding er mottatt"				<garagedoor>	  (gOutdoor)
+Switch garage_door_1    	"Garasjedør LEAF [MAP(no.map):%s]"		<garagedoor>  	(gOutdoor){http="<[zwave:10000:JS(getGarageDoorLeafStatus.js)]"}
+Switch garage_door_2    	"Garasjedør MONDEO [MAP(no.map):%s]"    <garagedoor>  	(gOutdoor){http="<[zwave:10000:JS(getGarageDoorMondeoStatus.js)]"}
+Switch message_received 	"Garasjedørmelding er mottatt"			<garagedoor>	(gOutdoor)
 
 /* Switch */
 Switch left_double_switch 	"Venstre knapp" <network> (gGF) { rfxcom="<11971074.11:Command" }
@@ -131,11 +131,19 @@ Rollershutter tv_channel 	"Kanal"     <channel>   	(TV){samsungtv="UP:Livingroom
 Switch        tv_mute		"Lyd av/på" <volume>	    (TV){samsungtv="ON:Livingroom:KEY_MUTE, OFF:Livingroom:KEY_MUTE"}
 Rollershutter tv_volume     "Volum"		<volume>	    (TV){samsungtv="UP:Livingroom:KEY_VOLUP, DOWN:Livingroom:KEY_VOLDOWN"}
 
+/* Astro information */
+Group Astro
+DateTime Sunrise_Time  "Soloppgang [%1$tH:%1$tM]" <sun> (Astro) {astro="planet=sun, type=rise, property=start"}
+DateTime Sunset_Time   "Solnedgang [%1$tH:%1$tM]" <sun> (Astro) {astro="planet=sun, type=set, property=end"}
+DateTime Moonrise_Time   "Måneoppgang [%1$td.%1$tm.%1$tY %1$tH:%1$tM]" <moon>	(Astro) {astro="planet=moon, type=rise, property=start"}
+DateTime Moonset_Time    "Månenedgang [%1$td.%1$tm.%1$tY %1$tH:%1$tM]" <moon>	(Astro) {astro="planet=moon, type=set, property=end"}
+DateTime  Moon_Full          "Neste fullmåne [%1$td.%1$tm.%1$tY %1$tH:%1$tM]" <moon>	(Astro) {astro="planet=moon, type=phase, property=full"}
+DateTime  Moon_New           "Neste nymåne [%1$td.%1$tm.%1$tY %1$tH:%1$tM]"   <moon>	(Astro) {astro="planet=moon, type=phase, property=new"}
 
 
 /* Samsung AC */
 Group AC
-Number ac_current_temp "Målt temperatur [%.1f °C]" <temperature> 	(AC) {samsungac="[Livingroom|AC_FUN_TEMPNOW]"}
+Number ac_current_temp "Målt temperatur [%.1f °C]" 	<temperature> 	(AC) {samsungac="[Livingroom|AC_FUN_TEMPNOW]"}
 Switch ac_power "Varmepumpe"						<power> 		(AC) {samsungac="[Livingroom|AC_FUN_POWER]"}
 Number ac_mode "Convenient mode" 					<sofa> 			(AC) {samsungac="[Livingroom|AC_FUN_COMODE]"}
 Number ac_mode_previous
@@ -146,13 +154,13 @@ Number ac_direction "Direction" 					<wind> 			(AC) {samsungac="[Livingroom|AC_F
 Number ac_windlevel "Windlevel" 					<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_WINDLEVEL]"}
 DateTime ac_lastUpdate "Last update [%1$ta %1$tR]"	<clock>
 
-Group Motion
-Number sensor_1_temp 		"Temperature [%.1f °C]" 		(Motion) {http="<[zwave:10000:JS(getMotionTemperature.js)]"}
-Number sensor_1_luminance 	"Luminance    [%.0f Lux]" 		(Motion) {http="<[zwave:10000:JS(getMotionLuminiscence.js)]"}
-Switch sensor_1_motion 		"sensor [MAP(motion.map):%s]" 	(Motion) {http="<[zwave:10000:JS(getMotion.js)]"}
-Number sensor_1_battery 	"Battery [%s %%]" 				(Motion) {http="<[zwave:10000:JS(getMotionBattery.js)]"}
-Number sensor_1_lu 			"[%.0f]" 								 {http="<[zwave:10000:JS(getMotionLastUpdate.js)]"}
-DateTime sensor_1_update 	"Last update [%1$ta %1$tR]" 	(Motion)
+Group Motion <office>
+Number sensor_1_temp 		"Temperature [%.1f °C]" 		<temperature> 	(Motion) 	{http="<[zwave:10000:JS(getMotionTemperature.js)]"}
+Number sensor_1_luminance 	"Luminance    [%.0f Lux]" 						(Motion) 	{http="<[zwave:10000:JS(getMotionLuminiscence.js)]"}
+Switch sensor_1_motion 		"sensor [MAP(motion.map):%s]" 	<present>		(Motion) 	{http="<[zwave:10000:JS(getMotion.js)]"}
+Number sensor_1_battery 	"Bev.sensor [%s %%]"			<energy>		(Motion, gBattery)	{http="<[zwave:10000:JS(getMotionBattery.js)]"}
+Number sensor_1_lu 			"[%.0f]" 						<clock>		 				{http="<[zwave:10000:JS(getMotionLastUpdate.js)]"}
+DateTime sensor_1_update 	"Last update [%1$ta %1$tR]" 	<clock>			(Motion)
 
 /* Modes */
 Switch night_mode <present>

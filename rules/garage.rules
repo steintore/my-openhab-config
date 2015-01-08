@@ -4,16 +4,16 @@ import org.openhab.model.script.actions.*
 
 var Timer garageDoorOpen = null
 
-rule "Send a message if garage door has been open for 30 minutes"
+rule "Send a message if garage door has been open for 15 minutes"
 	when
 		Item garage_door_1 changed to ON or
 		Item garage_door_2 changed to ON	
 	then
 		logInfo("org.openhab.rules","Garage door opened")
 		sendCommand(message_received, OFF)
-		garageDoorOpen = createTimer(now.plusSeconds(1800)) [|
+		garageDoorOpen = createTimer(now.plusSeconds(900)) [|
 			var t = ""
-			if (garage_door_1.state == ON) t = "Leafs "
+			if (garage_door_1.state == ON) t = "Leafs"
 			else t = "Mondeos" 
 			logInfo("org.openhab.rules", t+ " Garage door has been open too long")
 			postUpdate(push_message_text, t + " garasjeport er ikke lukket")

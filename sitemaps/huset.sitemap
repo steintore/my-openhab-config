@@ -7,22 +7,25 @@ sitemap huset label="Huset"
     			Text item=LivingRoomHumidity
 				Text item=LivingRoomTemperature_LastUpdate visibility=[LivingRoomTemperature_LastUpdate>30] valuecolor=[LivingRoomTemperature_LastUpdate>120="orange", LivingRoomTemperature_LastUpdate>300="red"]
 			}
-			Frame {
+			Frame label="Lys" {
 				Switch item=scene_light_livingroom mappings=[0="Av", 1="På", 2="Film"]
-			}
-			Frame label="TV" {
-				Group item=TV icon="tv6"
 			}
 			Frame label="Varmepumpe"{
 				Switch item=ac_power icon="heating" valuecolor=[ac_lastUpdate=="Uninitialized"="lightgray", ac_lastUpdate>240="orange", ac_lastUpdate<240="green"]
 				Text item=ac_current_temp visibility=[ac_power==ON]
 				Setpoint item=ac_set_temp minValue=16 maxValue=28 step=1 icon="temperature" visibility=[ac_power==ON]
-				Selection item=ac_mode mappings=[0="Off", 1="Quiet", 2="Sleep", 3="Smart", 4="SoftCool", 5="TurboMode", 6="WindMode1", 7="WindMode2", 8="WindMode3"] visibility=[ac_power==ON]
-				Selection item=ac_op_mode mappings=[0="Auto", 1="Cool", 2="Dry", 3="Wind", 4="Heat"] visibility=[ac_power==ON]
-				Selection item=ac_direction icon="wind" mappings=[0="Auto", 1="SwingUD", 2="Rotation", 3="Fixed", 4="SwingLR"] visibility=[ac_power==ON]
-				Selection item=ac_windlevel icon="wind" mappings=[0="Auto", 1="Low", 2="Mid", 3="High", 4="Turbo"] visibility=[ac_power==ON]
-				Setpoint item=ac_night_temp minValue=16 maxValue=28 step=1 icon="temperature"
+				Text label="Avansert" icon="office" visibility=[ac_power==ON] {
+					Selection item=ac_mode mappings=[0="Off", 1="Quiet", 2="Sleep", 3="Smart", 4="SoftCool", 5="TurboMode", 6="WindMode1", 7="WindMode2", 8="WindMode3"] visibility=[ac_power==ON]
+					Selection item=ac_op_mode mappings=[0="Auto", 1="Cool", 2="Dry", 3="Wind", 4="Heat"] visibility=[ac_power==ON]
+					Selection item=ac_direction icon="wind" mappings=[0="Auto", 1="SwingUD", 2="Rotation", 3="Fixed", 4="SwingLR"] visibility=[ac_power==ON]
+					Selection item=ac_windlevel icon="wind" mappings=[0="Auto", 1="Low", 2="Mid", 3="High", 4="Turbo"] visibility=[ac_power==ON]
+					Setpoint item=ac_night_temp minValue=16 maxValue=28 step=1 icon="temperature"
+				}
 			}
+			Frame label="TV" visibility=[tv_power==ON] {
+				Group item=TV icon="video"
+			}
+			
     	}
     	Text item=OfficeTemperature label="Andre etasje [%.1f °C]" icon="firstfloor" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame {
@@ -33,10 +36,9 @@ sitemap huset label="Huset"
     		Frame label="Varme" {
     			Switch item=kontor_panelovn
     			Switch item=gang_panelovn
-    			Text item=power_panelovn_kontor
-    			/*Text item=power_panelovn_gang*/
+    			Text item=power_panelovn_kontor visibility=[kontor_panelovn==ON]
     		}
-    		Frame label="Bevegelse" {
+    		Frame label="Bevegelse" icon="office" {
     			Group item=Motion
     			Text item=sensor_1_update
 			}
@@ -79,7 +81,18 @@ sitemap huset label="Huset"
     	}
     }
     Frame label="Weather" {
-		Text item=Date
+		Text item=Date {
+			Frame label="Sola" {
+				Text item=Sunrise_Time
+				Text item=Sunset_Time	
+			}
+			Frame label="Månen" {
+				Text item=Moonrise_Time
+				Text item=Moonset_Time
+				Text item=Moon_Full
+				Text item=Moon_New
+			}
+		}
 	}
 
 	Frame label="Presence" {
