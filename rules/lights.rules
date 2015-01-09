@@ -39,6 +39,9 @@ when
 then
 	if (scene_light_livingroom.state == 0) {
 		sendCommand(Living_Room_Lights, OFF)
+		sendCommand(light_living_room, OFF)
+		sendCommand(light_living_room_2, OFF)
+		sendCommand(light_living_room_3, OFF)
 	} else if (scene_light_livingroom.state == 1) {
 		sendCommand(Living_Room_Lights, ON)
 	} else {

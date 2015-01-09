@@ -53,17 +53,18 @@ sitemap huset label="Huset"
 				Text item=BasementTemperature_LastUpdate visibility=[BasementTemperature_LastUpdate>1800] valuecolor=[BasementTemperature_LastUpdate>120="orange", BasementTemperature_LastUpdate>300="red"]
 			}
 			Frame label="Diverse" {
+				Switch item=dryer
+				Text item=power_dryer visibility=[dryer==ON]
 				Text item=power_freezer
 				Text item=power_fridge
-				Text item=power_dryer
-				Switch item=dryer
+				
 			}
     	}
     	Text item=OutdoorTemperature label="Ute [%.1f °C]" icon="garden" valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame label="Garasjen" {
 				Text item=garage_door_1
 				Text item=garage_door_2
-				Switch item=message_received mappings=[ON="Ja"] icon="network" 
+				Switch item=message_received mappings=[ON="Ja"] icon="network"
 			}
 			Frame label="Ute" icon="garden" {
 				Text item=OutdoorTemperature

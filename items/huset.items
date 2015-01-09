@@ -10,12 +10,12 @@ Group nightMode		(All)
 Group awayMode		(All)
 
 /* NTP binding demo item */
-DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
+DateTime Date	"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
 Switch kontor_panelovn  "Panelovn kontor"	<heating>   (gFirstFloor, Heating, nightMode, awayMode)	{http="<[zwave:10000:JS(getOfficeOvenState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/off]"}
-Switch gang_panelovn "Panelovn gang" 		<heating> 	(gFirstFloor, Heating, nightMode, awayMode)	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/off]"}
+Switch gang_panelovn 	"Panelovn gang" 	<heating> 	(gFirstFloor, Heating, nightMode, awayMode)	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/off]"}
 
 /* Energy/Power measuring */
 Group:Number:SUM					Power			"Nå: [%.1f W]"			<energy>				(All)
@@ -35,38 +35,33 @@ Switch anette_home   		"Anette @ Home"       		<present>	(Home){ mqttitude="brok
 Switch guest_home 			"Guests @ Home" 			<present>	(Home)
 
 Group:Switch:OR(ON, OFF) proximity (All)
-Switch Mobile_Stein_Wlan 	"Steins iPhone Wlan" 		<present>	(proximity) {nh="192.168.1.151"}
-Switch Mobile_Anette_Wlan 	"Anettes iPhone Wlan" 		<present> 	(proximity) {nh="192.168.1.152"}
-Switch TV_living_room		"TV living room"			<present>	(proximity) {nh="192.168.1.153"}
-Switch time_capsule_lan "Time capsule"		<present>		(proximity) {nh="192.168.1.1"}
-Switch router_wlan		"Router"			<present>		(proximity) {nh="192.168.1.200"}
-Switch boss_lan			"Boss server"       <present>       (proximity) {nh="192.168.1.99"}
-Switch nas_lan			"NAS"				<present>		(proximity) {nh="192.168.1.222"}
-Switch roomba_lan		"Roomba"			<present>		(proximity) {nh="192.168.1.154"}
+Switch Mobile_Stein_Wlan 	"Steins iPhone Wlan" 	<present>		(proximity) {nh="192.168.1.151"}
+Switch Mobile_Anette_Wlan	"Anettes iPhone Wlan" 	<present> 		(proximity) {nh="192.168.1.152"}
+Switch TV_living_room		"TV living room"		<present>		(proximity) {nh="192.168.1.153"}
+Switch time_capsule_lan 	"Time capsule"			<present>		(proximity) {nh="192.168.1.1"}
+Switch router_wlan			"Router"				<present>		(proximity) {nh="192.168.1.200"}
+Switch boss_lan				"Boss server"       	<present>       (proximity) {nh="192.168.1.99"}
+Switch nas_lan				"NAS"					<present>		(proximity) {nh="192.168.1.222"}
+Switch roomba_lan			"Roomba"				<present>		(proximity) {nh="192.168.1.154"}
 
 /* Temperature */
 Group Temperature_Chart (Weather)
-Number Temperature_Chart_Period "Periode"
-Number Weather_Temp_Max 		"Todays Maximum [%.1f °C]"	<temperature> (Temperature_Chart)
-Number Weather_Temp_Min 		"Todays Minimum [%.1f °C]"	<temperature> (Temperature_Chart)
-Number Weather_Humidex			"Humidex [SCALE(humidex.scale):%s]" 			(Weather)
-Number OutdoorTemperature 		"Ute [%.1f °C]" 				<temperature> 	(Temperature,gOutdoor,Temperature_Chart) { rfxcom="<26628:Temperature" }
-Number OutdoorHumidity 			"Luftfuktighet ute [%.1f %%]" 		<temperature> 	(gOutdoor, Weather) { rfxcom="<26628:Humidity" }
-DateTime OutdoorTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
-
-Number OfficeTemperature		"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature,gFirstFloor) { rfxcom="<5377:Temperature" }
-Number OfficeHumidity 			"Luftfuktighet kontor [%.1f %%]"	<temperature> 	(gFirstFloor) { rfxcom="<5377:Humidity" }
-DateTime OfficeTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
-Number BasementTemperature		"Kjeller [%.1f °C]"			<temperature>	(Temperature,gBasement) { rfxcom="<52226:Temperature" }
-Number BasementHumidity 		"Luftfuktighet kjeller [%.1f %%]" 	<temperature>	(gBasement) { rfxcom="<52226:Humidity" }
-DateTime BasementTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
-Number LivingRoomTemperature    "Temp stue [%.1f °C]"			<temperature>   (Temperature,gGF) { rfxcom="<48385:Temperature"}
-Number LivingRoomHumidity		"Luftfuktighet stue [%.1f %%]" 		<temperature>	(gGF) { rfxcom="<48385:Humidity" }
-DateTime LivingRoomTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
-
-/* Weather */
-/*String w   "Today [%s]"   <w>  { http="<[http://api.wunderground.com/api/7c8571547a8b91c9/forecast/q/NO/Oslo.xml:3600000:XSLT(wunderground_icon_forecast.xsl)]"}*/
-/*String yr_weahter   "[%s]"   <w>  { http="<[http://www.yr.no/sted/Norge/%C3%98stfold/Fredrikstad/Ambj%C3%B8rnr%C3%B8d/varsel.xml:3600000:XSLT(yr.no_weatherforecast.xsl)]"}*/  
+Number Temperature_Chart_Period 			"Periode"
+Number Weather_Temp_Max 					"Dagens max [%.1f °C]"				<temperature> 	(Temperature_Chart)
+Number Weather_Temp_Min 					"Dagens min [%.1f °C]"				<temperature> 	(Temperature_Chart)
+Number Weather_Humidex						"Humidex [SCALE(humidex.scale):%s]"					(Weather)
+Number OutdoorTemperature 					"Ute [%.1f °C]" 					<temperature> 	(Temperature,gOutdoor,Temperature_Chart) { rfxcom="<26628:Temperature" }
+Number OutdoorHumidity 						"Luftfuktighet ute [%.1f %%]" 		<temperature> 	(gOutdoor, Weather) { rfxcom="<26628:Humidity" }
+DateTime OutdoorTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"			<clock>
+Number OfficeTemperature					"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature,gFirstFloor) { rfxcom="<5377:Temperature" }
+Number OfficeHumidity 						"Luftfuktighet kontor [%.1f %]"		<temperature> 	(gFirstFloor) { rfxcom="<5377:Humidity" }
+DateTime OfficeTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"			<clock>
+Number BasementTemperature					"Kjeller [%.1f °C]"					<temperature>	(Temperature,gBasement) { rfxcom="<52226:Temperature" }
+Number BasementHumidity 					"Luftfuktighet kjeller [%.1f %%]"	<temperature>	(gBasement) { rfxcom="<52226:Humidity" }
+DateTime BasementTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"			<clock>
+Number LivingRoomTemperature    			"Temp stue [%.1f °C]"				<temperature>   (Temperature,gGF) { rfxcom="<48385:Temperature"}
+Number LivingRoomHumidity					"Luftfuktighet stue [%.1f %%]" 		<temperature>	(gGF) { rfxcom="<48385:Humidity" }
+DateTime LivingRoomTemperature_LastUpdate	"Last Update [%1$ta %1$tR]"			<clock>
 
 /* Freezer */
 Group HomeAppliances (Appliance)
@@ -74,7 +69,7 @@ Number power_freezer	"Strøm fryser	[%.1f W]" 				<energy> 	(gBasement, Power, P
 Switch freezer		  	"Fryser"								<kitchen>   (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFreezerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_6-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_6-0-37/command/off]"}
 Number energy_freezer 	"Fryser totalforbruk: [%.2f KWh]" 		<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getFreezerTotal.js)]"}
 Number power_dryer		"Strøm tørketrommel	[%.1f W]" 			<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getDryerPower.js)]"}
-Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances, nightMode, awayMode)				{http="<[zwave:10000:JS(getDryerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_4-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_4-0-37/command/off]"}
+Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances, nightMode, awayMode) {http="<[zwave:10000:JS(getDryerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_4-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_4-0-37/command/off]"}
 Number energy_dryer 	"Tørketrommel totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getDryerTotal.js)]"}
 Switch fridge_basement  "Kjøleskap kjeller" 					<kitchebn>  (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFridgeState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_2-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_2-0-37/command/off]"}
 Number power_fridge		"Strøm kjøleskap [%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getFridgePower.js)]"}
@@ -93,28 +88,27 @@ Switch right_double_switch 	"Høyre knapp" 	<network> (gGF) { rfxcom="<11971074.
 Number battery_outdoor_temp		"Utetemp [%f]" 		<rollershutter>	(gBattery, gOutdoor) 	{rfxcom="<26628:BatteryLevel"}
 Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery, gBasement) 	{rfxcom="<52226:BatteryLevel"}
 Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery, gFirstFloor) {rfxcom="<5377:BatteryLevel"}
-Number battery_living_room_temp	"Stuetemp [%f]"		<rollershutter> (gBattery, gGF)		{rfxcom="<48385:BatteryLevel"}
+Number battery_living_room_temp	"Stuetemp [%f]"		<rollershutter> (gBattery, gGF)			{rfxcom="<48385:BatteryLevel"}
 
 /* Text values */
 String push_message_text "Default message"
 
 /* Lighting */
 Group:Switch:OR(ON, OFF) 		Living_Room_Lights 		"Lys [(%d)]"
-Switch light_living_room "Stue"	<light> (gGF,gLight, Living_Room_Lights, nightMode, awayMode) {rfxcom=">12339014.1:LIGHTING2.AC:Command"}
-Switch remote_light_living_room {rfxcom="<12339014.1:Command"}
-Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights, nightMode, awayMode) {rfxcom=">12339014.2:LIGHTING2.AC:Command"}
-Switch remote_light_living_room_2 {rfxcom="<12339014.2:Command"}
-Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights, nightMode, awayMode) {rfxcom=">12339014.3:LIGHTING2.AC:Command"}
-Switch remote_light_living_room_3 {rfxcom="<12339014.3:Command"}
+Switch light_living_room "Stue"		<light> (gGF,gLight, Living_Room_Lights, nightMode, awayMode)	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch remote_light_living_room 																	{rfxcom="<12339014.1:Command"}
+Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights, nightMode, awayMode) 	{rfxcom=">12339014.2:LIGHTING2.AC:Command"}
+Switch remote_light_living_room_2 																	{rfxcom="<12339014.2:Command"}
+Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights, nightMode, awayMode) 	{rfxcom=">12339014.3:LIGHTING2.AC:Command"}
+Switch remote_light_living_room_3 																	{rfxcom="<12339014.3:Command"}
 Number scene_light_livingroom "Lys" <sofa>
 
-Dimmer light_basement 		"Lystyrke [%%]" <light> (gBasement) 		{rfxcom=">12339014.0:LIGHTING2.AC:DimmingLevel"}
-Switch light_basement_power 	"Av/På"		<light> (gBasement, gLight, nightMode, awayMode) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
-Switch remote_light_basement_power 	{rfxcom="<12339014.0:Command"}
-Number light_basement_signal 	"Signalstyrke"	<light> (gBasement) 		{rfxcom="<12339014.0:SignalLevel"}
-
-Switch light_basement_window 	"Av/På"		<light> (gBasement, gLight, nightMode, awayMode) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
-Switch remote_light_basement_window 	{rfxcom="<12339014.1:Command"}
+Dimmer light_basement 				"Lystyrke [%%]" <light> (gBasement) 								{rfxcom=">12339014.0:LIGHTING2.AC:DimmingLevel"}
+Switch light_basement_power 		"Av/På"			<light> (gBasement, gLight, nightMode, awayMode) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
+Switch remote_light_basement_power 																		{rfxcom="<12339014.0:Command"}
+Number light_basement_signal 		"Signalstyrke"	<light> (gBasement) 								{rfxcom="<12339014.0:SignalLevel"}
+Switch light_basement_window 		"Av/På"			<light> (gBasement, gLight, nightMode, awayMode) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch remote_light_basement_window 																	{rfxcom="<12339014.1:Command"}
 
 /* Motion detector */
 Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
@@ -133,12 +127,12 @@ Rollershutter tv_volume     "Volum"		<volume>	    (TV){samsungtv="UP:Livingroom:
 
 /* Astro information */
 Group Astro
-DateTime Sunrise_Time  "Soloppgang [%1$tH:%1$tM]" <sun> (Astro) {astro="planet=sun, type=rise, property=start"}
-DateTime Sunset_Time   "Solnedgang [%1$tH:%1$tM]" <sun> (Astro) {astro="planet=sun, type=set, property=end"}
-DateTime Moonrise_Time   "Måneoppgang [%1$td.%1$tm.%1$tY %1$tH:%1$tM]" <moon>	(Astro) {astro="planet=moon, type=rise, property=start"}
-DateTime Moonset_Time    "Månenedgang [%1$td.%1$tm.%1$tY %1$tH:%1$tM]" <moon>	(Astro) {astro="planet=moon, type=set, property=end"}
-DateTime  Moon_Full          "Neste fullmåne [%1$td.%1$tm.%1$tY %1$tH:%1$tM]" <moon>	(Astro) {astro="planet=moon, type=phase, property=full"}
-DateTime  Moon_New           "Neste nymåne [%1$td.%1$tm.%1$tY %1$tH:%1$tM]"   <moon>	(Astro) {astro="planet=moon, type=phase, property=new"}
+DateTime Sunrise_Time  	"Soloppgang [%1$tH:%1$tM]" 						<sun> 	(Astro) {astro="planet=sun, type=rise, property=start"}
+DateTime Sunset_Time   	"Solnedgang [%1$tH:%1$tM]" 						<sun>	(Astro) {astro="planet=sun, type=set, property=end"}
+DateTime Moonrise_Time	"Måneoppgang [%1$td.%1$tm.%1$tY %1$tH:%1$tM]"	<moon>	(Astro) {astro="planet=moon, type=rise, property=start"}
+DateTime Moonset_Time   "Månenedgang [%1$td.%1$tm.%1$tY %1$tH:%1$tM]"	<moon>	(Astro) {astro="planet=moon, type=set, property=end"}
+DateTime Moon_Full      "Neste fullmåne [%1$td.%1$tm.%1$tY %1$tH:%1$tM]"<moon>	(Astro) {astro="planet=moon, type=phase, property=full"}
+DateTime Moon_New     	"Neste nymåne [%1$td.%1$tm.%1$tY %1$tH:%1$tM]"  <moon>	(Astro) {astro="planet=moon, type=phase, property=new"}
 
 
 /* Samsung AC */
@@ -155,11 +149,11 @@ Number ac_windlevel "Windlevel" 					<wind> 			(AC) {samsungac="[Livingroom|AC_F
 DateTime ac_lastUpdate "Last update [%1$ta %1$tR]"	<clock>
 
 Group Motion <office>
-Number sensor_1_temp 		"Temperature [%.1f °C]" 		<temperature> 	(Motion) 	{http="<[zwave:10000:JS(getMotionTemperature.js)]"}
-Number sensor_1_luminance 	"Luminance    [%.0f Lux]" 						(Motion) 	{http="<[zwave:10000:JS(getMotionLuminiscence.js)]"}
-Switch sensor_1_motion 		"sensor [MAP(motion.map):%s]" 	<present>		(Motion) 	{http="<[zwave:10000:JS(getMotion.js)]"}
+Number sensor_1_temp 		"Temperature [%.1f °C]" 		<temperature> 	(Motion) 			{http="<[zwave:10000:JS(getMotionTemperature.js)]"}
+Number sensor_1_luminance 	"Luminance    [%.0f Lux]" 						(Motion) 			{http="<[zwave:10000:JS(getMotionLuminiscence.js)]"}
+Switch sensor_1_motion 		"sensor [MAP(motion.map):%s]" 	<present>		(Motion) 			{http="<[zwave:10000:JS(getMotion.js)]"}
 Number sensor_1_battery 	"Bev.sensor [%s %%]"			<energy>		(Motion, gBattery)	{http="<[zwave:10000:JS(getMotionBattery.js)]"}
-Number sensor_1_lu 			"[%.0f]" 						<clock>		 				{http="<[zwave:10000:JS(getMotionLastUpdate.js)]"}
+Number sensor_1_lu 			"[%.0f]" 						<clock>		 						{http="<[zwave:10000:JS(getMotionLastUpdate.js)]"}
 DateTime sensor_1_update 	"Last update [%1$ta %1$tR]" 	<clock>			(Motion)
 
 /* Modes */
