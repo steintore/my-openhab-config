@@ -54,7 +54,7 @@ Number OutdoorTemperature 					"Ute [%.1f °C]" 					<temperature> 	(Temperature
 Number OutdoorHumidity 						"Luftfuktighet ute [%.1f %%]" 		<temperature> 	(gOutdoor, Weather) { rfxcom="<26628:Humidity" }
 DateTime OutdoorTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"			<clock>
 Number OfficeTemperature					"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature,gFirstFloor) { rfxcom="<5377:Temperature" }
-Number OfficeHumidity 						"Luftfuktighet kontor [%.1f %]"		<temperature> 	(gFirstFloor) { rfxcom="<5377:Humidity" }
+Number OfficeHumidity 						"Luftfuktighet kontor [%.1f %%]"		<temperature> 	(gFirstFloor) { rfxcom="<5377:Humidity" }
 DateTime OfficeTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"			<clock>
 Number BasementTemperature					"Kjeller [%.1f °C]"					<temperature>	(Temperature,gBasement) { rfxcom="<52226:Temperature" }
 Number BasementHumidity 					"Luftfuktighet kjeller [%.1f %%]"	<temperature>	(gBasement) { rfxcom="<52226:Humidity" }
