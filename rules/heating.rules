@@ -12,7 +12,7 @@ rule "If the room is too cold and we are home, then heat it up, but only if it i
 		var double tempBasement = new Double(BasementTemperature.state.toString())
 		
 		if (tempOutdoor < 10) {
-			if (gang_panelovn.state == OFF && away_mode == OFF && night_mode == OFF) {
+			if (gang_panelovn.state == OFF && away_mode.state == OFF && night_mode.state == OFF) {
 				if (tempOffice < 20) {
 					sendCommand(gang_panelovn, ON)	
 				}

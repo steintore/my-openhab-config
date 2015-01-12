@@ -55,14 +55,12 @@ rule "Switch on living room lights"
 	when
 		Item right_double_switch received command ON	
 	then
-		sendCommand(Living_Room_Lights, ON)
-		sendCommand(gLight, ON)
+		sendCommand(scene_light_livingroom, 1)
 end
 
 rule "Switch off living room lights"
 	when
 		Item right_double_switch received command OFF	
 	then
-		sendCommand(Living_Room_Lights, OFF)
-		sendCommand(gLight, OFF)
+		sendCommand(scene_light_livingroom, 0)
 end

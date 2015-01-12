@@ -14,17 +14,17 @@ rule "Night mode"
 		Item night_mode changed
 	then
 	if (night_mode.state == ON) {
-		night_states = storeStates(night_group, ac_set_temp, ac_mode)
-		sendCommand(night_group, OFF)
+		night_states = storeStates(night_group)
 		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
 			sendCommand(ac_set_temp, ac_night_temp.state.toString)
 			sendCommand(ac_mode, 0)
 		}
 		sendCommand(scene_light_livingroom, 0)
+		sendCommand(light_basement, OFF)
 		if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 			postUpdate(push_message_text, "Husk tørketrommelen før du legger deg")
 		}
-		if (tv_power == ON) {
+		if (tv_power.state == ON) {
 			postUpdate(push_message_text, "TV-en ble skrudd av")
 			sendCommand(tv_power, OFF)
 		}
@@ -49,7 +49,7 @@ rule "Away mode"
 			postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
 			sendCommand(dryer, OFF)
 		}
-		if (tv_power == ON) {
+		if (tv_power.state == ON) {
 			postUpdate(push_message_text, "TV-en ble skrudd av når du dro hjemmefra")
 			sendCommand(tv_power, OFF)
 		}
@@ -59,6 +59,7 @@ rule "Away mode"
 		sendCommand(ac_set_temp, ac_night_temp.state.toString)
 		sendCommand(ac_mode, 0)
 		sendCommand(scene_light_livingroom, 0)
+		sendCommand(light_basement, OFF)
 	} else {
 		if(guest_home.state == OFF && (OutdoorTemperature.state instanceof DecimalType) && (LivingRoomTemperature.state instanceof DecimalType) ){
 			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
@@ -79,13 +80,13 @@ rule "Switch to night mode in the evening"
 	when
 		Time cron "0 0 23 ? * *" 
 	then
-		if (tv_power == ON) {
+		if (tv_power.state == ON) {
 			// If TV is still on, we'll wait a bit before going into night mode
 			night_timer = createTimer(now.plusSeconds(360)) [|
-				if (tv_power == ON) {
+				if (tv_power.state == ON) {
 					night_timer.reschedule(now.plusSeconds(360))
 				} else {
-					if (away_mode == OFF) {
+					if (away_mode.state == OFF) {
 						sendCommand(night_mode, ON)
 					}
 				
@@ -97,7 +98,7 @@ rule "Switch to night mode in the evening"
 					}
 				}
 				]
-		} else if (away_mode == OFF) {
+		} else if (away_mode.state == OFF) {
 			sendCommand(night_mode, ON)
 		}
 end
@@ -110,7 +111,7 @@ rule "Return to day mode"
 		Time cron "0 30 5 ? * MON-FRI" or
 		Time cron "0 0 7 ? * SAT-SUN"
 	then
-		if (away_mode == OFF) {
+		if (away_mode.state == OFF) {
 			sendCommand(night_mode, OFF)
 		}
 end

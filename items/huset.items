@@ -95,11 +95,11 @@ String push_message_text "Default message"
 
 /* Lighting */
 Group:Switch:OR(ON, OFF) 		Living_Room_Lights 		"Lys [(%d)]"
-Switch light_living_room "Stue"		<light> (gGF,gLight, Living_Room_Lights, night_group, away_group)	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch light_living_room "Stue"		<light> (gGF,gLight, Living_Room_Lights)	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
 Switch remote_light_living_room 																	{rfxcom="<12339014.1:Command"}
-Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights, night_group, away_group) 	{rfxcom=">12339014.2:LIGHTING2.AC:Command"}
+Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights) 	{rfxcom=">12339014.2:LIGHTING2.AC:Command"}
 Switch remote_light_living_room_2 																	{rfxcom="<12339014.2:Command"}
-Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights, night_group, away_group) 	{rfxcom=">12339014.3:LIGHTING2.AC:Command"}
+Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights) 	{rfxcom=">12339014.3:LIGHTING2.AC:Command"}
 Switch remote_light_living_room_3 																	{rfxcom="<12339014.3:Command"}
 Number scene_light_livingroom "Lys" <sofa> (night_group, away_group)
 
@@ -139,10 +139,10 @@ DateTime Moon_New     	"Neste nymåne [%1$td.%1$tm.%1$tY %1$tH:%1$tM]"  <moon>	(
 Group AC
 Number ac_current_temp "Målt temperatur [%.1f °C]" 	<temperature> 	(AC) {samsungac="[Livingroom|AC_FUN_TEMPNOW]"}
 Switch ac_power "Varmepumpe"						<power> 		(AC) {samsungac="[Livingroom|AC_FUN_POWER]"}
-Number ac_mode "Convenient mode" 					<sofa> 			(AC) {samsungac="[Livingroom|AC_FUN_COMODE]"}
+Number ac_mode "Convenient mode" 					<sofa> 			(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_COMODE]"}
 Number ac_mode_previous
-Number ac_op_mode "Operation mode" 					<sofa> 			(AC) {samsungac="[Livingroom|AC_FUN_OPMODE]"}
-Number ac_set_temp "Temperatur [%.1f°C]" 			<temperature> 	(AC) {samsungac="[Livingroom|AC_FUN_TEMPSET]"}
+Number ac_op_mode "Operation mode" 					<sofa> 			(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_OPMODE]"}
+Number ac_set_temp "Temperatur [%.1f°C]" 			<temperature> 	(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_TEMPSET]"}
 Number ac_night_temp "Natttemp [%.1f°C]"			<temperature> 	(AC)
 Number ac_direction "Direction" 					<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_DIRECTION]"}
 Number ac_windlevel "Windlevel" 					<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_WINDLEVEL]"}
