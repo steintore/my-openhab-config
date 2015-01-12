@@ -13,7 +13,7 @@ rule "Night mode"
 	when
 		Item night_mode changed
 	then
-	if (night_mode == ON) {
+	if (night_mode.state == ON) {
 		night_states = storeStates(night_group, ac_set_temp, ac_mode)
 		sendCommand(night_group, OFF)
 		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
@@ -40,7 +40,7 @@ rule "Away mode"
 	when
 		Item away_mode changed
 	then
-	if (away_mode == ON) {
+	if (away_mode.state == ON) {
 		if (OutdoorTemperature.state instanceof DecimalType) {
 			pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
 		}
