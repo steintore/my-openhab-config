@@ -6,16 +6,16 @@ Group gFirstFloor 	(All)
 Group Status    	(All)
 Group gBattery 		(All)
 Group gLight		(All)
-Group nightMode		(All)
-Group awayMode		(All)
+Group night_group	(All)
+Group away_group	(All)
 
 /* NTP binding demo item */
-DateTime Date	"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
+DateTime Date	"Dato [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
-Switch kontor_panelovn  "Panelovn kontor"	<heating>   (gFirstFloor, Heating, nightMode, awayMode)	{http="<[zwave:10000:JS(getOfficeOvenState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/off]"}
-Switch gang_panelovn 	"Panelovn gang" 	<heating> 	(gFirstFloor, Heating, nightMode, awayMode)	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/off]"}
+Switch kontor_panelovn  "Panelovn kontor"	<heating>   (gFirstFloor, Heating, night_group, away_group)	{http="<[zwave:10000:JS(getOfficeOvenState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/off]"}
+Switch gang_panelovn 	"Panelovn gang" 	<heating> 	(gFirstFloor, Heating, night_group, away_group)	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/off]"}
 
 /* Energy/Power measuring */
 Group:Number:SUM					Power			"Nå: [%.1f W]"			<energy>				(All)
@@ -69,7 +69,7 @@ Number power_freezer	"Strøm fryser	[%.1f W]" 				<energy> 	(gBasement, Power, P
 Switch freezer		  	"Fryser"								<kitchen>   (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFreezerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_6-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_6-0-37/command/off]"}
 Number energy_freezer 	"Fryser totalforbruk: [%.2f KWh]" 		<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getFreezerTotal.js)]"}
 Number power_dryer		"Strøm tørketrommel	[%.1f W]" 			<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getDryerPower.js)]"}
-Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances, nightMode, awayMode) {http="<[zwave:10000:JS(getDryerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_4-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_4-0-37/command/off]"}
+Switch dryer			"Tørketrommel"										(gBasement, HomeAppliances, night_group, away_group) {http="<[zwave:10000:JS(getDryerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_4-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_4-0-37/command/off]"}
 Number energy_dryer 	"Tørketrommel totalforbruk: [%.2f KWh]"	<energy> 	(Energy, gBasement)						{http="<[zwave:60000:JS(getDryerTotal.js)]"}
 Switch fridge_basement  "Kjøleskap kjeller" 					<kitchebn>  (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFridgeState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_2-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_2-0-37/command/off]"}
 Number power_fridge		"Strøm kjøleskap [%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getFridgePower.js)]"}
@@ -95,19 +95,19 @@ String push_message_text "Default message"
 
 /* Lighting */
 Group:Switch:OR(ON, OFF) 		Living_Room_Lights 		"Lys [(%d)]"
-Switch light_living_room "Stue"		<light> (gGF,gLight, Living_Room_Lights, nightMode, awayMode)	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch light_living_room "Stue"		<light> (gGF,gLight, Living_Room_Lights, night_group, away_group)	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
 Switch remote_light_living_room 																	{rfxcom="<12339014.1:Command"}
-Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights, nightMode, awayMode) 	{rfxcom=">12339014.2:LIGHTING2.AC:Command"}
+Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights, night_group, away_group) 	{rfxcom=">12339014.2:LIGHTING2.AC:Command"}
 Switch remote_light_living_room_2 																	{rfxcom="<12339014.2:Command"}
-Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights, nightMode, awayMode) 	{rfxcom=">12339014.3:LIGHTING2.AC:Command"}
+Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights, night_group, away_group) 	{rfxcom=">12339014.3:LIGHTING2.AC:Command"}
 Switch remote_light_living_room_3 																	{rfxcom="<12339014.3:Command"}
-Number scene_light_livingroom "Lys" <sofa>
+Number scene_light_livingroom "Lys" <sofa> (night_group, away_group)
 
 Dimmer light_basement 				"Lystyrke [%%]" <light> (gBasement) 								{rfxcom=">12339014.0:LIGHTING2.AC:DimmingLevel"}
-Switch light_basement_power 		"Av/På"			<light> (gBasement, gLight, nightMode, awayMode) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
+Switch light_basement_power 		"Av/På"			<light> (gBasement, gLight, night_group, away_group) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
 Switch remote_light_basement_power 																		{rfxcom="<12339014.0:Command"}
 Number light_basement_signal 		"Signalstyrke"	<light> (gBasement) 								{rfxcom="<12339014.0:SignalLevel"}
-Switch light_basement_window 		"Av/På"			<light> (gBasement, gLight, nightMode, awayMode) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch light_basement_window 		"Av/På"			<light> (gBasement, gLight, night_group, away_group) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
 Switch remote_light_basement_window 																	{rfxcom="<12339014.1:Command"}
 
 /* Motion detector */
@@ -120,7 +120,7 @@ String pushover_token_default 	"Pushover default" 	{configadmin = "pushover:defa
 
 /* Living room TV */
 Group TV <tv>
-Switch 		  tv_power 		"Av/på"		<power>	   		(TV){samsungtv="ON:Livingroom:KEY_POWERON, OFF:Linvingroom:KEY_POWEROFF"}
+Switch 		  tv_power 		"Av/på"		<power>	   		(TV){samsungtv="ON:Livingroom:KEY_POWERON, OFF:Livingroom:KEY_POWEROFF"}
 Rollershutter tv_channel 	"Kanal"     <channel>   	(TV){samsungtv="UP:Livingroom:KEY_CHUP, DOWN:Livingroom:KEY_CHDOWN"}
 Switch        tv_mute		"Lyd av/på" <volume>	    (TV){samsungtv="ON:Livingroom:KEY_MUTE, OFF:Livingroom:KEY_MUTE"}
 Rollershutter tv_volume     "Volum"		<volume>	    (TV){samsungtv="UP:Livingroom:KEY_VOLUP, DOWN:Livingroom:KEY_VOLDOWN"}

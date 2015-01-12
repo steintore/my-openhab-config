@@ -5,22 +5,15 @@ import java.util.Map
 import org.joda.time.DateTime
 
 var Timer timerRouterLAN = null
-var Map states = null
+var Timer timerDryer = null
 
-rule "Switch on living room lights"
+rule "Startup"
 	when
-		Item right_double_switch received command ON	
+		System started
 	then
-		sendCommand(Living_Room_Lights, ON)
-		sendCommand(gLight, ON)
-end
-
-rule "Switch off living room lights"
-	when
-		Item right_double_switch received command OFF	
-	then
-		sendCommand(Living_Room_Lights, OFF)
-		sendCommand(gLight, OFF)
+		if (ac_night_temp.state == Uninitialized) {
+			sendCommand(ac_night_temp, 19)
+		}
 end
 
 rule "Leaving home, we think"
@@ -43,19 +36,7 @@ then
 					timerRouterLAN.reschedule(now.plusSeconds(240))
 				} else {
 					logInfo("org.openhab.rules", "Timer has timed out. Executing proximity off")
-					if (OutdoorTemperature.state instanceof DecimalType) {
-						pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
-					}
-					states = storeStates(awayMode)
-					if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
-						postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
-					}
-					
-					sendCommand(guest_home, OFF)
-					sendCommand(Home, OFF)
-					sendCommand(awayMode, OFF)
-					sendCommand(ac_set_temp, ac_night_temp.state.toString)
-					sendCommand(ac_mode, 0)
+					sendCommand(away_mode, ON)
 					if(timerRouterLAN!=null) {
 						if(timerRouterLAN.running) {
 							timerRouterLAN.cancel()
@@ -76,14 +57,7 @@ rule "Alarm is being disarmed"
 			timerRouterLAN.cancel()
 			timerRouterLAN = null
 		}
-		if(guest_home.state == OFF && (OutdoorTemperature.state instanceof DecimalType) && (LivingRoomTemperature.state instanceof DecimalType) ){
-			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
-		}
-		restoreStates(states)
-		sendCommand(guest_home, ON)
-		if (dryer.state == ON) {
-			postUpdate(push_message_text, "Tørketrommelen ble startet igjen nå når du kom hjem.")
-		}
+		sendCommand(away_mode, OFF)
 end
 
 rule "When text is changes, send a push message"
@@ -148,8 +122,8 @@ when
 	Time cron "0 0 0 * * ?" or
 	System started
 then	
-	postUpdate(Weather_Temp_Max, OutdoorTemperature.maximumSince(now.toDateMidnight).state)
-	postUpdate(Weather_Temp_Min, OutdoorTemperature.minimumSince(now.toDateMidnight).state)
+	postUpdate(Weather_Temp_Max, OutdoorTemperature.maximumSince(now.toLocalDate.toDateTimeAtStartOfDay).state)
+	postUpdate(Weather_Temp_Min, OutdoorTemperature.minimumSince(now.toLocalDate.toDateTimeAtStartOfDay).state)
 	//logInfo("Weather","Temperature evolved of " + OutdoorTemperature.deltaSince(now.minusMinutes(2)).toString + " degrees.")
 end
 
@@ -183,9 +157,18 @@ then
 		var double maxLastHour = new Double(power_dryer.maximumSince(now.minusHours(1)).state.toString())
 		var double maxLastTwoMinutes = new Double(power_dryer.maximumSince(now.minusMinutes(2)).state.toString())
 		if (w < 2 && maxLastHour > 100 && (maxLastTwoMinutes <= (w*2) || w == 0)) {
-			/*	sendCommand(dryer, OFF)*/
-			postUpdate(push_message_text, "Tørketrommelen er ferdig!")	
+			postUpdate(push_message_text, "Tørketrommelen er ferdig!")
+			timerDryer = createTimer(now.plusSeconds(120)) [|
+				var double maxLastTwoMinutes_timer = new Double(power_dryer.maximumSince(now.minusMinutes(2)).state.toString())
+				if (maxLastTwoMinutes_timer == 0)
+					sendCommand(dryer, OFF)
+			]	
 		}
+	} else if(timerDryer != null) {
+		if(timerDryer.running) {
+			timerDryer.cancel()
+		}
+		timerDryer= null	
 	}
 end
 
@@ -207,3 +190,22 @@ then
   var v = new DateTime(new Long(sensor_1_lu.state.toString) * 1000L)
   postUpdate(sensor_1_update, new DateTimeType(v.toGregorianCalendar))
 end
+
+rule "Send a status message at 22 if anything is NOT ok"
+	when
+		Time cron "0 0 22 ? * *"
+	then
+		if (garage_door_1.state == ON || garage_door_2.state == ON) {
+			postUpdate(push_message_text, "Leaf: " + garage_door_1.state.toString() + ", Mondeo:" + garage_door_2.state.toString())
+		}
+		if (boss_lan.state == OFF && !boss_lan.changedSince(now.minusHours(12))) {
+			pushover('Boss is not responding, and has been off for 12 hours')
+		}
+		if (nas_lan.state == OFF && !nas_lan.changedSince(now.minusHours(12))) {
+			pushover('NAS is not responding, and has been off for 12 hours')
+		} 	
+		if (away_mode.state == ON || night_mode.state == ON && tv_power.state == ON) {
+			pushover('TV står på, men du har enten lagt deg eller er borte..')
+		} 	
+end
+

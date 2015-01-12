@@ -1,0 +1,116 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+import java.util.Map
+import org.joda.time.DateTime
+
+var Map away_states = null
+var Map night_states = null
+var Timer night_timer = null
+
+
+rule "Night mode" 
+	when
+		Item night_mode changed
+	then
+	if (night_mode == ON) {
+		night_states = storeStates(night_group, ac_set_temp, ac_mode)
+		sendCommand(night_group, OFF)
+		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
+			sendCommand(ac_set_temp, ac_night_temp.state.toString)
+			sendCommand(ac_mode, 0)
+		}
+		sendCommand(scene_light_livingroom, 0)
+		if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
+			postUpdate(push_message_text, "Husk tørketrommelen før du legger deg")
+		}
+		if (tv_power == ON) {
+			postUpdate(push_message_text, "TV-en ble skrudd av")
+			sendCommand(tv_power, OFF)
+		}
+	} else {
+		if (Home.state == ON && new Double(OutdoorTemperature.state.toString()) < 10) {
+			sendCommand(ac_power, ON)
+		}
+		restoreStates(night_states)
+	}
+end
+
+rule "Away mode"
+	when
+		Item away_mode changed
+	then
+	if (away_mode == ON) {
+		if (OutdoorTemperature.state instanceof DecimalType) {
+			pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
+		}
+		away_states = storeStates(away_group)
+		if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
+			postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
+			sendCommand(dryer, OFF)
+		}
+		if (tv_power == ON) {
+			postUpdate(push_message_text, "TV-en ble skrudd av når du dro hjemmefra")
+			sendCommand(tv_power, OFF)
+		}
+					
+		sendCommand(guest_home, OFF)
+		sendCommand(Home, OFF)
+		sendCommand(ac_set_temp, ac_night_temp.state.toString)
+		sendCommand(ac_mode, 0)
+		sendCommand(scene_light_livingroom, 0)
+	} else {
+		if(guest_home.state == OFF && (OutdoorTemperature.state instanceof DecimalType) && (LivingRoomTemperature.state instanceof DecimalType) ){
+			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
+		}
+		restoreStates(away_states)
+		sendCommand(guest_home, ON)
+		if (dryer.state == ON) {
+			postUpdate(push_message_text, "Tørketrommelen ble startet igjen nå når du kom hjem.")
+		}
+	}
+end
+
+/*
+ * At 23 in the evening we'll go into night mode, but only if someone is at home.
+ * Away mode overrules night mode
+ */
+rule "Switch to night mode in the evening"
+	when
+		Time cron "0 0 23 ? * *" 
+	then
+		if (tv_power == ON) {
+			// If TV is still on, we'll wait a bit before going into night mode
+			night_timer = createTimer(now.plusSeconds(360)) [|
+				if (tv_power == ON) {
+					night_timer.reschedule(now.plusSeconds(360))
+				} else {
+					if (away_mode == OFF) {
+						sendCommand(night_mode, ON)
+					}
+				
+					if(night_timer!=null) {
+						if(night_timer.running) {
+							night_timer.cancel()
+						}
+						night_timer = null
+					}
+				}
+				]
+		} else if (away_mode == OFF) {
+			sendCommand(night_mode, ON)
+		}
+end
+
+/*
+ * We'll returning to day mode again, but only if we are at home.
+ */
+rule "Return to day mode"
+	when
+		Time cron "0 30 5 ? * MON-FRI" or
+		Time cron "0 0 7 ? * SAT-SUN"
+	then
+		if (away_mode == OFF) {
+			sendCommand(night_mode, OFF)
+		}
+end

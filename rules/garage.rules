@@ -48,7 +48,7 @@ rule "Send a message after 10 minutes if garage door is open and nobody is home"
 	when
 		Time cron "0 0/10 * * * ?"
 	then
-		if (Home.state == OFF && (garage_door_1.state == ON || garage_door_2.state == ON)) {
+		if (away_mode.state == ON && (garage_door_1.state == ON || garage_door_2.state == ON)) {
 			if (message_received.state == OFF && !garage_door_1.changedSince(now.minusMinutes(15)) && !garage_door_2.changedSince(now.minusMinutes(15))) {
 				postUpdate(push_message_text, "Tydeligvis ingen hjemme, men garasjeporten er åpen!")
 			}
@@ -59,19 +59,4 @@ rule "Send a message after 10 minutes if garage door is open and nobody is home"
         if (garage_door_2.state == Undefined || garage_door_2.state == Uninitialized) {
         	sendCommand(garage_door_2, OFF)
         }	
-end
-
-rule "Send a status message at 22 if anything is NOT ok"
-	when
-		Time cron "0 0 22 ? * *"
-	then
-		if (garage_door_1.state == ON || garage_door_2.state == ON) {
-			postUpdate(push_message_text, "Leaf: " + garage_door_1.state.toString() + ", Mondeo:" + garage_door_2.state.toString())
-		}
-		if (boss_lan.state == OFF && !boss_lan.changedSince(now.minusHours(12))) {
-			pushover('Boss is not responding, and has been off for 12 hours')
-		}
-		if (nas_lan.state == OFF && !nas_lan.changedSince(now.minusHours(12))) {
-			pushover('NAS is not responding, and has been off for 12 hours')
-		} 	 	
 end

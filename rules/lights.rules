@@ -50,3 +50,19 @@ then
 		sendCommand(light_living_room_2, ON)
 	}	
 end
+
+rule "Switch on living room lights"
+	when
+		Item right_double_switch received command ON	
+	then
+		sendCommand(Living_Room_Lights, ON)
+		sendCommand(gLight, ON)
+end
+
+rule "Switch off living room lights"
+	when
+		Item right_double_switch received command OFF	
+	then
+		sendCommand(Living_Room_Lights, OFF)
+		sendCommand(gLight, OFF)
+end

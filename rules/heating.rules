@@ -1,19 +1,7 @@
 import org.openhab.core.library.types.*
 import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
-import java.lang.Math
 import java.util.*
-
-var Map nightModeStates = null
-
-rule "Startup"
-	when
-		System started
-	then
-		if (ac_night_temp.state == Uninitialized) {
-			sendCommand(ac_night_temp, 19)
-		}
-end
 
 rule "If the room is too cold and we are home, then heat it up, but only if it is less than 10 degrees outside"
 	when
@@ -24,12 +12,11 @@ rule "If the room is too cold and we are home, then heat it up, but only if it i
 		var double tempBasement = new Double(BasementTemperature.state.toString())
 		
 		if (tempOutdoor < 10) {
-			if (gang_panelovn.state == OFF && Home.state == ON) {
+			if (gang_panelovn.state == OFF && away_mode == OFF && night_mode == OFF) {
 				if (tempOffice < 20) {
 					sendCommand(gang_panelovn, ON)	
 				}
 			}
-			
 			if (tempBasement < 18 && BasementTemperature.maximumSince(now.minusMinutes(21)).state >= 18) {
 				pushover('Kjellertemp er nå: ' + tempBasement + " - den har gått fra " + BasementTemperature.maximumSince(now.minusMinutes(21)).state + " de siste 20 minuttene")
 			}	
@@ -37,29 +24,3 @@ rule "If the room is too cold and we are home, then heat it up, but only if it i
 end
 
 
-rule "Switch to night mode in the evening"
-	when
-		Time cron "0 0 23 ? * *" 
-	then
-		nightModeStates = storeStates(nightMode, ac_set_temp, ac_mode)
-		if (Heating.state == ON) {
-			sendCommand(nightMode, OFF)
-			postUpdate(push_message_text, "Panelovnene ble skrudd av kl: " + now)
-		}
-		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
-			sendCommand(ac_set_temp, ac_night_temp.state.toString)
-			sendCommand(ac_mode, 0)
-		}
-end
-
-
-rule "Return to day mode"
-	when
-		Time cron "0 30 5 ? * MON-FRI" or
-		Time cron "0 0 7 ? * SAT-SUN"
-	then
-		if (Home.state == ON && new Double(OutdoorTemperature.state.toString()) < 10) {
-			sendCommand(ac_power, ON)
-		}
-		restoreStates(nightModeStates)
-end

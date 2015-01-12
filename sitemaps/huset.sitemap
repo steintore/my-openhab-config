@@ -5,7 +5,7 @@ sitemap huset label="Huset"
     		Frame {
     			Text item=LivingRoomTemperature
     			Text item=LivingRoomHumidity
-				Text item=LivingRoomTemperature_LastUpdate visibility=[LivingRoomTemperature_LastUpdate>30] valuecolor=[LivingRoomTemperature_LastUpdate>120="orange", LivingRoomTemperature_LastUpdate>300="red"]
+				Text item=LivingRoomTemperature_LastUpdate visibility=[LivingRoomTemperature_LastUpdate>1800] valuecolor=[LivingRoomTemperature_LastUpdate>120="orange", LivingRoomTemperature_LastUpdate>300="red"]
 			}
 			Frame label="Lys" {
 				Switch item=scene_light_livingroom mappings=[0="Av", 1="På", 2="Film"]
@@ -64,7 +64,7 @@ sitemap huset label="Huset"
     		Frame label="Garasjen" {
 				Text item=garage_door_1
 				Text item=garage_door_2
-				Switch item=message_received mappings=[ON="Ja"] icon="network"
+				Switch item=message_received mappings=[ON="Ja"] icon="network" visibility=[garage_door_1==ON, garage_door_2==ON]
 			}
 			Frame label="Ute" icon="garden" {
 				Text item=OutdoorTemperature
@@ -81,7 +81,7 @@ sitemap huset label="Huset"
 			}
     	}
     }
-    Frame label="Weather" {
+    Frame label="Været" {
 		Text item=Date {
 			Frame label="Sola" {
 				Text item=Sunrise_Time
@@ -96,15 +96,22 @@ sitemap huset label="Huset"
 		}
 	}
 
-	Frame label="Presence" {
-		Group item=Home label="Hjemme  [(%d)]" icon="present"
-		Group item=proximity label="Network health [(%d)]" icon="present"
+	Frame label="Tilstedeværelse" {
+		Text label="Moduser" icon="present" {
+			Switch item=night_mode label="Nattmodus"
+			Switch item=away_mode label="Bortemodus"
+			
+			Group item=proximity label="Nettverkshelse [(%d)]" icon="present"
+			Group item=Home label="Hjemme [(%d)]" icon="present"
+		}
 	}
 	
 	Frame label="Status" {
-		Group item=gBattery label="Batteri" icon="energy"
-		Group item=Energy 
 		Text item=Power icon="energy" {
+			Frame {
+				Group item=Energy
+				Group item=gBattery label="Batteri" icon="energy"
+			}
 			Frame {
 				Text item=power_dryer
 				Text item=power_freezer
@@ -117,6 +124,7 @@ sitemap huset label="Huset"
 				Chart item=Power_Chart period=D refresh=1800 visibility=[Power_Chart_Period==1]
 				Chart item=Power_Chart period=W refresh=3600 visibility=[Power_Chart_Period==2]
 			}
+			
 		}
 	}
 	
