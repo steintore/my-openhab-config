@@ -21,6 +21,9 @@ rule "Night mode"
 		}
 		sendCommand(scene_light_livingroom, 0)
 		sendCommand(light_basement, OFF)
+		sendCommand(kontor_panelovn, OFF)
+		sendCommand(gang_panelovn, OFF)
+		
 		if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 			postUpdate(push_message_text, "Husk tørketrommelen før du legger deg")
 		}
@@ -60,6 +63,8 @@ rule "Away mode"
 		sendCommand(ac_mode, 0)
 		sendCommand(scene_light_livingroom, 0)
 		sendCommand(light_basement, OFF)
+		sendCommand(kontor_panelovn, OFF)
+		sendCommand(gang_panelovn, OFF)
 	} else {
 		if(guest_home.state == OFF && (OutdoorTemperature.state instanceof DecimalType) && (LivingRoomTemperature.state instanceof DecimalType) ){
 			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
@@ -111,7 +116,7 @@ rule "Return to day mode"
 		Time cron "0 30 5 ? * MON-FRI" or
 		Time cron "0 0 7 ? * SAT-SUN"
 	then
-		if (away_mode.state == OFF) {
+		if (away_mode.state == OFF || away_mode.state == Uninitialized) {
 			sendCommand(night_mode, OFF)
 		}
 end

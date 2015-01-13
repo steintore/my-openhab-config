@@ -14,8 +14,8 @@ DateTime Date	"Dato [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
-Switch kontor_panelovn  "Panelovn kontor"	<heating>   (gFirstFloor, Heating, night_group, away_group)	{http="<[zwave:10000:JS(getOfficeOvenState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/off]"}
-Switch gang_panelovn 	"Panelovn gang" 	<heating> 	(gFirstFloor, Heating, night_group, away_group)	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/off]"}
+Switch kontor_panelovn  "Panelovn kontor"	<heating>   (gFirstFloor, Heating, away_group)	{http="<[zwave:10000:JS(getOfficeOvenState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_5-0-37/command/off]"}
+Switch gang_panelovn 	"Panelovn gang" 	<heating> 	(gFirstFloor, Heating, away_group)	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_10-0-37/command/off]"}
 
 /* Energy/Power measuring */
 Group:Number:SUM					Power			"Nå: [%.1f W]"			<energy>				(All)
@@ -101,7 +101,7 @@ Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights) 	{r
 Switch remote_light_living_room_2 																	{rfxcom="<12339014.2:Command"}
 Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights) 	{rfxcom=">12339014.3:LIGHTING2.AC:Command"}
 Switch remote_light_living_room_3 																	{rfxcom="<12339014.3:Command"}
-Number scene_light_livingroom "Lys" <sofa> (night_group, away_group)
+Number scene_light_livingroom "Lys" <sofa>
 
 Dimmer light_basement 				"Lystyrke [%%]" <light> (gBasement) 								{rfxcom=">12339014.0:LIGHTING2.AC:DimmingLevel"}
 Switch light_basement_power 		"Av/På"			<light> (gBasement, gLight, night_group, away_group) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
