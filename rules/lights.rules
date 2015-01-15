@@ -36,8 +36,7 @@ end
 rule "scene for lights in living room"
 when
 	Item scene_light_livingroom changed or
-	Item scene_light_livingroom received update or
-	Item scene_light_livingroom received command
+	Item scene_light_livingroom received update
 then
 	if (scene_light_livingroom.state == 0) {
 		sendCommand(light_living_room, OFF)
@@ -76,7 +75,7 @@ rule "motion detected in the living room"
 		if (away_mode.state == ON) {
 			pushover("Bevegelse i stua når ingen er hjemme...")
 		} else {
-			var double lux = new Double(sensor_1_lu.state.toString())
+			var double lux = new Double(sensor_1_luminance.state.toString())
 			if (lux < 200) {
 				if (tv_power.state == OFF) {
 					sendCommand(scene_light_livingroom, 1)
