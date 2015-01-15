@@ -15,10 +15,6 @@ rule "Night mode"
 	then
 	if (night_mode.state == ON) {
 		night_states = storeStates(night_group)
-		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
-			sendCommand(ac_set_temp, ac_night_temp.state.toString)
-			sendCommand(ac_mode, 0)
-		}
 		sendCommand(scene_light_livingroom, 0)
 		sendCommand(light_basement, OFF)
 		sendCommand(kontor_panelovn, OFF)
@@ -30,6 +26,10 @@ rule "Night mode"
 		if (tv_power.state == ON) {
 			postUpdate(push_message_text, "TV-en ble skrudd av")
 			sendCommand(tv_power, OFF)
+		}
+		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
+			sendCommand(ac_set_temp, ac_night_temp.state.toString)
+			sendCommand(ac_mode, 0)
 		}
 	} else {
 		if (Home.state == ON && new Double(OutdoorTemperature.state.toString()) < 10) {
@@ -56,15 +56,15 @@ rule "Away mode"
 			postUpdate(push_message_text, "TV-en ble skrudd av når du dro hjemmefra")
 			sendCommand(tv_power, OFF)
 		}
-					
 		sendCommand(guest_home, OFF)
-		sendCommand(Home, OFF)
-		sendCommand(ac_set_temp, ac_night_temp.state.toString)
-		sendCommand(ac_mode, 0)
-		sendCommand(scene_light_livingroom, 0)
 		sendCommand(light_basement, OFF)
 		sendCommand(kontor_panelovn, OFF)
 		sendCommand(gang_panelovn, OFF)
+		sendCommand(scene_light_livingroom, 0)
+		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
+			sendCommand(ac_set_temp, ac_night_temp.state.toString)
+			sendCommand(ac_mode, 0)
+		}
 	} else {
 		if(guest_home.state == OFF && (OutdoorTemperature.state instanceof DecimalType) && (LivingRoomTemperature.state instanceof DecimalType) ){
 			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
@@ -86,9 +86,9 @@ rule "Switch to night mode in the evening"
 		Time cron "0 0 23 ? * *" 
 	then
 		if (tv_power.state == ON) {
-			// If TV is still on, we'll wait a bit before going into night mode
+			// If TV is still on or there's someone in the living room, we'll wait a bit before going into night mode
 			night_timer = createTimer(now.plusSeconds(360)) [|
-				if (tv_power.state == ON) {
+				if (tv_power.state == ON || sensor_1_motion.state == ON) {
 					night_timer.reschedule(now.plusSeconds(360))
 				} else {
 					if (away_mode.state == OFF) {
