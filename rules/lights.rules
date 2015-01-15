@@ -40,13 +40,13 @@ when
 	Item scene_light_livingroom received command
 then
 	if (scene_light_livingroom.state == 0) {
-		Living_Room_Lights.members.forEach(Switch|
-			sendCommand(Switch, OFF)
-		)
+		sendCommand(light_living_room, OFF)
+		sendCommand(light_living_room_3, OFF)
+		sendCommand(light_living_room_2, OFF)
 	} else if (scene_light_livingroom.state == 1) {
-		Living_Room_Lights.members.forEach(Switch|
-			sendCommand(Switch, ON)
-		)
+		sendCommand(light_living_room, ON)
+		sendCommand(light_living_room_3, ON)
+		sendCommand(light_living_room_2, ON)
 	} else {
 		sendCommand(light_living_room, OFF)
 		sendCommand(light_living_room_3, OFF)

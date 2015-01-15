@@ -11,6 +11,7 @@ when
 	Item Mobile_Stein_Wlan changed from OFF to ON
 then
 	if(timerSteinMobileWlan!=null) {
+		logInfo("org.openhab.rules","steinwlan ON. stopping timer.")
 		timerSteinMobileWlan.cancel()
 		timerSteinMobileWlan = null
 	}
