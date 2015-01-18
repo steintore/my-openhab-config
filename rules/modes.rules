@@ -4,17 +4,31 @@ import org.openhab.model.script.actions.*
 import java.util.Map
 import org.joda.time.DateTime
 
-var Map away_states = null
-var Map night_states = null
+var Map stored_states = null
 var Timer night_timer = null
 
-
-rule "Night mode" 
+rule "A change of mode"
 	when
-		Item night_mode changed
+		Item mode changed
 	then
-	if (night_mode.state == ON) {
-		night_states = storeStates(night_group)
+	if (mode.state == 0) {
+		// HOME
+		restoreStates(stored_states)
+		if (new Double(OutdoorTemperature.state.toString()) < 10) {
+				sendCommand(ac_power, ON)
+		}
+			
+		if (previous_mode.state == 2) {
+			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
+		
+			sendCommand(guest_home, ON)
+			if (dryer.state == ON) {
+				postUpdate(push_message_text, "Tørketrommelen ble startet igjen nå når du kom hjem.")
+			}
+		}
+	} else if (mode.state == 1) {
+		// NIGHT MODE
+		stored_states = storeStates(night_group)
 		sendCommand(scene_light_livingroom, 0)
 		sendCommand(light_basement, OFF)
 		sendCommand(kontor_panelovn, OFF)
@@ -31,23 +45,13 @@ rule "Night mode"
 			sendCommand(ac_set_temp, ac_night_temp.state.toString)
 			sendCommand(ac_mode, 0)
 		}
-	} else {
-		if (Home.state == ON && new Double(OutdoorTemperature.state.toString()) < 10) {
-			sendCommand(ac_power, ON)
-		}
-		restoreStates(night_states)
-	}
-end
-
-rule "Away mode"
-	when
-		Item away_mode changed
-	then
-	if (away_mode.state == ON) {
+		
+	} else if (mode.state == 2) {
+		//AWAY MODE
 		if (OutdoorTemperature.state instanceof DecimalType) {
 			pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
 		}
-		away_states = storeStates(away_group)
+		stored_states = storeStates(away_group)
 		if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 			postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
 			sendCommand(dryer, OFF)
@@ -65,16 +69,11 @@ rule "Away mode"
 			sendCommand(ac_set_temp, ac_night_temp.state.toString)
 			sendCommand(ac_mode, 0)
 		}
-	} else {
-		if(guest_home.state == OFF && (OutdoorTemperature.state instanceof DecimalType) && (LivingRoomTemperature.state instanceof DecimalType) ){
-			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
-		}
-		restoreStates(away_states)
-		sendCommand(guest_home, ON)
-		if (dryer.state == ON) {
-			postUpdate(push_message_text, "Tørketrommelen ble startet igjen nå når du kom hjem.")
-		}
 	}
+	
+	logInfo('org.openhab', 'Set previous mode to:' + mode.state.toString)
+	sendCommand(previous_mode, mode.state.toString)
+	logInfo('org.openhab', 'Previous state:' + previous_mode.state.toString() + " - Current state: " + mode.state.toString())
 end
 
 /*
@@ -91,8 +90,8 @@ rule "Switch to night mode in the evening"
 				if (tv_power.state == ON || sensor_1_motion.state == ON) {
 					night_timer.reschedule(now.plusSeconds(360))
 				} else {
-					if (away_mode.state == OFF) {
-						sendCommand(night_mode, ON)
+					if (mode.state != 2) {
+						sendCommand(mode, 1)
 					}
 				
 					if(night_timer!=null) {
@@ -103,20 +102,28 @@ rule "Switch to night mode in the evening"
 					}
 				}
 				]
-		} else if (away_mode.state == OFF) {
-			sendCommand(night_mode, ON)
+		} else if (mode.state != 2) {
+			sendCommand(mode, 1)
 		}
 end
 
 /*
  * We'll returning to day mode again, but only if we are at home.
  */
-rule "Return to day mode"
+rule "Return to day mode during the week"
 	when
-		Time cron "0 30 5 ? * MON-FRI" or
+		Time cron "0 30 5 ? * MON-FRI"
+	then
+		if (mode.state != 2) {
+			sendCommand(mode, 0)
+		}
+end
+
+rule "Return to day mode during weekend"
+	when
 		Time cron "0 0 7 ? * SAT-SUN"
 	then
-		if (away_mode.state == OFF || away_mode.state == Uninitialized) {
-			sendCommand(night_mode, OFF)
+		if (mode.state != 2) {
+			sendCommand(mode, 0)
 		}
 end

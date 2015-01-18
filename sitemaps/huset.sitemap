@@ -25,6 +25,10 @@ sitemap huset label="Huset"
 			Frame label="TV" visibility=[tv_power==ON] {
 				Group item=TV icon="video"
 			}
+			Frame label="Bevegelse" icon="office" {
+    			Group item=Motion
+    			Text item=sensor_1_update
+			}
 			
     	}
     	Text item=OfficeTemperature label="Andre etasje [%.1f °C]" icon="firstfloor" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
@@ -38,14 +42,10 @@ sitemap huset label="Huset"
     			Switch item=gang_panelovn
     			Text item=power_panelovn_kontor visibility=[kontor_panelovn==ON]
     		}
-    		Frame label="Bevegelse" icon="office" {
-    			Group item=Motion
-    			Text item=sensor_1_update
-			}
     	}
     	Text item=BasementTemperature label="Kjeller [%.1f °C]" icon="cellar" valuecolor=[BasementTemperature_LastUpdate=="Uninitialized"="lightgray",BasementTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame label="Kjellerstue"{
-    			Switch item=light_basement_power
+    			Switch item=light_basement_power mappings=[ON='På',OFF='Av']
     		}
     		Frame {
     			Text item=BasementTemperature
@@ -98,8 +98,7 @@ sitemap huset label="Huset"
 
 	Frame label="Tilstedeværelse" {
 		Text label="Moduser" icon="present" {
-			Switch item=night_mode label="Nattmodus"
-			Switch item=away_mode label="Bortemodus"
+			Switch item=mode mappings=[0="Hjemme", 1="Natt", 2="Borte"]
 			
 			Group item=proximity label="Nettverkshelse [(%d)]" icon="present"
 			Group item=Home label="Hjemme [(%d)]" icon="present"

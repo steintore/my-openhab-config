@@ -103,11 +103,9 @@ Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights) 	{r
 Switch remote_light_living_room_3 																	{rfxcom="<12339014.3:Command"}
 Number scene_light_livingroom "Lys" <sofa>
 
-Dimmer light_basement 				"Lystyrke [%%]" <light> (gBasement) 								{rfxcom=">12339014.0:LIGHTING2.AC:DimmingLevel"}
-Switch light_basement_power 		"Av/På"			<light> (gBasement, gLight, night_group, away_group) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
+Switch light_basement_power 		"Av/På"			<light> (gBasement, gLight) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
 Switch remote_light_basement_power 																		{rfxcom="<12339014.0:Command"}
-Number light_basement_signal 		"Signalstyrke"	<light> (gBasement) 								{rfxcom="<12339014.0:SignalLevel"}
-Switch light_basement_window 		"Av/På"			<light> (gBasement, gLight, night_group, away_group) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch light_basement_window 		"Av/På"			<light> (gBasement, gLight) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
 Switch remote_light_basement_window 																	{rfxcom="<12339014.1:Command"}
 
 /* Motion detector */
@@ -152,13 +150,13 @@ Group Motion <office>
 Number sensor_1_temp 		"Temperature [%.1f °C]" 		<temperature> 	(Motion) 			{http="<[zwave:10000:JS(getMotionTemperature.js)]"}
 Number sensor_1_luminance 	"Luminance    [%.0f Lux]" 						(Motion) 			{http="<[zwave:10000:JS(getMotionLuminiscence.js)]"}
 Switch sensor_1_motion 		"sensor [MAP(motion.map):%s]" 	<present>		(Motion) 			{http="<[zwave:10000:JS(getMotion.js)]"}
-Number sensor_1_battery 	"Bev.sensor [%s %%]"			<energy>		(Motion, gBattery)	{http="<[zwave:10000:JS(getMotionBattery.js)]"}
+Number sensor_1_battery 	"Bev.sensor [%s %%]"			<energy>		(Motion, gBattery)	{http="<[zwave:600000:JS(getMotionBattery.js)]"}
 Number sensor_1_lu 			"[%.0f]" 						<clock>		 						{http="<[zwave:10000:JS(getMotionLastUpdate.js)]"}
 DateTime sensor_1_update 	"Last update [%1$ta %1$tR]" 	<clock>			(Motion)
 
-/* Modes */
-Switch night_mode <present>
-Switch away_mode <present>
+/* Modes 0=HOME, 1=NIGHT, 2=AWAY */
+Number mode "Modus:" <present>
+Number previous_mode 
 
 /* Roomba */
 //String roomba_test <sofa> {tcp="<[192.168.1.154:9001:'REGEX((.*))']"} // for a String Item that captures some state of a remote device that connects to openHAB

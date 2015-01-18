@@ -14,6 +14,13 @@ rule "Startup"
 		if (ac_night_temp.state == Uninitialized) {
 			sendCommand(ac_night_temp, 19)
 		}
+		if (mode.state == Uninitialized || mode.state < 0 || mode.state > 2) {
+			sendCommand(mode, 0)
+		}
+		if (previous_mode.state == Uninitialized) {
+			sendCommand(previous_mode, 0)
+		}
+		
 end
 
 rule "Leaving home, we think"
@@ -36,7 +43,7 @@ then
 					timerRouterLAN.reschedule(now.plusSeconds(240))
 				} else {
 					logInfo("org.openhab.rules", "Timer has timed out. Executing proximity off")
-					sendCommand(away_mode, ON)
+					sendCommand(mode, 2)
 					if(timerRouterLAN!=null) {
 						if(timerRouterLAN.running) {
 							timerRouterLAN.cancel()
@@ -57,7 +64,7 @@ rule "Alarm is being disarmed"
 			timerRouterLAN.cancel()
 			timerRouterLAN = null
 		}
-		sendCommand(away_mode, OFF)
+		sendCommand(mode, 0)
 end
 
 rule "When text is changes, send a push message"
@@ -145,6 +152,9 @@ then
 	} else if (tv_power.state == OFF && ac_mode_previous.state.toString != "99") {
 		ac_mode.sendCommand(ac_mode_previous.state.toString)
 		ac_mode_previous.sendCommand(99)
+		if (sensor_1_motion.state == OFF) {
+			sendCommand(scene_light_livingroom, 0)
+		}
 	}
 end
 
@@ -204,7 +214,7 @@ rule "Send a status message at 22 if anything is NOT ok"
 		if (nas_lan.state == OFF && !nas_lan.changedSince(now.minusHours(12))) {
 			pushover('NAS is not responding, and has been off for 12 hours')
 		} 	
-		if (away_mode.state == ON || night_mode.state == ON && tv_power.state == ON) {
+		if (mode.state != 0 && tv_power.state == ON) {
 			pushover('TV står på, men du har enten lagt deg eller er borte..')
 		} 	
 end
