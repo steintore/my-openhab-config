@@ -30,7 +30,7 @@ rule "A change of mode"
 		// NIGHT MODE
 		stored_states = storeStates(night_group)
 		sendCommand(scene_light_livingroom, 0)
-		sendCommand(light_basement, OFF)
+		sendCommand(light_basement_power, OFF)
 		sendCommand(kontor_panelovn, OFF)
 		sendCommand(gang_panelovn, OFF)
 		
@@ -61,7 +61,7 @@ rule "A change of mode"
 			sendCommand(tv_power, OFF)
 		}
 		sendCommand(guest_home, OFF)
-		sendCommand(light_basement, OFF)
+		sendCommand(light_basement_power, OFF)
 		sendCommand(kontor_panelovn, OFF)
 		sendCommand(gang_panelovn, OFF)
 		sendCommand(scene_light_livingroom, 0)
@@ -70,10 +70,7 @@ rule "A change of mode"
 			sendCommand(ac_mode, 0)
 		}
 	}
-	
-	logInfo('org.openhab', 'Set previous mode to:' + mode.state.toString)
 	sendCommand(previous_mode, mode.state.toString)
-	logInfo('org.openhab', 'Previous state:' + previous_mode.state.toString() + " - Current state: " + mode.state.toString())
 end
 
 /*
