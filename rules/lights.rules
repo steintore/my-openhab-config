@@ -86,8 +86,8 @@ rule "motion detected in the living room"
 
 		}	
 	} else {
-		if (tv_power.state == OFF) {
-			sendCommand(scene_light_livingroom, 0)
+		if (tv_power.state == OFF && scene_light_livingroom.state > 0) {
+			sendCommand(scene_light_livingroom, 2)
 		}
 	}
 end
