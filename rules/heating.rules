@@ -14,7 +14,8 @@ rule "If the room is too cold and we are home, then heat it up, but only if it i
 		if (tempOutdoor < 10) {
 			if (gang_panelovn.state == OFF && mode.state == 0) {
 				if (tempOffice < 20) {
-					sendCommand(gang_panelovn, ON)	
+					sendCommand(gang_panelovn, ON)
+					sendCommand(kontor_panelovn, ON)	
 				}
 			}
 			if (tempBasement < 18 && BasementTemperature.maximumSince(now.minusMinutes(21)).state >= 18) {

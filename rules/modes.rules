@@ -9,68 +9,72 @@ var Timer night_timer = null
 
 rule "A change of mode"
 	when
-		Item mode changed
+		Item mode received command
 	then
-	if (mode.state == 0) {
-		// HOME
-		restoreStates(stored_states)
-		if (new Double(OutdoorTemperature.state.toString()) < 10) {
+	switch (receivedCommand) {
+		case 0: { // HOME
+			restoreStates(stored_states)
+			if (new Double(OutdoorTemperature.state.toString()) < 10 && ac_power.state == OFF) {
 				sendCommand(ac_power, ON)
-		}
+			}
 			
-		if (previous_mode.state == 2) {
-			pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
+			if (previous_mode.state == 2) {
+				pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
 		
-			sendCommand(guest_home, ON)
-			if (dryer.state == ON) {
-				postUpdate(push_message_text, "Tørketrommelen ble startet igjen nå når du kom hjem.")
+				sendCommand(guest_home, ON)
+				if (dryer.state == ON) {
+					postUpdate(push_message_text, "Tørketrommelen ble startet igjen nå når du kom hjem.")
+				}
 			}
 		}
-	} else if (mode.state == 1) {
-		// NIGHT MODE
-		stored_states = storeStates(night_group)
-		sendCommand(scene_light_livingroom, 0)
-		sendCommand(light_basement_power, OFF)
-		sendCommand(kontor_panelovn, OFF)
-		sendCommand(gang_panelovn, OFF)
 		
-		if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
-			postUpdate(push_message_text, "Husk tørketrommelen før du legger deg")
-		}
-		if (tv_power.state == ON) {
-			postUpdate(push_message_text, "TV-en ble skrudd av")
-			sendCommand(tv_power, OFF)
-		}
-		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
-			sendCommand(ac_set_temp, ac_night_temp.state.toString)
-			sendCommand(ac_mode, 0)
+		case 1: { // NIGHT
+			stored_states = storeStates(night_group)
+			sendCommand(scene_light_livingroom, 0)
+			sendCommand(light_basement_power, OFF)
+			sendCommand(kontor_panelovn, OFF)
+			sendCommand(gang_panelovn, OFF)
+		
+			if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
+				postUpdate(push_message_text, "Husk tørketrommelen før du legger deg")
+			}
+			if (tv_power.state == ON) {
+				postUpdate(push_message_text, "TV-en ble skrudd av")
+				sendCommand(tv_power, OFF)
+			}
+			if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
+				sendCommand(ac_set_temp, ac_night_temp.state.toString)
+				if (ac_mode.state != 0)
+					sendCommand(ac_mode, 0)
+			}	
 		}
 		
-	} else if (mode.state == 2) {
-		//AWAY MODE
-		if (OutdoorTemperature.state instanceof DecimalType) {
-			pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
-		}
-		stored_states = storeStates(away_group)
-		if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
-			postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
-			sendCommand(dryer, OFF)
-		}
-		if (tv_power.state == ON) {
-			postUpdate(push_message_text, "TV-en ble skrudd av når du dro hjemmefra")
-			sendCommand(tv_power, OFF)
-		}
-		sendCommand(guest_home, OFF)
-		sendCommand(light_basement_power, OFF)
-		sendCommand(kontor_panelovn, OFF)
-		sendCommand(gang_panelovn, OFF)
-		sendCommand(scene_light_livingroom, 0)
-		if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
-			sendCommand(ac_set_temp, ac_night_temp.state.toString)
-			sendCommand(ac_mode, 0)
+		case 2: { //AWAY
+			if (OutdoorTemperature.state instanceof DecimalType) {
+				pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
+			}
+			stored_states = storeStates(away_group)
+			if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
+				postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
+				sendCommand(dryer, OFF)
+			}
+			if (tv_power.state == ON) {
+				postUpdate(push_message_text, "TV-en ble skrudd av når du dro hjemmefra")
+				sendCommand(tv_power, OFF)
+			}
+			sendCommand(guest_home, OFF)
+			sendCommand(light_basement_power, OFF)
+			sendCommand(kontor_panelovn, OFF)
+			sendCommand(gang_panelovn, OFF)
+			sendCommand(scene_light_livingroom, 0)
+			if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
+				sendCommand(ac_set_temp, ac_night_temp.state.toString)
+				if (ac_mode.state != 0)
+					sendCommand(ac_mode, 0)
+			}		
 		}
 	}
-	sendCommand(previous_mode, mode.state.toString)
+	postUpdate(previous_mode, mode.state.toString)
 end
 
 /*
@@ -105,13 +109,13 @@ rule "Switch to night mode in the evening"
 end
 
 /*
- * We'll returning to day mode again, but only if we are at home.
+ * We'll return to day mode again, but only if we are at home.
  */
 rule "Return to day mode during the week"
 	when
 		Time cron "0 30 5 ? * MON-FRI"
 	then
-		if (mode.state != 2) {
+		if (mode.state == 1) {
 			sendCommand(mode, 0)
 		}
 end
@@ -120,7 +124,7 @@ rule "Return to day mode during weekend"
 	when
 		Time cron "0 0 7 ? * SAT-SUN"
 	then
-		if (mode.state != 2) {
+		if (mode.state == 1) {
 			sendCommand(mode, 0)
 		}
 end

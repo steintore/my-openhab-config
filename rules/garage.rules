@@ -48,7 +48,7 @@ rule "Send a message after 10 minutes if garage door is open and nobody is home"
 	when
 		Time cron "0 0/10 * * * ?"
 	then
-		if (mode.state ==  2 && (garage_door_1.state == ON || garage_door_2.state == ON)) {
+		if (mode.state == 2 && (garage_door_1.state == ON || garage_door_2.state == ON)) {
 			if (message_received.state == OFF && !garage_door_1.changedSince(now.minusMinutes(15)) && !garage_door_2.changedSince(now.minusMinutes(15))) {
 				postUpdate(push_message_text, "Tydeligvis ingen hjemme, men garasjeporten er åpen!")
 			}
