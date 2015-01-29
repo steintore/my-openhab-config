@@ -149,7 +149,7 @@ DateTime ac_lastUpdate "Last update [%1$ta %1$tR]"	<clock>
 Group Motion <office>
 Number sensor_1_temp 		"Temperature [%.1f °C]" 		<temperature> 	(Motion) 			{http="<[zwave:10000:JS(getMotionTemperature.js)]"}
 Number sensor_1_luminance 	"Luminance    [%.0f Lux]" 						(Motion) 			{http="<[zwave:10000:JS(getMotionLuminiscence.js)]"}
-Switch sensor_1_motion 		"sensor [MAP(motion.map):%s]" 	<present>		(Motion) 			{http="<[zwave:10000:JS(getMotion.js)]"}
+Switch sensor_1_motion 		"sensor [MAP(motion.map):%s]" 	<present>		(Motion) 			{http="<[zwave:600000:JS(getMotion.js)]"}
 Number sensor_1_battery 	"Bev.sensor [%s %%]"			<energy>		(Motion, gBattery)	{http="<[zwave:600000:JS(getMotionBattery.js)]"}
 Number sensor_1_lu 			"[%.0f]" 						<clock>		 						{http="<[zwave:10000:JS(getMotionLastUpdate.js)]"}
 DateTime sensor_1_update 	"Last update [%1$ta %1$tR]" 	<clock>			(Motion)
