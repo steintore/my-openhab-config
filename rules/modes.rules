@@ -39,7 +39,6 @@ rule "A change of mode"
 				postUpdate(push_message_text, "Husk tørketrommelen før du legger deg")
 			}
 			if (tv_power.state == ON) {
-				postUpdate(push_message_text, "TV-en ble skrudd av")
 				sendCommand(tv_power, OFF)
 			}
 			if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
