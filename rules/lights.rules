@@ -103,11 +103,12 @@ end
 
 rule "Lighting in living room has changed" 
 	when
-		Item sensor_1_luminance received update
+		Item sensor_1_luminance changed
 	then
 		if (mode.state == 0) {
 			var double lux = new Double(sensor_1_luminance.state.toString())
-			if (lux > 100 && scene_light_livingroom.state > 0) {
+			logInfo('org.openhab.rules', 'Luminance change to: ' + lux + ' and living room light state: ' + scene_light_livingroom.state)
+			if (lux > 100 && scene_light_livingroom.state != 0) {
 				sendCommand(scene_light_livingroom, 0)
 			} else if (lux <= 100 && sensor_1_motion.state == ON && scene_light_livingroom.state == 0) {
 				sendCommand(scene_light_livingroom, 1)

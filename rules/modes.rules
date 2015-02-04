@@ -29,7 +29,7 @@ rule "A change of mode"
 		}
 		
 		case 1: { // NIGHT
-			stored_states = storeStates(night_group)
+			stored_states = storeStates(night_group, ac_set_temp)
 			sendCommand(scene_light_livingroom, 0)
 			sendCommand(light_basement_power, OFF)
 			sendCommand(kontor_panelovn, OFF)
@@ -52,7 +52,7 @@ rule "A change of mode"
 			if (OutdoorTemperature.state instanceof DecimalType) {
 				pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
 			}
-			stored_states = storeStates(away_group)
+			stored_states = storeStates(away_group, ac_set_temp)
 			if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 				postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
 				sendCommand(dryer, OFF)
