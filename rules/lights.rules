@@ -78,10 +78,10 @@ end
 
 rule "motion detected in the living room" 
 	when
-		Item sensor_1_motion received update
+		Item sensor_1_motion changed
 	then
-	logInfo('org.openhab', 'Motion sensor in the living room received update: ' + sensor_1_motion.state)
-	pushover('Motion received update: ' + sensor_1_motion.state + ' - Mode:' + mode.state + ' - TV:' + tv_power.state)
+	logInfo('org.openhab', 'Motion sensor in the living room changed to: ' + sensor_1_motion.state)
+	//pushover('Motion received update: ' + sensor_1_motion.state + ' - Mode:' + mode.state + ' - TV:' + tv_power.state)
 	switch (sensor_1_motion.state as OnOffType) {
 		case ON: {
 			if (mode.state == 2) {
