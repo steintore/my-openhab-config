@@ -1,3 +1,7 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
 rule "send command from remote to living room light 1"
 when
         Item remote_light_living_room changed
@@ -74,12 +78,11 @@ end
 
 rule "motion detected in the living room" 
 	when
-		Item sensor_1_motion received command or
 		Item sensor_1_motion received update
 	then
-	logInfo('org.openhab', 'Motion sensor in the living room received update: ' + sensor_1_motion.state + " - state:" + receivedCommand)
-	pushover('Motion received command: ' + receivedCommand + ' - the state is: ' + sensor_1_motion.state + ' - Mode:' + mode.state + ' - TV:' + tv_power.state)
-	switch (receivedCommand) {
+	logInfo('org.openhab', 'Motion sensor in the living room received update: ' + sensor_1_motion.state)
+	pushover('Motion received update: ' + sensor_1_motion.state + ' - Mode:' + mode.state + ' - TV:' + tv_power.state)
+	switch (sensor_1_motion.state as OnOffType) {
 		case ON: {
 			if (mode.state == 2) {
 				pushover("Bevegelse i stua når ingen er hjemme...")
