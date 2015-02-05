@@ -76,13 +76,15 @@ rule "motion detected in the living room"
 	when
 		Item sensor_1_motion received command
 	then
-	logInfo('org.openhab', 'Motion sensor in the living room received update: ' + sensor_1_motion.state)
+	logInfo('org.openhab', 'Motion sensor in the living room received update: ' + sensor_1_motion.state + " - state:" + receivedCommand)
+	pushover('Motion received command: ' + receivedCommand + ' - the state is: ' + sensor_1_motion.state + ' - Mode:' + mode.state + ' - TV:' + tv_power.state)
 	switch (receivedCommand) {
 		case ON: {
 			if (mode.state == 2) {
 				pushover("Bevegelse i stua når ingen er hjemme...")
 			} else if (mode.state == 0) {
 				var double lux = new Double(sensor_1_luminance.state.toString())
+				pushover('Lux is: ' + lux)
 				if (lux <= 100) {
 					if (tv_power.state == OFF) {
 						sendCommand(scene_light_livingroom, 1)

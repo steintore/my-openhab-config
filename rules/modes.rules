@@ -6,6 +6,7 @@ import org.joda.time.DateTime
 
 var Map stored_states = null
 var Timer night_timer = null
+var String acTemp = '21'
 
 rule "A change of mode"
 	when
@@ -14,6 +15,9 @@ rule "A change of mode"
 	switch (receivedCommand) {
 		case 0: { // HOME
 			restoreStates(stored_states)
+			if (acTemp != null && ac_set_temp.state.toString != acTemp) {
+				sendCommand(ac_set_temp, new Float(acTemp))
+			}
 			if (new Double(OutdoorTemperature.state.toString()) < 10 && ac_power.state == OFF) {
 				sendCommand(ac_power, ON)
 			}
@@ -30,6 +34,7 @@ rule "A change of mode"
 		
 		case 1: { // NIGHT
 			stored_states = storeStates(night_group, ac_set_temp)
+			acTemp = ac_set_temp.state.toString
 			sendCommand(scene_light_livingroom, 0)
 			sendCommand(light_basement_power, OFF)
 			sendCommand(kontor_panelovn, OFF)
@@ -53,6 +58,7 @@ rule "A change of mode"
 				pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
 			}
 			stored_states = storeStates(away_group, ac_set_temp)
+			acTemp = ac_set_temp.state.toString
 			if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 				postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
 				sendCommand(dryer, OFF)
