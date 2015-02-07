@@ -2,13 +2,6 @@ import org.openhab.core.library.types.*
 import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 
-rule "send command from remote to living room light 1"
-when
-        Item remote_light_living_room changed
-then
-        sendCommand(light_living_room, remote_light_living_room.state.toString)
-end
-
 rule "send command from remote to living room light 2"
 when
         Item remote_light_living_room_2 changed
@@ -44,19 +37,19 @@ then
 	logInfo('org.openhab', 'scene_light_livingroom received state:' + scene_light_livingroom.state)
 	switch (receivedCommand) {
 		case 0: {
-			sendCommand(light_living_room, OFF)
-			sendCommand(light_living_room_3, OFF)
 			sendCommand(light_living_room_2, OFF)
+			sendCommand(light_living_room_3, OFF)
+			sendCommand(light_living_old, OFF)
 		}
 		case 1: {
-			sendCommand(light_living_room, ON)
+			sendCommand(light_living_room_2, ON)
 			sendCommand(light_living_room_3, ON)
-			sendCommand(light_living_room_2, ON)	
+			sendCommand(light_living_old, ON)	
 		}
 		case 2: {
-			sendCommand(light_living_room, OFF)
+			sendCommand(light_living_room_2, OFF)
 			sendCommand(light_living_room_3, OFF)
-			sendCommand(light_living_room_2, ON)	
+			sendCommand(light_living_old, ON)	
 		}
 	}	
 	logInfo('org.openhab', 'scene_light_livingroom update to: ' + scene_light_livingroom.state)
