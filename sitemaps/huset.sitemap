@@ -33,6 +33,13 @@ sitemap huset label="Huset"
     	}
     	Text item=OfficeTemperature label="Andre etasje [%.1f °C]" icon="firstfloor" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame {
+    			Switch item=light_hall_1_switch label="Pære 1"
+    			Switch item=light_hall_2_switch label="Pære 2"
+    			
+    			Slider item=light_hall_1 visibility=[light_hall_1_switch==ON]
+    			Slider item=light_hall_2 visibility=[light_hall_2_switch==ON]
+    		}
+    		Frame {
     			Text item=OfficeTemperature
     			Text item=OfficeHumidity
 				Text item=OfficeTemperature_LastUpdate visibility=[OfficeTemperature_LastUpdate>1800] valuecolor=[OfficeTemperature_LastUpdate>120="orange", OfficeTemperature_LastUpdate>300="red"]

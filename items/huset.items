@@ -108,6 +108,13 @@ Switch remote_light_basement_power 																		{rfxcom="<12339014.0:Comman
 Switch light_basement_window 		"Av/På"			<light> (gBasement, gLight) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
 Switch remote_light_basement_window 																	{rfxcom="<12339014.1:Command"}
 
+/* Philips HUE */
+Switch light_hall_1_switch "Left bulb" (gLight, gFirstFloor) {hue="1"}
+Switch light_hall_2_switch "Right bulb" (gLight, gFirstFloor) {hue="2"}   
+
+Dimmer light_hall_1     "Left bulb"    {hue="1;brightness;30"}
+Dimmer light_hall_2     "Right bulb"   {hue="2;brightness;30"}
+
 /* Motion detector */
 Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
 
