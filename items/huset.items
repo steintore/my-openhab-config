@@ -95,12 +95,12 @@ String push_message_text "Default message"
 
 /* Lighting */
 Group:Switch:OR(ON, OFF) 		Living_Room_Lights 		"Lys [(%d)]"
-Switch light_living_room_2 "Stue 2" <light> (gGF,gLight, Living_Room_Lights) 	{rfxcom=">12339014.2:LIGHTING2.AC:Command"}
-Switch remote_light_living_room_2 																	{rfxcom="<12339014.2:Command"}
-Switch light_living_room_3 "Stue 3" <light> (gGF,gLight, Living_Room_Lights) 	{rfxcom=">12339014.3:LIGHTING2.AC:Command"}
-Switch remote_light_living_room_3 																	{rfxcom="<12339014.3:Command"}
-Number scene_light_livingroom "Lys" <sofa>
-Switch light_living_old "Gamlelyset" <light> (gGF, gLight, Living_Room_Lights)  {http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/off]"}
+Switch light_living_room_corner "Stue hjørnet"		<light> (gGF,gLight, Living_Room_Lights) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
+Switch remote_light_living_room_corner 															{rfxcom="<12339014.1:Command"}
+Switch light_living_room_window "Stue hvit vindu" 	<light> (gGF,gLight, Living_Room_Lights) 	{rfxcom=">12339014.2:LIGHTING2.AC:Command"}
+Switch remote_light_living_room_window 															{rfxcom="<12339014.2:Command"}
+Switch light_living_old "Gamlelyset" 			<light> (gGF, gLight, Living_Room_Lights)  	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/off]"}
+Number scene_light_livingroom "Lys" 			<sofa>
 
 Switch light_basement_power 		"Av/På"			<light> (gBasement, gLight) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
 Switch remote_light_basement_power 																		{rfxcom="<12339014.0:Command"}
