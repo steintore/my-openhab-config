@@ -32,6 +32,10 @@ sitemap huset label="Huset"
 			
     	}
     	Text item=OfficeTemperature label="Andre etasje [%.1f °C]" icon="firstfloor" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
+    		Frame label="Badet" {
+    			Switch item=light_bathroom_dimmer_switch
+    			Slider item=light_bathroom_dimmer visibility=[light_bathroom_dimmer_switch==ON]
+    		}
     		Frame {
     			Switch item=light_hall_1_switch label="Pære 1"
     			Switch item=light_hall_2_switch label="Pære 2"
@@ -52,7 +56,9 @@ sitemap huset label="Huset"
     	}
     	Text item=BasementTemperature label="Kjeller [%.1f °C]" icon="cellar" valuecolor=[BasementTemperature_LastUpdate=="Uninitialized"="lightgray",BasementTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame label="Kjellerstue"{
+    			Switch item=light_basement_window label="Vinduslys" mappings=[ON='På',OFF='Av']
     			Switch item=light_basement_power mappings=[ON='På',OFF='Av']
+    			Slider item=light_basement_dimmer label="Taklys"
     		}
     		Frame {
     			Text item=BasementTemperature
@@ -131,6 +137,51 @@ sitemap huset label="Huset"
 				Chart item=Power_Chart period=W refresh=3600 visibility=[Power_Chart_Period==2]
 			}
 			
+		}
+		Text item=loadAverage1min icon="system" {
+			Frame {
+				Text item=uptime
+			}
+			Frame {
+				Text item=cpuCombined icon="system"
+			}
+			
+			Frame label="Load" {
+				Text item=loadAverage1min
+				Text item=loadAverage5min
+				Text item=loadAverage15min
+			}
+			Frame label="Minnebruk" {
+				Text item=memFreePercent  {
+					Frame {
+						Switch item=memFreePercentPeriod label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"]
+						Chart item=memFreePercent period=h refresh=30000 visibility=[memFreePercentPeriod==0, memFreePercentPeriod=="Uninitialized"]
+						Chart item=memFreePercent period=D refresh=30000 visibility=[memFreePercentPeriod==1]
+						Chart item=memFreePercent period=W refresh=30000 visibility=[memFreePercentPeriod==2]
+					}
+				}
+				Text item=memUsed 
+				Text item=memUsedPercent
+				Text item=memActualFree 
+				Text item=memActualUsed 
+				Text item=memTotal 
+			}
+			
+			Frame label="Swap" {
+				Text item=swapFree 
+				Text item=swapTotal
+				Text item=swapUsed 
+			}
+			
+			Frame label="Openhab" {
+				Text item=openhabRealMem
+				Text item=openhabVirtualMem
+				Text item=openhabCpuPercent
+				Text item=openhabCpuSystem
+				Text item=openhabUptime
+				Text item=openhabUptimeFormatted
+				
+			}
 		}
 	}
 	
