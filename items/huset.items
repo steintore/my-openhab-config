@@ -63,7 +63,7 @@ Number LivingRoomTemperature    			"Temp stue [%.1f °C]"				<temperature>   (Te
 Number LivingRoomHumidity					"Luftfuktighet stue [%.1f %%]" 		<temperature>	(gGF) { rfxcom="<48385:Humidity" }
 DateTime LivingRoomTemperature_LastUpdate	"Last Update [%1$ta %1$tR]"			<clock>
 
-/* Freezer */
+/* Home appliances */
 Group HomeAppliances (Appliance)
 Number power_freezer	"Strøm fryser	[%.1f W]" 				<energy> 	(gBasement, Power, Power_Chart) 		{http="<[zwave:60000:JS(getFreezerPower.js)]"}
 Switch freezer		  	"Fryser"								<kitchen>   (gBasement, Control, HomeAppliances)	{http="<[zwave:10000:JS(getFreezerState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_6-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_6-0-37/command/off]"}
@@ -99,13 +99,15 @@ Switch light_living_room_corner "Stue hjørnet"		<light> (gGF,gLight, Living_Roo
 Switch remote_light_living_room_corner 															{rfxcom="<12339014.1:Command"}
 Switch light_living_room_window "Stue hvit vindu" 	<light> (gGF,gLight, Living_Room_Lights) 	{rfxcom=">12339014.2:LIGHTING2.AC:Command"}
 Switch remote_light_living_room_window 															{rfxcom="<12339014.2:Command"}
-Switch light_living_old "Gamlelyset" 			<light> (gGF, gLight, Living_Room_Lights)  	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/off]"}
+Switch light_living_old "Gamlelyset" 				<light> (gGF, gLight, Living_Room_Lights)  	{http="<[zwave:10000:JS(getLightState.js)] >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/off]"}
 Number scene_light_livingroom "Lys" 			<sofa>
 
 Switch light_basement_power 		"Av/På"			<light> (gBasement, gLight) 	{rfxcom=">12339014.0:LIGHTING2.AC:Command"}
 Switch remote_light_basement_power 																		{rfxcom="<12339014.0:Command"}
+Dimmer light_basement_dimmer "Tak kjellerstue [%d %%]"	(gBasement, gLight) {rfxcom=">12339014.0:LIGHTING2.AC:DimmingLevel"}
 Switch light_basement_window 		"Av/På"			<light> (gBasement, gLight) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
-Switch remote_light_basement_window 																	{rfxcom="<12339014.1:Command"}
+Switch remote_light_basement_window 
+																	{rfxcom="<12339014.1:Command"}
 
 /* Philips HUE */
 Switch light_hall_1_switch "Left bulb" (gLight, gFirstFloor) {hue="1"}
@@ -163,6 +165,11 @@ DateTime sensor_1_update 	"Last update [%1$ta %1$tR]" 	<clock>			(Motion)
 /* Modes 0=HOME, 1=NIGHT, 2=AWAY */
 Number mode "Modus:" <present>
 Number previous_mode 
+
+/* Bathroom 1st floor */
+/*Switch light_bathroom_dimmer_switch 	<light> {http="<[zwave:10000:JS(getBathRoomDimmerSwitch.js)]  >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/off]"}
+Dimmer light_bathroom_dimmer			<light>	
+*/
 
 /* Roomba */
 //String roomba_test <sofa> {tcp="<[192.168.1.154:9001:'REGEX((.*))']"} // for a String Item that captures some state of a remote device that connects to openHAB
