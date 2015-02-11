@@ -6,7 +6,6 @@ import org.joda.time.DateTime
 
 var Map stored_states = null
 var Timer night_timer = null
-var String acTemp = '21'
 
 rule "A change of mode"
 	when
@@ -15,9 +14,6 @@ rule "A change of mode"
 	switch (receivedCommand) {
 		case 0: { // HOME
 			restoreStates(stored_states)
-			if (acTemp != null && ac_set_temp.state.toString != acTemp) {
-				sendCommand(ac_set_temp, new Float(acTemp))
-			}
 			if (new Double(OutdoorTemperature.state.toString()) < 10 && ac_power.state == OFF) {
 				sendCommand(ac_power, ON)
 			}
@@ -33,8 +29,7 @@ rule "A change of mode"
 		}
 		
 		case 1: { // NIGHT
-			stored_states = storeStates(night_group, ac_set_temp)
-			acTemp = ac_set_temp.state.toString
+			stored_states = storeStates(night_group)
 			sendCommand(scene_light_livingroom, 0)
 			sendCommand(light_basement_power, OFF)
 			sendCommand(kontor_panelovn, OFF)
@@ -57,8 +52,7 @@ rule "A change of mode"
 			if (OutdoorTemperature.state instanceof DecimalType) {
 				pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
 			}
-			stored_states = storeStates(away_group, ac_set_temp)
-			acTemp = ac_set_temp.state.toString
+			stored_states = storeStates(away_group)
 			if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 				postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
 				sendCommand(dryer, OFF)
@@ -90,13 +84,13 @@ rule "Switch to night mode in the evening"
 	when
 		Time cron "0 0 23 ? * *" 
 	then
-		if (tv_power.state == ON) {
+		if (tv_power.state == ON && mode.state == 0) {
 			// If TV is still on or there's someone in the living room, we'll wait a bit before going into night mode
 			night_timer = createTimer(now.plusSeconds(360)) [|
 				if (tv_power.state == ON || sensor_1_motion.state == ON) {
 					night_timer.reschedule(now.plusSeconds(360))
 				} else {
-					if (mode.state != 2) {
+					if (mode.state == 0) {
 						sendCommand(mode, 1)
 					}
 				
@@ -108,7 +102,7 @@ rule "Switch to night mode in the evening"
 					}
 				}
 				]
-		} else if (mode.state != 2) {
+		} else if (mode.state == 0) {
 			sendCommand(mode, 1)
 		}
 end

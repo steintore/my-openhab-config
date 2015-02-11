@@ -36,19 +36,19 @@ when
 then
 	logInfo('org.openhab', 'scene_light_livingroom received state:' + scene_light_livingroom.state)
 	switch (receivedCommand) {
-		case 0: {
+		case 0: { // OFF
 			sendCommand(light_living_old, OFF)
 			sendCommand(light_living_room_corner, OFF)
 			sendCommand(light_living_room_window, OFF)
 			
 		}
-		case 1: {
+		case 1: { // ON
 			sendCommand(light_living_old, ON)
 			sendCommand(light_living_room_window, ON)
 			sendCommand(light_living_room_corner, ON)
 				
 		}
-		case 2: {
+		case 2: { // WATCHING A MOVIE
 			sendCommand(light_living_old, ON)
 			sendCommand(light_living_room_corner, OFF)
 			sendCommand(light_living_room_window, OFF)
