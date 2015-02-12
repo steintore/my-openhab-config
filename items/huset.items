@@ -110,14 +110,15 @@ Switch remote_light_basement_window
 																	{rfxcom="<12339014.1:Command"}
 
 /* Philips HUE */
-Switch light_hall_1_switch "Left bulb" (gLight, gFirstFloor) {hue="1"}
-Switch light_hall_2_switch "Right bulb" (gLight, gFirstFloor) {hue="2"}   
+Group:Switch:OR(ON, OFF) 		gHallLights 		"Lys [(%d)]"
+Switch light_hall_1_switch "Left bulb" 	<light>	(gLight, gFirstFloor) {hue="1"}
+Switch light_hall_2_switch "Right bulb" <light>	(gLight, gFirstFloor) {hue="2"}   
 
-Dimmer light_hall_1     "Left bulb"    {hue="1;brightness;30"}
-Dimmer light_hall_2     "Right bulb"   {hue="2;brightness;30"}
+Dimmer light_hall_1     "Left bulb [%d %%]"    {hue="1;brightness;30"}
+Dimmer light_hall_2     "Right bulb [%d %%]"   {hue="2;brightness;30"}
 
 /* Motion detector */
-Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
+//Switch motion_detector "Bevegelse" <switch> (gGF) {rfxcom="<13734590.10:Command"}
 
 /* Config-values */
 String pushover_token_anette 	"Pushover Anette" 	{configadmin = "pushover:anetteToken"}
@@ -167,9 +168,11 @@ Number mode "Modus:" <present>
 Number previous_mode 
 
 /* Bathroom 1st floor */
-/*Switch light_bathroom_dimmer_switch 	<light> {http="<[zwave:10000:JS(getBathRoomDimmerSwitch.js)]  >[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/on] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_13-0-37/command/off]"}
-Dimmer light_bathroom_dimmer			<light>	
-*/
+Dimmer light_bathroom_dimmer "Dimmer [%s]" 					<light> 							{http="<[zwave:20000:JS(getBathroomDimmerSwitch.js)] >[CHANGED:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_14-0-38/command/exact?level=%2$s]"}
+Number bathroom_temp 		 "Temperature [%.1f °C]" 		<temperature> 	(Motion) 			{http="<[zwave:10000:JS(getBathroomTemperature.js)]"}
+Number bathroom_lux 		 "Luminance    [%.0f Lux]" 						(Motion) 			{http="<[zwave:60000:JS(getBathroomLuminiscence.js)]"}
+Switch bathroom_motion 		 "sensor [MAP(motion.map):%s]" 	<present>		(Motion) 			{http="<[zwave:600000:JS(getBathroomMotion.js)]"}
+Number bathroom_battery 	 "Bev.sensor [%s %%]"			<energy>		(Motion, gBattery)	{http="<[zwave:600000:JS(getBathroomBattery.js)]"}
 
 /* Roomba */
 //String roomba_test <sofa> {tcp="<[192.168.1.154:9001:'REGEX((.*))']"} // for a String Item that captures some state of a remote device that connects to openHAB

@@ -33,10 +33,13 @@ sitemap huset label="Huset"
     	}
     	Text item=OfficeTemperature label="Andre etasje [%.1f °C]" icon="firstfloor" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame label="Badet" {
-    			Switch item=light_bathroom_dimmer_switch
-    			Slider item=light_bathroom_dimmer visibility=[light_bathroom_dimmer_switch==ON]
+    			Text item=bathroom_temp
+    			Text item=bathroom_lux
+    			Text item=bathroom_motion 
+    			Slider item=light_bathroom_dimmer
     		}
     		Frame {
+    			Switch item=gHallLights
     			Switch item=light_hall_1_switch label="Pære 1"
     			Switch item=light_hall_2_switch label="Pære 2"
     			
