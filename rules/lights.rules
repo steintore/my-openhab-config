@@ -115,3 +115,25 @@ rule "Lighting in living room has changed"
 			} 
 		}
 end
+
+rule "motion detected in the bathroom" 
+	when
+		Item bathroom_motion changed
+	then
+	logInfo('org.openhab', 'Motion sensor in the bathroom changed to: ' + bathroom_motion.state)
+	switch (bathroom_motion.state as OnOffType) {
+		case ON: {
+			if (mode.state == 2) {
+				pushover("Bevegelse på badet når ingen er hjemme...")
+			} else if (mode.state == 0) {
+				var double lux = new Double(bathroom_lux.state.toString())
+				if (lux <= 100) {
+					sendCommand(light_bathroom_dimmer, 30)			
+				}
+			}	
+		}
+		case OFF: {
+			sendCommand(light_bathroom_dimmer, 0)	
+		}
+	}
+end

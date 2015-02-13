@@ -111,8 +111,8 @@ Switch remote_light_basement_window
 
 /* Philips HUE */
 Group:Switch:OR(ON, OFF) 		gHallLights 		"Lys [(%d)]"
-Switch light_hall_1_switch "Left bulb" 	<light>	(gLight, gFirstFloor) {hue="1"}
-Switch light_hall_2_switch "Right bulb" <light>	(gLight, gFirstFloor) {hue="2"}   
+Switch light_hall_1_switch "Left bulb" 	<light>	(gLight, gHallLights, gFirstFloor) {hue="1"}
+Switch light_hall_2_switch "Right bulb" <light>	(gLight, gHallLights, gFirstFloor) {hue="2"}   
 
 Dimmer light_hall_1     "Left bulb [%d %%]"    {hue="1;brightness;30"}
 Dimmer light_hall_2     "Right bulb [%d %%]"   {hue="2;brightness;30"}
