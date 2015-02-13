@@ -128,12 +128,37 @@ rule "motion detected in the bathroom"
 			} else if (mode.state == 0) {
 				var double lux = new Double(bathroom_lux.state.toString())
 				if (lux <= 100) {
-					sendCommand(light_bathroom_dimmer, 30)			
+					sendCommand(light_bathroom, ON)			
 				}
+			} else if (mode.state == 1) {
+					sendCommand(light_bathroom_dimmer, 30)
 			}	
 		}
 		case OFF: {
-			sendCommand(light_bathroom_dimmer, 0)	
+			sendCommand(light_bathroom, OFF)	
 		}
 	}
 end
+
+ 
+rule "light dimmer changed"
+	when
+		Item light_bathroom_dimmer changed
+	then
+		var Number percent = 0
+		if(light_bathroom_dimmer.state instanceof DecimalType) percent = light_bathroom_dimmer.state as DecimalType
+		
+		if(percent == 0 && light_bathroom.state == ON) postUpdate(light_bathroom, OFF)
+		else if (percent > 0 && light_bathroom.state == OFF) postUpdate(light_bathroom, ON)
+		
+		//logInfo('org.openhab', 'Dimming from OpenHab, changed to ' + light_bathroom_dimmer.state)
+		var String htp = "http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_14-0-38/command/exact?level=" + percent.toString
+		
+		sendHttpGetRequest(htp)
+		//logInfo('org.openhab', 'sent request: ' + htp)
+end
+
+
+
+
+

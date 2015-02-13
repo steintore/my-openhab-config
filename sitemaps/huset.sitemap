@@ -35,8 +35,9 @@ sitemap huset label="Huset"
     		Frame label="Badet" {
     			Text item=bathroom_temp
     			Text item=bathroom_lux
-    			Text item=bathroom_motion 
-    			Slider item=light_bathroom_dimmer
+    			Text item=bathroom_motion
+    			Switch item=light_bathroom
+    			Setpoint item=light_bathroom_dimmer minValue=0 maxValue=100 step=10 visibility=[light_bathroom==ON]
     		}
     		Frame {
     			Switch item=gHallLights

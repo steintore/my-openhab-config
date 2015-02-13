@@ -110,7 +110,7 @@ Switch remote_light_basement_window
 																	{rfxcom="<12339014.1:Command"}
 
 /* Philips HUE */
-Group:Switch:OR(ON, OFF) 		gHallLights 		"Lys [(%d)]"
+Group:Switch:AND(ON, OFF) 		gHallLights 		"Lys [(%d)]"
 Switch light_hall_1_switch "Left bulb" 	<light>	(gLight, gHallLights, gFirstFloor) {hue="1"}
 Switch light_hall_2_switch "Right bulb" <light>	(gLight, gHallLights, gFirstFloor) {hue="2"}   
 
@@ -168,7 +168,8 @@ Number mode "Modus:" <present>
 Number previous_mode 
 
 /* Bathroom 1st floor */
-Dimmer light_bathroom_dimmer "Dimmer [%s]" 					<light> 							{http="<[zwave:20000:JS(getBathroomDimmerSwitch.js)] >[CHANGED:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_14-0-38/command/exact?level=%2$s]"}
+Switch light_bathroom		 "Lys"							<light>	{http=">[ON:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_14-0-38/command/exact?level=255] >[OFF:GET:http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_14-0-38/command/exact?level=0]"}
+Number light_bathroom_dimmer "Dimmer [%s]" 					<light> 							{http="<[zwave:60000:JS(getBathroomDimmerSwitch.js)]"}
 Number bathroom_temp 		 "Temperature [%.1f °C]" 		<temperature> 	(Motion) 			{http="<[zwave:10000:JS(getBathroomTemperature.js)]"}
 Number bathroom_lux 		 "Luminance    [%.0f Lux]" 						(Motion) 			{http="<[zwave:60000:JS(getBathroomLuminiscence.js)]"}
 Switch bathroom_motion 		 "sensor [MAP(motion.map):%s]" 	<present>		(Motion) 			{http="<[zwave:600000:JS(getBathroomMotion.js)]"}
