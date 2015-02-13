@@ -136,6 +136,7 @@ rule "motion detected in the bathroom"
 		}
 		case OFF: {
 			sendCommand(light_bathroom, OFF)	
+			postUpdate(light_bathroom_dimmer, 0)
 		}
 	}
 end
@@ -148,6 +149,9 @@ rule "light dimmer changed"
 		var Number percent = 0
 		if(light_bathroom_dimmer.state instanceof DecimalType) percent = light_bathroom_dimmer.state as DecimalType
 		
+		if (percent > 100) percent = 100
+		if (percent < 0) percent = 0
+		
 		if(percent == 0 && light_bathroom.state == ON) postUpdate(light_bathroom, OFF)
 		else if (percent > 0 && light_bathroom.state == OFF) postUpdate(light_bathroom, ON)
 		
@@ -156,6 +160,13 @@ rule "light dimmer changed"
 		
 		sendHttpGetRequest(htp)
 		//logInfo('org.openhab', 'sent request: ' + htp)
+end
+
+rule "light switched on or off"
+	when
+		Item light_bathroom changed
+	then
+		
 end
 
 
