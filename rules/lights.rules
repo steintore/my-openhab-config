@@ -126,12 +126,9 @@ rule "motion detected in the bathroom"
 			if (mode.state == 2) {
 				pushover("Bevegelse på badet når ingen er hjemme...")
 			} else if (mode.state == 0) {
-				var double lux = new Double(bathroom_lux.state.toString())
-				if (lux <= 100) {
-					sendCommand(light_bathroom, ON)			
-				}
+				sendCommand(light_bathroom, ON)
 			} else if (mode.state == 1) {
-					sendCommand(light_bathroom_dimmer, 30)
+					sendCommand(light_bathroom_dimmer, 20)
 			}	
 		}
 		case OFF: {
@@ -161,15 +158,3 @@ rule "light dimmer changed"
 		sendHttpGetRequest(htp)
 		//logInfo('org.openhab', 'sent request: ' + htp)
 end
-
-rule "light switched on or off"
-	when
-		Item light_bathroom changed
-	then
-		
-end
-
-
-
-
-
