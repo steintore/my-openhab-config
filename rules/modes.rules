@@ -34,6 +34,7 @@ rule "A change of mode"
 			sendCommand(light_basement_power, OFF)
 			sendCommand(kontor_panelovn, OFF)
 			sendCommand(gang_panelovn, OFF)
+			sendCommand(gHallLights, OFF)
 		
 			if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 				postUpdate(push_message_text, "Husk tørketrommelen før du legger deg")
@@ -66,6 +67,7 @@ rule "A change of mode"
 			sendCommand(kontor_panelovn, OFF)
 			sendCommand(gang_panelovn, OFF)
 			sendCommand(scene_light_livingroom, 0)
+			sendCommand(light_bathroom, OFF)
 			if (ac_power.state == ON && ac_night_temp.state != Uninitialized) {
 				sendCommand(ac_set_temp, ac_night_temp.state.toString)
 				if (ac_mode.state != 0)
