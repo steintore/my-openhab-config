@@ -145,13 +145,13 @@ DateTime Moon_New     	"Neste nymåne [%1$td.%1$tm.%1$tY %1$tH:%1$tM]"  <moon>	(
 Group AC
 Number ac_current_temp "Målt temperatur [%.1f °C]" 	<temperature> 	(AC) {samsungac="[Livingroom|AC_FUN_TEMPNOW]"}
 Switch ac_power "Varmepumpe"						<power> 		(AC) {samsungac="[Livingroom|AC_FUN_POWER]"}
-Number ac_mode "Convenient mode" 					<sofa> 			(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_COMODE]"}
+Number ac_mode "Convenient mode [%s]" 					<sofa> 			(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_COMODE]"}
 Number ac_mode_previous
-Number ac_op_mode "Operation mode" 					<sofa> 			(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_OPMODE]"}
+Number ac_op_mode "Operation mode [%s]" 					<sofa> 			(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_OPMODE]"}
 Number ac_set_temp "Temperatur [%.1f°C]" 			<temperature> 	(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_TEMPSET]"}
 Number ac_night_temp "Natttemp [%.1f°C]"			<temperature> 	(AC)
-Number ac_direction "Direction" 					<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_DIRECTION]"}
-Number ac_windlevel "Windlevel" 					<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_WINDLEVEL]"}
+Number ac_direction "Direction [%s]" 					<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_DIRECTION]"}
+Number ac_windlevel "Windlevel [%s]" 					<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_WINDLEVEL]"}
 String ac_error "Error [%s]"												(AC) {samsungac="[Livingroom|AC_FUN_ERROR]"}
 String  AC_SG_VENDER01 "AC_SG_VENDER01 [%s]" (AC) {samsungac="[Livingroom|AC_SG_VENDER01]"}
 String  AC_SG_VENDER02 "AC_SG_VENDER02 [%s]" (AC) {samsungac="[Livingroom|AC_SG_VENDER02]"}
