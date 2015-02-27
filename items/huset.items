@@ -143,29 +143,29 @@ DateTime Moon_New     	"Neste nymåne [%1$td.%1$tm.%1$tY %1$tH:%1$tM]"  <moon>	(
 
 /* Samsung AC */
 Group AC
-Number ac_current_temp "Målt temperatur [%.1f °C]" 	<temperature> 	(AC) {samsungac="[Livingroom|AC_FUN_TEMPNOW]"}
-Switch ac_power "Varmepumpe"						<power> 		(AC) {samsungac="[Livingroom|AC_FUN_POWER]"}
-Number ac_mode "Convenient mode [%s]" 					<sofa> 			(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_COMODE]"}
+Number ac_current_temp "Målt temperatur [%.1f °C]" 	<temperature> 	(AC) 							{samsungac="[Livingroom|AC_FUN_TEMPNOW]"}
+Switch ac_power "Varmepumpe"						<power> 		(AC) 							{samsungac="[Livingroom|AC_FUN_POWER]"}
+Number ac_mode "Convenient mode [%s]" 				<sofa> 			(AC, away_group, night_group) 	{samsungac="[Livingroom|AC_FUN_COMODE]"}
 Number ac_mode_previous
-Number ac_op_mode "Operation mode [%s]" 					<sofa> 			(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_OPMODE]"}
-Number ac_set_temp "Temperatur [%.1f°C]" 			<temperature> 	(AC, away_group, night_group) {samsungac="[Livingroom|AC_FUN_TEMPSET]"}
+Number ac_op_mode "Operation mode [%s]" 			<sofa> 			(AC, away_group, night_group) 	{samsungac="[Livingroom|AC_FUN_OPMODE]"}
+Number ac_set_temp "Temperatur [%.1f°C]" 			<temperature> 	(AC, away_group, night_group) 	{samsungac="[Livingroom|AC_FUN_TEMPSET]"}
 Number ac_night_temp "Natttemp [%.1f°C]"			<temperature> 	(AC)
-Number ac_direction "Direction [%s]" 					<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_DIRECTION]"}
-Number ac_windlevel "Windlevel [%s]" 					<wind> 			(AC) {samsungac="[Livingroom|AC_FUN_WINDLEVEL]"}
-String ac_error "Error [%s]"												(AC) {samsungac="[Livingroom|AC_FUN_ERROR]"}
-String  AC_SG_VENDER01 "AC_SG_VENDER01 [%s]" (AC) {samsungac="[Livingroom|AC_SG_VENDER01]"}
-String  AC_SG_VENDER02 "AC_SG_VENDER02 [%s]" (AC) {samsungac="[Livingroom|AC_SG_VENDER02]"}
-String  AC_SG_VENDER03 "AC_SG_VENDER03 [%s]" (AC) {samsungac="[Livingroom|AC_SG_VENDER03]"}
-String  AC_SG_MACHIGH "AC_SG_MACHIGH [%s]" (AC) {samsungac="[Livingroom|AC_SG_MACHIGH]"}
-String  AC_ADD2_VERSION "AC_ADD2_VERSION [%s]" (AC) {samsungac="[Livingroom|AC_ADD2_VERSION]"}
-String  AC_SG_INTERNET "AC_SG_INTERNET [%s]" (AC) {samsungac="[Livingroom|AC_SG_INTERNET]"}
-String  AC_SG_WIFI "AC_SG_WIFI [%s]" (AC) {samsungac="[Livingroom|AC_SG_WIFI]"}
-String  AC_ADD_SPI "AC_ADD_SPI [%s]" (AC) {samsungac="[Livingroom|AC_ADD_SPI]"}
-String  AC_ADD_STARTWPS "AC_ADD_STARTWPS [%s]" (AC) {samsungac="[Livingroom|AC_ADD_STARTWPS]"}
-String  AC_ADD_APMODE_END "AC_ADD_APMODE_END [%s]" (AC) {samsungac="[Livingroom|AC_ADD_APMODE_END]"}
-String  AC_ADD_AUTOCLEAN "AC_ADD_AUTOCLEAN [%s]" (AC) {samsungac="[Livingroom|AC_ADD_AUTOCLEAN]"}
-String  AC_FUN_SUPPORTED "AC_FUN_SUPPORTED [%s]" (AC) {samsungac="[Livingroom|AC_FUN_SUPPORTED]"}
-DateTime ac_lastUpdate "Last update [%1$ta %1$tR]"	<clock>
+Number ac_direction "Direction [%s]" 				<wind> 			(AC) 							{samsungac="[Livingroom|AC_FUN_DIRECTION]"}
+Number ac_windlevel "Windlevel [%s]" 				<wind> 			(AC) 							{samsungac="[Livingroom|AC_FUN_WINDLEVEL]"}
+String ac_error "Error [%s]"										(AC) 							{samsungac="[Livingroom|AC_FUN_ERROR]"}
+Number  AC_SG_VENDER01 "AC_SG_VENDER01 [%s]" 						(AC) 							{samsungac="[Livingroom|AC_SG_VENDER01]"}
+Number  AC_SG_VENDER02 "AC_SG_VENDER02 [%s]" 						(AC) 							{samsungac="[Livingroom|AC_SG_VENDER02]"}
+Number  AC_SG_VENDER03 "AC_SG_VENDER03 [%s]" 						(AC) 							{samsungac="[Livingroom|AC_SG_VENDER03]"}
+Number  AC_SG_MACHIGH "AC_SG_MACHIGH [%s]" 							(AC) 							{samsungac="[Livingroom|AC_SG_MACHIGH]"}
+Number  AC_ADD2_VERSION "AC_ADD2_VERSION [%s]"						(AC) 							{samsungac="[Livingroom|AC_ADD2_VERSION]"}
+String  AC_SG_INTERNET "AC_SG_INTERNET [%s]" 						(AC) 							{samsungac="[Livingroom|AC_SG_INTERNET]"}
+String  AC_SG_WIFI "AC_SG_WIFI [%s]" 								(AC) 							{samsungac="[Livingroom|AC_SG_WIFI]"}
+Switch  AC_ADD_SPI "AC_ADD_SPI [%s]" 								(AC) 							{samsungac="[Livingroom|AC_ADD_SPI]"}
+Number  AC_ADD_STARTWPS "AC_ADD_STARTWPS [%s]" 						(AC) 							{samsungac="[Livingroom|AC_ADD_STARTWPS]"}
+Number  AC_ADD_APMODE_END "AC_ADD_APMODE_END [%s]" 					(AC) 							{samsungac="[Livingroom|AC_ADD_APMODE_END]"}
+Switch  AC_ADD_AUTOCLEAN "AC_ADD_AUTOCLEAN [%s]" 					(AC) 							{samsungac="[Livingroom|AC_ADD_AUTOCLEAN]"}
+Number  AC_FUN_SUPPORTED "AC_FUN_SUPPORTED [%s]" 					(AC) 							{samsungac="[Livingroom|AC_FUN_SUPPORTED]"}
+DateTime ac_lastUpdate "Last update [%1$ta %1$tR]"	<clock>         (AC)
 
 Group Motion <office>
 Number sensor_1_temp 		"Temperature [%.1f °C]" 		<temperature> 	(Motion) 			{http="<[zwave:10000:JS(getMotionTemperature.js)]"}

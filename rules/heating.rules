@@ -28,7 +28,7 @@ rule "When the error code from the AC changes, please let me know"
 	when
 		Item ac_error changed
 	then
-	pushover("AC Error changed to: " + ac_error.state.toString)
+	pushover("AC Error changed to: " + ac_error.state.toString())
 end
 
 
