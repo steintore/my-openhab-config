@@ -30,7 +30,8 @@ rule "A change of mode"
 		
 		case 1: { // NIGHT
 			stored_states = storeStates(night_group)
-			sendCommand(scene_light_livingroom, 0)
+			if (sensor_1_motion.state == OFF)
+				sendCommand(scene_light_livingroom, 0)
 			sendCommand(light_basement_power, OFF)
 			sendCommand(kontor_panelovn, OFF)
 			sendCommand(gang_panelovn, OFF)
@@ -84,28 +85,30 @@ end
  */
 rule "Switch to night mode in the evening"
 	when
-		Time cron "0 0 23 ? * *" 
+		Time cron "0 0 22 ? * *" 
 	then
-		if (tv_power.state == ON && mode.state == 0) {
-			// If TV is still on or there's someone in the living room, we'll wait a bit before going into night mode
-			night_timer = createTimer(now.plusSeconds(360)) [|
-				if (tv_power.state == ON || sensor_1_motion.state == ON) {
-					night_timer.reschedule(now.plusSeconds(360))
-				} else {
-					if (mode.state == 0) {
-						sendCommand(mode, 1)
-					}
-				
-					if(night_timer!=null) {
-						if(night_timer.running) {
-							night_timer.cancel()
+		if (mode.state == 0) {
+			if (tv_power.state == ON || sensor_1_motion.state == ON) {
+				// If TV is still on or there's someone in the living room, we'll wait a bit before going into night mode
+				night_timer = createTimer(now.plusSeconds(360)) [|
+					if (tv_power.state == ON || sensor_1_motion.state == ON) {
+						night_timer.reschedule(now.plusSeconds(360))
+					} else {
+						if (mode.state == 0) {
+							sendCommand(mode, 1)
 						}
-						night_timer = null
+				
+						if(night_timer!=null) {
+							if(night_timer.running) {
+								night_timer.cancel()
+							}	
+							night_timer = null
+						}
 					}
-				}
-				]
-		} else if (mode.state == 0) {
-			sendCommand(mode, 1)
+					]
+			} else {
+				sendCommand(mode, 1)
+			}
 		}
 end
 

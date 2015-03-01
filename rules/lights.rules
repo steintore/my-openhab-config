@@ -2,8 +2,6 @@ import org.openhab.core.library.types.*
 import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 
-var Timer motionBathroom = null
-
 rule "send command from remote to living room light corner"
 when
         Item remote_light_living_room_corner changed
@@ -95,8 +93,8 @@ rule "motion detected in the living room"
 			}	
 		}
 		case OFF: {
-			if (tv_power.state == OFF && scene_light_livingroom.state > 0) {
-				if(mode.state == 0)
+			if (tv_power.state == OFF) {
+				if(mode.state == 0 && scene_light_livingroom.state > 0)
 					sendCommand(scene_light_livingroom, 2)
 				else 
 					sendCommand(scene_light_livingroom, 0)
