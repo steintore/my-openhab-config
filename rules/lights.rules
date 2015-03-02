@@ -138,6 +138,7 @@ rule "motion detected in the bathroom"
 				}	
 				if (timerBathroom == null) {
 					timerBathroom = createTimer(now.plusSeconds(240)) [|
+						logInfo("org.openhab", "Bathroom dimmer timer timed out, state for motion: '" + bathroom_motion.state)
 						if (bathroom_motion.state == ON) {
 							timerBathroom.reschedule(now.plusSeconds(240))
 						} else {
@@ -160,6 +161,7 @@ rule "motion detected in the bathroom"
 		case OFF: {
 			if (timerBathroom == null) {
 				timerBathroom = createTimer(now.plusSeconds(120)) [|
+					logInfo("org.openhab", "Bathroom dimmer timer created by OFF-signal timed out, state for motion: '" + bathroom_motion.state)
 					if (bathroom_motion.state == ON) {
 						timerBathroom.reschedule(now.plusSeconds(120))
 					} else {
@@ -187,6 +189,8 @@ rule "light dimmer changed"
 		var Number percent = 0
 		if(light_bathroom_dimmer.state instanceof DecimalType) percent = light_bathroom_dimmer.state as DecimalType
 		
+		logInfo('org.openhab',"Bathroom dimmer received command: '" + light_basement_dimmer.state + "' converted it to percentages: '" + percent + "'")
+		
 		if (percent > 100) percent = 100
 		if (percent < 0) percent = 0
 		
@@ -197,5 +201,5 @@ rule "light dimmer changed"
 		var String htp = "http://192.168.1.139:8083/ZAutomation/api/v1/devices/ZWayVDev_zway_14-0-38/command/exact?level=" + percent.toString
 		
 		sendHttpGetRequest(htp)
-		//logInfo('org.openhab', 'sent request: ' + htp)
+		logInfo('org.openhab', 'Bathroom dimmer sent request: ' + htp)
 end
