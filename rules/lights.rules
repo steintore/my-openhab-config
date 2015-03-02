@@ -2,6 +2,8 @@ import org.openhab.core.library.types.*
 import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 
+var Timer timerBathroom = null
+
 rule "send command from remote to living room light corner"
 when
         Item remote_light_living_room_corner changed
@@ -128,15 +130,51 @@ rule "motion detected in the bathroom"
 		case ON: {
 			if (mode.state == 2) {
 				pushover("Bevegelse på badet når ingen er hjemme...")
-			} else if (mode.state == 0) {
-				sendCommand(light_bathroom, ON)
-			} else if (mode.state == 1) {
-				sendCommand(light_bathroom_dimmer, 20)
-			}	
+			} else { 
+				if (mode.state == 0) {
+					sendCommand(light_bathroom_dimmer, 60)
+				} else if (mode.state == 1) {
+					sendCommand(light_bathroom_dimmer, 20)
+				}	
+				if (timerBathroom == null) {
+					timerBathroom = createTimer(now.plusSeconds(240)) [|
+						if (bathroom_motion.state == ON) {
+							timerBathroom.reschedule(now.plusSeconds(240))
+						} else {
+							sendCommand(light_bathroom, OFF)	
+							postUpdate(light_bathroom_dimmer, 0)
+					
+							if(timerBathroom!=null) {
+								if(timerBathroom.running) {
+									timerBathroom.cancel()
+								}	
+								timerBathroom = null
+							}
+						}
+						]
+				} else {
+					timerBathroom.reschedule(now.plusSeconds(240))
+				}
+			}
 		}
 		case OFF: {
-			sendCommand(light_bathroom, OFF)	
-			postUpdate(light_bathroom_dimmer, 0)
+			if (timerBathroom == null) {
+				timerBathroom = createTimer(now.plusSeconds(120)) [|
+					if (bathroom_motion.state == ON) {
+						timerBathroom.reschedule(now.plusSeconds(120))
+					} else {
+						sendCommand(light_bathroom, OFF)	
+						postUpdate(light_bathroom_dimmer, 0)
+				
+						if(timerBathroom!=null) {
+							if(timerBathroom.running) {
+								timerBathroom.cancel()
+							}	
+							timerBathroom = null
+						}
+					}
+					]
+			}
 		}
 	}
 end
@@ -144,7 +182,7 @@ end
  
 rule "light dimmer changed"
 	when
-		Item light_bathroom_dimmer changed
+		Item light_bathroom_dimmer received command
 	then
 		var Number percent = 0
 		if(light_bathroom_dimmer.state instanceof DecimalType) percent = light_bathroom_dimmer.state as DecimalType
