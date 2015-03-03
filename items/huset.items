@@ -37,7 +37,6 @@ Switch guest_home 			"Guests @ Home" 			<present>	(Home)
 Group:Switch:OR(ON, OFF) proximity (All)
 Switch Mobile_Stein_Wlan 	"Steins iPhone Wlan" 	<present>		(proximity) {nh="192.168.1.151"}
 Switch Mobile_Anette_Wlan	"Anettes iPhone Wlan" 	<present> 		(proximity) {nh="192.168.1.152"}
-Switch TV_living_room		"TV living room"		<present>		(proximity) {nh="192.168.1.153"}
 Switch time_capsule_lan 	"Time capsule"			<present>		(proximity) {nh="192.168.1.1"}
 Switch router_wlan			"Router"				<present>		(proximity) {nh="192.168.1.200"}
 Switch boss_lan				"Boss server"       	<present>       (proximity) {nh="192.168.1.99"}
@@ -126,7 +125,7 @@ String pushover_token_default 	"Pushover default" 	{configadmin = "pushover:defa
 
 /* Living room TV */
 Group TV <tv>
-Switch 		  tv_power 		"Av/på"		<power>	   		(TV){samsungtv="ON:Livingroom:KEY_POWERON, OFF:Livingroom:KEY_POWEROFF"}
+Switch 		  tv_power 		"TV"		<power>	   		(TV, proximity){samsungtv="ON:Livingroom:KEY_POWERON, OFF:Livingroom:KEY_POWEROFF", nh="192.168.1.153"}
 Rollershutter tv_channel 	"Kanal"     <channel>   	(TV){samsungtv="UP:Livingroom:KEY_CHUP, DOWN:Livingroom:KEY_CHDOWN"}
 Switch        tv_mute		"Lyd av/på" <volume>	    (TV){samsungtv="ON:Livingroom:KEY_MUTE, OFF:Livingroom:KEY_MUTE"}
 Rollershutter tv_volume     "Volum"		<volume>	    (TV){samsungtv="UP:Livingroom:KEY_VOLUP, DOWN:Livingroom:KEY_VOLDOWN"}

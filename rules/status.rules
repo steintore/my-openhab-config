@@ -143,9 +143,8 @@ end
 
 rule "Set Samsung TV to same state as LAN-checking, and set Air Conditioner to QUIET-mode if TV is being switched on"
 when
-	Item TV_living_room changed
+	Item tv_power changed
 then
-	tv_power.setState(TV_living_room.state)
 	if (tv_power.state == ON && ac_mode.state != 1) {
 		ac_mode_previous.sendCommand(ac_mode.state.toString)
 		ac_mode.sendCommand(1)

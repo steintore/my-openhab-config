@@ -181,6 +181,14 @@ rule "motion detected in the bathroom"
 	}
 end
 
+rule "light dimmer received an update"
+	when
+		Item light_bathroom_dimmer received update
+	then
+		var Number percent = 0
+		if(light_bathroom_dimmer.state instanceof DecimalType) percent = light_bathroom_dimmer.state as DecimalType
+		logInfo('org.openhab',"Bathroom dimmer received UPDATE: '" + light_basement_dimmer.state + "' converted it to percentages: '" + percent + "'")
+end
  
 rule "light dimmer changed"
 	when
