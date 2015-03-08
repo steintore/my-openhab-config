@@ -81,9 +81,7 @@ rule "motion detected in the living room"
 	logInfo('org.openhab', 'Motion sensor in the living room changed to: ' + sensor_1_motion.state)
 	switch (sensor_1_motion.state as OnOffType) {
 		case ON: {
-			if (mode.state == 2) {
-				pushover("Bevegelse i stua når ingen er hjemme...")
-			} else if (mode.state == 0) {
+			if (mode.state == 0) {
 				var double lux = new Double(sensor_1_luminance.state.toString())
 				if (lux <= 100) {
 					if (tv_power.state == OFF) {
@@ -103,7 +101,7 @@ rule "motion detected in the living room"
 			}	
 		}
 	}
-	logInfo('org.openhab', 'Motion sensor in the livingroom updated to: ' + sensor_1_motion.state)
+	logInfo('org.openhab', 'Motion sensor in the living room updated to: ' + sensor_1_motion.state)
 end
 
 rule "Lighting in living room has changed" 
@@ -128,12 +126,10 @@ rule "motion detected in the bathroom"
 	logInfo('org.openhab', 'Motion sensor in the bathroom changed to: ' + bathroom_motion.state)
 	switch (bathroom_motion.state as OnOffType) {
 		case ON: {
-			if (mode.state == 2) {
-				pushover("Bevegelse på badet når ingen er hjemme...")
-			} else { 
+			if (mode.state != 2) {
 				if (mode.state == 0) {
 					sendCommand(light_bathroom_dimmer, 60)
-				} else if (mode.state == 1) {
+				} else {
 					sendCommand(light_bathroom_dimmer, 20)
 				}	
 				if (timerBathroom == null) {
@@ -155,6 +151,7 @@ rule "motion detected in the bathroom"
 						]
 				} else {
 					timerBathroom.reschedule(now.plusSeconds(240))
+					logInfo("org.openhab", "Bathroom dimmer timer rescheduled to 240 seconds from now")
 				}
 			}
 		}
