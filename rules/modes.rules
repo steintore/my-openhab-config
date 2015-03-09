@@ -19,7 +19,22 @@ rule "A change of mode"
 			}
 			
 			if (previous_mode.state == 2) {
-				pushover("Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " + LivingRoomTemperature.state.format("%.1f") + " °C i stua")
+				var t = ""
+				if (garage_door_1.state == ON || garage_door_2.state == ON) {
+					if (garage_door_1.state == ON) t = "Leafs"
+					if (garage_door_2.state == ON) {
+						if (t.length() > 0)
+					  		t = t + " og " 
+						t = t + "Mondeos"
+					}	 
+					t = t + " garasjeport er ikke lukket"
+				}
+				
+				t = "Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " 
+					+ LivingRoomTemperature.state.format("%.1f") + " °C i stua. "
+					+ t
+				//postUpdate(push_message_text, t)
+				pushover(t)
 		
 				sendCommand(guest_home, ON)
 				if (dryer.state == ON) {
@@ -35,7 +50,10 @@ rule "A change of mode"
 			sendCommand(light_basement_power, OFF)
 			sendCommand(kontor_panelovn, OFF)
 			sendCommand(gang_panelovn, OFF)
-			sendCommand(gHallLights, OFF)
+			sendCommand(light_hall_1, 30)
+			sendCommand(light_hall_2, 0)
+			sendCommand(light_hall_3, 30)
+			sendCommand(light_hall_4, 0)
 		
 			if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 				postUpdate(push_message_text, "Husk tørketrommelen før du legger deg")
