@@ -50,10 +50,7 @@ rule "A change of mode"
 			sendCommand(light_basement_power, OFF)
 			sendCommand(kontor_panelovn, OFF)
 			sendCommand(gang_panelovn, OFF)
-			sendCommand(light_hall_1, 30)
-			sendCommand(light_hall_2, 0)
-			sendCommand(light_hall_3, 30)
-			sendCommand(light_hall_4, 0)
+			sendCommand(scene_light_hall, 2) // NIGHT
 		
 			if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
 				postUpdate(push_message_text, "Husk tørketrommelen før du legger deg")

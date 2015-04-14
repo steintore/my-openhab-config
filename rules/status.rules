@@ -205,10 +205,10 @@ rule "Send a status message at 22 if anything is NOT ok"
 			postUpdate(push_message_text, "Leaf: " + garage_door_1.state.toString() + ", Mondeo:" + garage_door_2.state.toString())
 		}
 		if (boss_lan.state == OFF && !boss_lan.changedSince(now.minusHours(12))) {
-			pushover('Boss is not responding, and has been off for 12 hours')
+			pushover('Boss is not responding, and has been off for 12 hours (' + boss_lan.lastUpdate.toString + ')')
 		}
 		if (nas_lan.state == OFF && !nas_lan.changedSince(now.minusHours(12))) {
-			pushover('NAS is not responding, and has been off for 12 hours')
+			pushover('NAS is not responding, and has been off for 12 hours(' + nas_lan.lastUpdate.toString + ')')
 		} 	
 		if (mode.state != 0 && tv_power.state == ON) {
 			pushover('TV står på, men du har enten lagt deg eller er borte..')
