@@ -268,7 +268,7 @@ rule "Motion detector in basement wants ut to turn on the lights"
 		switch (motion_detector_basement.state as OnOffType) {
 		case ON: {
 			sendCommand(scene_light_basement, 1) // ON
-			if (mode.state != 1) {
+			if (mode.state != 0) {
 				pushover('Bevegelse i kjelleren...')
 			}
 		}

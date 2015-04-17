@@ -55,8 +55,8 @@ sitemap huset label="Huset"
     	Text item=BasementTemperature label="Kjeller [%.1f °C]" icon="cellar" valuecolor=[BasementTemperature_LastUpdate=="Uninitialized"="lightgray",BasementTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame label="Lys"{
     			Switch item=scene_light_basement mappings=[0="Av", 1="På"]
-    			Switch item=light_basement_window label="Vinduslys" mappings=[ON='På',OFF='Av']
-    			Switch item=light_basement_power mappings=[ON='På',OFF='Av']
+    			Switch item=light_basement_window label="Vinduslys" mappings=[OFF='Av',ON='På']
+    			Switch item=light_basement_power mappings=[OFF='Av',ON='På']
     		}
     		Frame {
     			Text item=BasementTemperature

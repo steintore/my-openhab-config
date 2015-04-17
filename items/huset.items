@@ -93,7 +93,7 @@ Number battery_living_room_temp	"Stuetemp [%f]"		<rollershutter> (gBattery, gGF)
 String push_message_text "Default message"
 
 /* Lighting */
-Group:Switch:OR(ON, OFF) 		Living_Room_Lights 		"Lys [(%d)]"
+Group:Switch:OR(ON, OFF) 		Living_Room_Lights 		"Lys [(%d)]" <light>
 Switch light_living_room_corner "Stue hjørnet"		<light> (gGF,gLight, Living_Room_Lights) 	{rfxcom=">12339014.1:LIGHTING2.AC:Command"}
 Switch remote_light_living_room_corner 															{rfxcom="<12339014.1:Command"}
 Switch light_living_room_window "Stue hvit vindu" 	<light> (gGF,gLight, Living_Room_Lights) 	{rfxcom=">12339014.2:LIGHTING2.AC:Command"}
@@ -108,7 +108,7 @@ Switch light_basement_window 		"Av/På"			<light> (gBasement, gLight) 	{rfxcom="
 Switch remote_light_basement_window {rfxcom="<12339014.1:Command"}
 
 /* Philips HUE */
-Group:Switch:AND(ON, OFF) 		gHallLights 		"Lys [(%d)]"
+Group:Switch:AND(ON, OFF) 		gHallLights	"Lys [(%d)]"  <light>
 Number scene_light_hall "Lys gang" <light> (gLight, gHallLights, gFirstFloor)
 Switch light_hall_1_switch "Left bulb" 	<light>	(gLight, gHallLights, gFirstFloor) {hue="1"}
 Switch light_hall_2_switch "Right bulb" <light>	(gLight, gHallLights, gFirstFloor) {hue="2"}
@@ -123,7 +123,7 @@ Dimmer light_hall_4     "Right bulb2 [%d %%]"   {hue="4;brightness;30"}
 /* Motion detector */
 Switch motion_detector_basement "Bevegelse gang nede" <switch> (gGF, Motion) {rfxcom="<13734590.10:Command"}
 
-Group:Switch:AND(ON, OFF) 		gBasementLights 		"Lys [(%d)]"
+Group:Switch:AND(ON, OFF) 		gBasementLights	"Lys [(%d)]"	 <light>		
 Number scene_light_basement "Lys kjellergang" <light> (gLight, gBasementLights, gBasement)
 Dimmer light_basement_1     "Kjellerlys 1.1 [%d %%]" <light> (gBasement, gLight, gBasementLights)  {hue="5;brightness;80"}
 Dimmer light_basement_2     "Kjellerlys 1.2 [%d %%]" <light> (gBasement, gLight, gBasementLights)   {hue="6;brightness;80"}
