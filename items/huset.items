@@ -121,7 +121,14 @@ Dimmer light_hall_3     "Left bulb2 [%d %%]"    {hue="3;brightness;30"}
 Dimmer light_hall_4     "Right bulb2 [%d %%]"   {hue="4;brightness;30"}
 
 /* Motion detector */
-Switch motion_detector_basement "Bevegelse" <switch> (gGF, Motion) {rfxcom="<13734590.10:Command"}
+Switch motion_detector_basement "Bevegelse gang nede" <switch> (gGF, Motion) {rfxcom="<13734590.10:Command"}
+
+Group:Switch:AND(ON, OFF) 		gBasementLights 		"Lys [(%d)]"
+Number scene_light_basement "Lys kjellergang" <light> (gLight, gBasementLights, gBasement)
+Dimmer light_basement_1     "Kjellerlys 1.1 [%d %%]" <light> (gBasement, gLight, gBasementLights)  {hue="5;brightness;80"}
+Dimmer light_basement_2     "Kjellerlys 1.2 [%d %%]" <light> (gBasement, gLight, gBasementLights)   {hue="6;brightness;80"}
+Dimmer light_basement_3     "Kjellerlys 2.1 [%d %%]" <light> (gBasement, gLight, gBasementLights)   {hue="7;brightness;80"}
+Dimmer light_basement_4     "Kjellerlys 2.2 [%d %%]" <light> (gBasement, gLight, gBasementLights)   {hue="8;brightness;80"}
 
 /* Config-values */
 String pushover_token_anette 	"Pushover Anette" 	{configadmin = "pushover:anetteToken"}
@@ -172,10 +179,10 @@ Number  AC_FUN_SUPPORTED "AC_FUN_SUPPORTED [%s]" 					(AC) 							{samsungac="[L
 DateTime ac_lastUpdate "Last update [%1$ta %1$tR]"	<clock>         (AC)
 
 Group Motion <office>
-Number sensor_1_temp 		"Temperature [%.1f °C]" 		<temperature> 	(Motion) 			{http="<[zwave:10000:JS(getMotionTemperature.js)]"}
+Number sensor_1_temp 		"Temperature [%.1f °C]" 		<temperature> 	(Motion, gGF) 			{http="<[zwave:10000:JS(getMotionTemperature.js)]"}
 Number sensor_1_luminance 	"Luminance    [%.0f Lux]" 						(Motion) 			{http="<[zwave:60000:JS(getMotionLuminiscence.js)]"}
-Switch sensor_1_motion 		"sensor [MAP(motion.map):%s]" 	<present>		(Motion) 			{http="<[zwave:600000:JS(getMotion.js)]"}
-Number sensor_1_battery 	"Bev.sensor [%s %%]"			<energy>		(Motion, gBattery)	{http="<[zwave:600000:JS(getMotionBattery.js)]"}
+Switch sensor_1_motion 		"Stuesensor [MAP(motion.map):%s]" 	<present>		(Motion) 			{http="<[zwave:600000:JS(getMotion.js)]"}
+Number sensor_1_battery 	"Bev.sensor, stue [%s %%]"			<energy>		(Motion, gBattery)	{http="<[zwave:600000:JS(getMotionBattery.js)]"}
 Number sensor_1_lu 			"[%.0f]" 						<clock>		 						{http="<[zwave:10000:JS(getMotionLastUpdate.js)]"}
 DateTime sensor_1_update 	"Last update [%1$ta %1$tR]" 	<clock>			(Motion)
 

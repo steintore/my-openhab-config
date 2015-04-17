@@ -234,3 +234,46 @@ rule "light in hall 1st floor"
 		}
 	}
 end
+
+rule "light in basement hall"
+	when
+		Item scene_light_basement received command
+	then
+	switch (receivedCommand) {
+		case 0:  { //OFF 
+			sendCommand(light_basement_1, 0)
+			sendCommand(light_basement_2, 0)
+			sendCommand(light_basement_3, 0)
+			sendCommand(light_basement_4, 0)
+		}
+		case 1: { //ON
+			sendCommand(light_basement_1, 100)
+			sendCommand(light_basement_2, 100)
+			sendCommand(light_basement_3, 100)
+			sendCommand(light_basement_4, 100)
+		}
+		case 2: { //NIGHT MODE
+			sendCommand(light_basement_1, 30)
+			sendCommand(light_basement_2, 30)
+			sendCommand(light_basement_3, 30)
+			sendCommand(light_basement_4, 30)
+		}
+	}
+end
+
+rule "Motion detector in basement wants ut to turn on the lights"
+	when
+	 	Item motion_detector_basement changed
+	then
+		switch (motion_detector_basement.state as OnOffType) {
+		case ON: {
+			sendCommand(scene_light_basement, 1) // ON
+			if (mode.state != 1) {
+				pushover('Bevegelse i kjelleren...')
+			}
+		}
+		case OFF: {
+			sendCommand(scene_light_basement, 0) // OFF
+		}
+	}
+end
