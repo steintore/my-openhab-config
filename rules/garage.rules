@@ -2,28 +2,52 @@ import org.openhab.core.library.types.*
 import org.openhab.core.persistence.*
 import org.openhab.model.script.actions.*
 
-var Timer garageDoorOpen = null
+var Timer garageDoorOpenLeaf = null
+var Timer garageDoorOpenMondeo = null
 
-rule "Send a message if garage door has been open for 15 minutes"
+rule "Send a message if garage door LEAF has been open for 15 minutes"
 	when
-		Item garage_door_1 changed to ON or
+		Item garage_door_1 changed to ON	
+	then
+		logInfo("org.openhab.rules","LEAF Garage door opened")
+		sendCommand(message_received, OFF)
+		garageDoorOpenLeaf = createTimer(now.plusSeconds(900)) [|
+			if (garage_door_1.state == OFF) {
+				if(garageDoorOpenLeaf != null) {
+					if(garageDoorOpenLeaf.running) {
+						garageDoorOpenLeaf.cancel()
+					}
+					garageDoorOpenLeaf = null
+				}	
+			} else {
+				var t = "Leafs garasjeport er ikke lukket"
+				logInfo("org.openhab.rules", t)
+				postUpdate(push_message_text, t)
+				garageDoorOpenLeaf.reschedule(now.plusSeconds(1200))
+			}			
+		]
+end
+
+rule "Send a message if garage door MONDEO has been open for 15 minutes"
+	when
 		Item garage_door_2 changed to ON	
 	then
-		logInfo("org.openhab.rules","Garage door opened")
+		logInfo("org.openhab.rules","MONDEO Garage door opened")
 		sendCommand(message_received, OFF)
-		garageDoorOpen = createTimer(now.plusSeconds(900)) [|
-			var t = ""
-			if (garage_door_1.state == ON) t = "Leafs"
-			else t = "Mondeos" 
-			logInfo("org.openhab.rules", t+ " Garage door has been open too long")
-			postUpdate(push_message_text, t + " garasjeport er ikke lukket")
-			
-			if(garageDoorOpen!=null) {
-				if(garageDoorOpen.running) {
-					garageDoorOpen.cancel()
-				}
-				garageDoorOpen = null
-			}
+		garageDoorOpenMondeo = createTimer(now.plusSeconds(900)) [|
+			if (garage_door_2.state == OFF) {
+				if(garageDoorOpenMondeo != null) {
+					if(garageDoorOpenMondeo.running) {
+						garageDoorOpenMondeo.cancel()
+					}
+					garageDoorOpenMondeo = null
+				}	
+			} else {
+				var t = "Mondeos garasjeport er ikke lukket"
+				logInfo("org.openhab.rules", t)
+				postUpdate(push_message_text, t)
+				garageDoorOpenMondeo.reschedule(now.plusSeconds(1200))
+			}			
 		]
 end
 
@@ -34,13 +58,22 @@ rule "Reset timer if someone closes the garage door, and both is closed"
 	then
 		logInfo("org.openhab.rules", "Garage door closed")
 		sendCommand(message_received, OFF)
-		if (garage_door_1.state == OFF && garage_door_2.state == OFF) {
-			if(garageDoorOpen!=null) {
-			garageDoorOpen.cancel
-			garageDoorOpen = null
+		if (garage_door_1.state == OFF) {
+			if(garageDoorOpenLeaf!=null) {
+				garageDoorOpenLeaf.cancel
+				garageDoorOpenLeaf = null
 			}
 		} else {
-			garageDoorOpen.reschedule(now.plusSeconds(1200))
+			garageDoorOpenLeaf.reschedule(now.plusSeconds(1200))
+		}
+		 
+		if (garage_door_2.state == OFF) {
+			if(garageDoorOpenMondeo != null) {
+				garageDoorOpenMondeo.cancel()
+				garageDoorOpenMondeo = null
+			}
+		} else {
+			garageDoorOpenMondeo.reschedule(now.plusSeconds(1200))
 		}	
 end
 

@@ -27,19 +27,19 @@ rule "A change of mode"
 					  		t = t + " og " 
 						t = t + "Mondeos"
 					}	 
-					t = t + " garasjeport er ikke lukket"
-				}
+					t = t + " garasjeport er ikke lukket. "
 				
-				t = "Velkommen hjem! Det er akkurat nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " 
+				
+				t = "Velkommen hjem! Nå " + OutdoorTemperature.state.format("%.1f") + " °C ute, og " 
 					+ LivingRoomTemperature.state.format("%.1f") + " °C i stua. "
 					+ t
-				//postUpdate(push_message_text, t)
-				pushover(t)
-		
+				}
 				sendCommand(guest_home, ON)
 				if (dryer.state == ON) {
-					postUpdate(push_message_text, "Tørketrommelen ble startet igjen nå når du kom hjem.")
+					t = t + "Tørketrommelen ble startet igjen. "
 				}
+				if (t.length() > 0)
+					postUpdate(push_message_text, t)
 			}
 		}
 		
@@ -66,18 +66,21 @@ rule "A change of mode"
 		}
 		
 		case 2: { //AWAY
+			var t = ""
 			if (OutdoorTemperature.state instanceof DecimalType) {
-				pushover("Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", Akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute")
+				t  = "Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute"
 			}
 			stored_states = storeStates(away_group)
 			if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
-				postUpdate(push_message_text, "Tørketrommelen ble skrudd av nå når du dro hjemmefra.")
+				t = t + " Tørketrommelen ble skrudd av nå når du dro hjemmefra."
 				sendCommand(dryer, OFF)
 			}
 			if (tv_power.state == ON) {
-				postUpdate(push_message_text, "TV-en ble skrudd av når du dro hjemmefra")
+				t = t + " TV-en ble skrudd av når du dro hjemmefra"
 				sendCommand(tv_power, OFF)
 			}
+			if (t.length() > 0)
+				postUpdate(push_message_text, t)
 			sendCommand(guest_home, OFF)
 			sendCommand(light_basement_power, OFF)
 			sendCommand(kontor_panelovn, OFF)
@@ -88,14 +91,14 @@ rule "A change of mode"
 				sendCommand(ac_set_temp, ac_night_temp.state.toString)
 				if (ac_mode.state != 0)
 					sendCommand(ac_mode, 0)
-			}		
+			}
 		}
 	}
 	postUpdate(previous_mode, mode.state.toString)
 end
 
 /*
- * At 23 in the evening we'll go into night mode, but only if someone is at home.
+ * At 22 in the evening we'll go into night mode, but only if someone is at home.
  * Away mode overrules night mode
  */
 rule "Switch to night mode in the evening"
