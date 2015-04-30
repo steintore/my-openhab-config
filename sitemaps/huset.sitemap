@@ -27,11 +27,7 @@ sitemap huset label="Huset"
 			Frame label="TV" visibility=[tv_power==ON] {
 				Group item=TV icon="video"
 			}
-			Frame label="Bevegelse" icon="office" {
-    			Group item=Motion
-    			Text item=sensor_1_update
-			}
-			
+		
     	}
     	Text item=OfficeTemperature label="Andre etasje [%.1f °C]" icon="firstfloor" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
     		Frame label="Gang" {
@@ -41,7 +37,6 @@ sitemap huset label="Huset"
     			Text item=bathroom_temp
     			Slider item=light_bathroom_dimmer
     		}
-    		
     		Frame label="Kontor"{
     			Text item=OfficeTemperature
     			Text item=OfficeHumidity
@@ -53,17 +48,16 @@ sitemap huset label="Huset"
     		}
     	}
     	Text item=BasementTemperature label="Kjeller [%.1f °C]" icon="cellar" valuecolor=[BasementTemperature_LastUpdate=="Uninitialized"="lightgray",BasementTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
-    		Frame label="Lys"{
-    			Switch item=scene_light_basement mappings=[0="Av", 1="På"]
-    			Switch item=light_basement_window label="Vinduslys" mappings=[OFF='Av',ON='På']
-    			Switch item=light_basement_power mappings=[OFF='Av',ON='På']
-    		}
     		Frame {
     			Text item=BasementTemperature
     			Text item=BasementHumidity
 				Text item=BasementTemperature_LastUpdate visibility=[BasementTemperature_LastUpdate>1800] valuecolor=[BasementTemperature_LastUpdate>120="orange", BasementTemperature_LastUpdate>300="red"]
 			}
-			Frame label="Diverse" {
+    		Frame label="Lys"{
+    			Switch item=scene_light_basement mappings=[0="Av", 1="På"]
+    			Switch item=light_basement_power label="Kjellerstue" mappings=[OFF='Av',ON='På']
+    		}
+    		Frame label="Diverse" {
 				Switch item=dryer
 				Text item=power_dryer visibility=[dryer==ON]
 				Text item=power_freezer
@@ -72,17 +66,19 @@ sitemap huset label="Huset"
 			}
     	}
     	Text item=OutdoorTemperature label="Ute [%.1f °C]" icon="garden" valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>90="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]  {
+    		Frame {
+    			Text item=OutdoorTemperature
+				Text item=OutdoorHumidity
+				Text item=OutdoorTemperature_LastUpdate visibility=[OutdoorTemperature_LastUpdate>30] valuecolor=[OutdoorTemperature_LastUpdate>120="orange", OutdoorTemperature_LastUpdate>300="red"]
+    		}
     		Frame label="Garasjen" {
 				Text item=garage_door_1
 				Text item=garage_door_2
 				Switch item=message_received mappings=[ON="Ja"] icon="network" visibility=[garage_door_1==ON, garage_door_2==ON]
 			}
 			Frame label="Ute" icon="garden" {
-				Text item=OutdoorTemperature
 				Text item=Weather_Temp_Max valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"]
 				Text item=Weather_Temp_Min valuecolor=[>25="orange",>15="green",>5="orange",<=5="blue"]
-				Text item=OutdoorHumidity
-				Text item=OutdoorTemperature_LastUpdate visibility=[OutdoorTemperature_LastUpdate>30] valuecolor=[OutdoorTemperature_LastUpdate>120="orange", OutdoorTemperature_LastUpdate>300="red"]
 			}
 			Frame label="Tempdetaljer" {
 				Switch item=Temperature_Chart_Period label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="temperature"
@@ -185,5 +181,9 @@ sitemap huset label="Huset"
 	
 	Frame label="Heating" {
 		Group item=Heating
+	}
+	Frame label="Bevegelse" icon="office" {
+		Group item=Motion
+		Text item=sensor_1_update
 	}
 }

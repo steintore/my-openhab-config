@@ -68,7 +68,7 @@ rule "A change of mode"
 		case 2: { //AWAY
 			var t = ""
 			if (OutdoorTemperature.state instanceof DecimalType) {
-				t  = "Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", akkurat nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute"
+				t  = "Du dro kl: " + now.getHourOfDay + ":" + now.getMinuteOfHour + ", nå er det " + OutdoorTemperature.state.format("%.1f") + " °C ute."
 			}
 			stored_states = storeStates(away_group)
 			if (dryer.state == ON && new Double(power_dryer.state.toString()) > 10) {
@@ -76,7 +76,7 @@ rule "A change of mode"
 				sendCommand(dryer, OFF)
 			}
 			if (tv_power.state == ON) {
-				t = t + " TV-en ble skrudd av når du dro hjemmefra"
+				t = t + " TV-en ble skrudd av når du dro hjemmefra."
 				sendCommand(tv_power, OFF)
 			}
 			if (t.length() > 0)
