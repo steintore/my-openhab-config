@@ -55,8 +55,8 @@ DateTime OutdoorTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"			<clock>
 Number OfficeTemperature					"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature,gFirstFloor) { rfxcom="<20481:Temperature" }
 Number OfficeHumidity 						"Luftfuktighet kontor [%.1f %%]"		<temperature> 	(gFirstFloor) { rfxcom="<20481:Humidity" }
 DateTime OfficeTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"			<clock>
-Number BasementTemperature					"Kjeller [%.1f °C]"					<temperature>	(Temperature,gBasement) { rfxcom="<52226:Temperature" }
-Number BasementHumidity 					"Luftfuktighet kjeller [%.1f %%]"	<temperature>	(gBasement) { rfxcom="<52226:Humidity" }
+Number BasementTemperature					"Kjeller [%.1f °C]"					<temperature>	(Temperature,gBasement) { rfxcom="<38402:Temperature" }
+Number BasementHumidity 					"Luftfuktighet kjeller [%.1f %%]"	<temperature>	(gBasement) { rfxcom="<38402:Humidity" }
 DateTime BasementTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"			<clock>
 Number LivingRoomTemperature    			"Temp stue [%.1f °C]"				<temperature>   (Temperature,gGF) { rfxcom="<48385:Temperature"}
 Number LivingRoomHumidity					"Luftfuktighet stue [%.1f %%]" 		<temperature>	(gGF) { rfxcom="<48385:Humidity" }
@@ -85,8 +85,8 @@ Switch right_double_switch 	"Høyre knapp" 	<network> (gGF) { rfxcom="<11971074.
 
 /* Battery */
 Number battery_outdoor_temp		"Utetemp [%f]" 		<rollershutter>	(gBattery, gOutdoor) 	{rfxcom="<26628:BatteryLevel"}
-Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery, gBasement) 	{rfxcom="<52226:BatteryLevel"}
-Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery, gFirstFloor) {rfxcom="<5377:BatteryLevel"}
+Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery, gBasement) 	{rfxcom="<38402:BatteryLevel"}
+Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery, gFirstFloor) {rfxcom="<20481:BatteryLevel"}
 Number battery_living_room_temp	"Stuetemp [%f]"		<rollershutter> (gBattery, gGF)			{rfxcom="<48385:BatteryLevel"}
 
 /* Text values */
