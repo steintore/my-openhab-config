@@ -22,7 +22,9 @@ rule "Send a message if garage door LEAF has been open for 15 minutes"
 			} else {
 				var t = "Leafs garasjeport er ikke lukket"
 				logInfo("org.openhab.rules", t)
-				postUpdate(push_message_text, t)
+				if (message_received.state == OFF) { 
+					postUpdate(push_message_text, t)
+				}
 				garageDoorOpenLeaf.reschedule(now.plusSeconds(1200))
 			}			
 		]
@@ -45,7 +47,9 @@ rule "Send a message if garage door MONDEO has been open for 15 minutes"
 			} else {
 				var t = "Mondeos garasjeport er ikke lukket"
 				logInfo("org.openhab.rules", t)
-				postUpdate(push_message_text, t)
+				if (message_received.state == OFF) { 
+					postUpdate(push_message_text, t)
+				}
 				garageDoorOpenMondeo.reschedule(now.plusSeconds(1200))
 			}			
 		]
