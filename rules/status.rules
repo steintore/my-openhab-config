@@ -215,3 +215,25 @@ rule "Send a status message at 22 if anything is NOT ok"
 		} 	
 end
 
+rule "Battery level changed"
+when
+	Item BatteryLevel_10 changed or
+	Item BatteryLevel_100 changed
+then
+	if (BatteryLevel_10.state <= 2) {
+		BatteryLevel_10?.members.forEach [item | 
+			if (item.state <= 2) {
+				logInfo('battery', item.name + " : " + item.state)
+				pushover('' + item.name + ' har lavt batterinivå: ' + item.state.toString)
+			}
+		]
+	}
+	if (BatteryLevel_100.state <= 20) {
+		BatteryLevel_100?.members.forEach [item | 
+			if (item.state <= 20) {
+				pushover(''+ item.name + ' har lavt batterinivå: ' + item.state.toString + '%')
+			}
+		]	
+	} 
+end
+

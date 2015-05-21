@@ -10,7 +10,11 @@ Group night_group	(All)
 Group away_group	(All)
 
 /* NTP binding demo item */
-DateTime Date	"Dato [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
+DateTime Date	"[%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
+
+
+Group:Number:MIN	BatteryLevel_10		"Batteri [(%d)]"	<battery>		(All)
+Group:Number:MIN	BatteryLevel_100	"Batteri [(%d)] %"	<battery>		(All)
 
 /* Heating */
 Group:Switch:OR(ON, OFF) 			Heating 		"All varme [(%d)]" 				<heating> 				(All)
@@ -53,7 +57,7 @@ Number OutdoorTemperature 					"Ute [%.1f °C]" 					<temperature> 	(Temperature
 Number OutdoorHumidity 						"Luftfuktighet ute [%.1f %%]" 		<temperature> 	(gOutdoor, Weather) { rfxcom="<26628:Humidity" }
 DateTime OutdoorTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"			<clock>
 Number OfficeTemperature					"Temp kontor [%.1f °C]" 			<temperature> 	(Temperature,gFirstFloor) { rfxcom="<20481:Temperature" }
-Number OfficeHumidity 						"Luftfuktighet kontor [%.1f %%]"		<temperature> 	(gFirstFloor) { rfxcom="<20481:Humidity" }
+Number OfficeHumidity 						"Luftfuktighet kontor [%.1f %%]"	<temperature> 	(gFirstFloor) { rfxcom="<20481:Humidity" }
 DateTime OfficeTemperature_LastUpdate		"Last Update [%1$ta %1$tR]"			<clock>
 Number BasementTemperature					"Kjeller [%.1f °C]"					<temperature>	(Temperature,gBasement) { rfxcom="<38402:Temperature" }
 Number BasementHumidity 					"Luftfuktighet kjeller [%.1f %%]"	<temperature>	(gBasement) { rfxcom="<38402:Humidity" }
@@ -84,10 +88,10 @@ Switch left_double_switch 	"Venstre knapp" <network> (gGF) { rfxcom="<11971074.1
 Switch right_double_switch 	"Høyre knapp" 	<network> (gGF) { rfxcom="<11971074.12:Command" }
 
 /* Battery */
-Number battery_outdoor_temp		"Utetemp [%f]" 		<rollershutter>	(gBattery, gOutdoor) 	{rfxcom="<26628:BatteryLevel"}
-Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery, gBasement) 	{rfxcom="<38402:BatteryLevel"}
-Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery, gFirstFloor) {rfxcom="<20481:BatteryLevel"}
-Number battery_living_room_temp	"Stuetemp [%f]"		<rollershutter> (gBattery, gGF)			{rfxcom="<48385:BatteryLevel"}
+Number battery_outdoor_temp		"Utetemp [%f]" 		<rollershutter>	(gBattery, gOutdoor, BatteryLevel_10) 	{rfxcom="<26628:BatteryLevel"}
+Number battery_basement_temp	"Kjellertemp [%f]"	<rollershutter>	(gBattery, gBasement, BatteryLevel_10) 	{rfxcom="<38402:BatteryLevel"}
+Number battery_office_temp		"Kontortemp [%f]"	<rollershutter>	(gBattery, gFirstFloor, BatteryLevel_10) {rfxcom="<20481:BatteryLevel"}
+Number battery_living_room_temp	"Stuetemp [%f]"		<rollershutter> (gBattery, gGF, BatteryLevel_10)			{rfxcom="<48385:BatteryLevel"}
 
 /* Text values */
 String push_message_text "Default message"
@@ -134,6 +138,7 @@ Dimmer light_basement_4     "Kjellerlys 2.2 [%d %%]" <light> (gBasement, gLight,
 String pushover_token_anette 	"Pushover Anette" 	{configadmin = "pushover:anetteToken"}
 String pushover_token_both 		"Pushover both" 	{configadmin = "pushover:bothToken"}
 String pushover_token_default 	"Pushover default" 	{configadmin = "pushover:defaultToken"}
+String stein_email				"STT e-mail"		{configadmin = "steintore:email"}
 
 /* Living room TV */
 Group TV <tv>
@@ -182,7 +187,7 @@ Group Motion <office>
 Number sensor_1_temp 		"Temperature [%.1f °C]" 		<temperature> 	(Motion, gGF) 			{http="<[zwave:10000:JS(getMotionTemperature.js)]"}
 Number sensor_1_luminance 	"Luminance    [%.0f Lux]" 						(Motion) 			{http="<[zwave:60000:JS(getMotionLuminiscence.js)]"}
 Switch sensor_1_motion 		"Stuesensor [MAP(motion.map):%s]" 	<present>		(Motion) 			{http="<[zwave:600000:JS(getMotion.js)]"}
-Number sensor_1_battery 	"Bev.sensor, stue [%s %%]"			<energy>		(Motion, gBattery)	{http="<[zwave:600000:JS(getMotionBattery.js)]"}
+Number sensor_1_battery 	"Bev.sensor, stue [%s %%]"			<energy>		(Motion, gBattery, BatteryLevel_100)	{http="<[zwave:600000:JS(getMotionBattery.js)]"}
 Number sensor_1_lu 			"[%.0f]" 						<clock>		 						{http="<[zwave:10000:JS(getMotionLastUpdate.js)]"}
 DateTime sensor_1_update 	"Last update [%1$ta %1$tR]" 	<clock>			(Motion)
 
@@ -196,7 +201,10 @@ Number light_bathroom_dimmer "Dimmer [%s]" 					<light> 							{http="<[zwave:60
 Number bathroom_temp 		 "Temp [%.1f °C]" 		<temperature> 	(Motion) 			{http="<[zwave:10000:JS(getBathroomTemperature.js)]"}
 Number bathroom_lux 		 "Lys    [%.0f Lux]" 						(Motion) 			{http="<[zwave:60000:JS(getBathroomLuminiscence.js)]"}
 Switch bathroom_motion 		 "Sensor [MAP(motion.map):%s]" 	<present>		(Motion) 			{http="<[zwave:600000:JS(getBathroomMotion.js)]"}
-Number bathroom_battery 	 "Bev.sensor [%s %%]"			<energy>		(Motion, gBattery)	{http="<[zwave:600000:JS(getBathroomBattery.js)]"}
+Number bathroom_battery 	 "Bev.sensor [%s %%]"			<battery>		(Motion, gBattery, BatteryLevel_10)	{http="<[zwave:600000:JS(getBathroomBattery.js)]"}
 
 /* Roomba */
 //String roomba_test <sofa> {tcp="<[192.168.1.154:9001:'REGEX((.*))']"} // for a String Item that captures some state of a remote device that connects to openHAB
+
+/* Smoke detector */
+String smoke_detector "Røykvarsler" {rfxcom="<16435200:Status"}
